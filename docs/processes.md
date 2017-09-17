@@ -14,5 +14,3 @@ As far as we have designed these are going to be the processes.
 
 The communication between the processes is to made more clear. This involves
 * The data-format of the processed pages which is going to be delivered to knowledge-graph process. Here is the [link](exchfmt.md) to the file which describes the data-format. 
-    
-

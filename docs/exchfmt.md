@@ -4,14 +4,15 @@ Here is the sample format we decided on 16-Sep-2017. It needs to improved. Sugge
 
 Keep it adaptive such that even though we add some more features for our search like we gonna produce some image results too then this must be easier to manage.
 
-    ````json
+````javascript
     /* Here is a template */
 
     {
         "title": "fruits",
         "date_visited": "dd-mm-yyyy",
         "keywords": [
-            "some", "keywords", "from", "meta", "of", "the", "page", "like", "category", "of", "the", "page"
+            "some", "keywords", "from", "meta", 
+	    "of", "the", "page", "like", "category", "of", "the", "page"
         ],
         "contents": [
             {
