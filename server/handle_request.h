@@ -59,7 +59,7 @@ void handle_request(void *fd_ptr)
             strcat(tmp_path,path);
             FILE *fp=popen(tmp_path,"r");
             fread(data,file_stat.st_size,1,fp);
-            fclose(fp);
+            pclose(fp);
         }
         else
         {
