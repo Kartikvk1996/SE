@@ -33,7 +33,7 @@ int main()
 
     config_server();    // configure the server
 
-	printf("\n\n\n\t\tSERVER STARTED\t PORT : - %d\n",PORT);
+    printf("\n\n\n\t\tSERVER STARTED\t PORT : - %d\n",PORT);
     printf("\t\tMAX CONCURRENT CONNECTIONS : - %d\n",TOTAL_CONNECTIONS);
     printf("\t\tTHREAD POOL : - %d\n",TOTAL_THREADS);
 
