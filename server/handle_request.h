@@ -53,12 +53,17 @@ void handle_request(void *fd_ptr)
 
         /*  following code identifies the file type and sends mime accordingly
             if the file ends with .cgi it is considered as executable file      */
+	size_t len=0;
         if(identify_file_type(path,fd)==1)
         {
             char tmp_path[BUFFER_SIZE]="./";
             strcat(tmp_path,path);
             FILE *fp=popen(tmp_path,"r");
-            fread(data,file_stat.st_size,1,fp);
+	    fseek(fp,0L,SEEK_END);
+	    len=ftell(fp);
+	    rewind(fp);
+	    printf("data %d",len);
+            fread(data,len+1,1,fp);
             pclose(fp);
         }
         else
@@ -68,8 +73,8 @@ void handle_request(void *fd_ptr)
         }
         // write data
         write(fd,"\n",2);                   // flush the stream
-        write(fd,data,file_stat.st_size);   // send the data
-        free(data);
+        write(fd,data,len+1);	    // send the data
+	free(data);
     }
     close(fd);
     shutdown(fd,SHUT_RDWR);
