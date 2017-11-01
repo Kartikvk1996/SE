@@ -18,12 +18,22 @@ Well *__master__* needs to understand a simple protocol called *__fup__*. The fo
 1. command based protocol (commands are exchanged)
 2. One command per line.
 3. command has following format 
-    > `command arg1 arg2 arg3`  
-    Here command can be one of the following (Case Insensitive).
+    ````
+    password
+    command arg1 arg2 arg3
+    ````
+    The password field is used for integrity and is passed to the master while connecting.
+
+    Command can be one of the following (Case Insensitive).
 
     | Command | Meaning |
     |---------|---------|
     | create  | Create a process first argument is process name followed by arguments to the process itself |
     | kill    | Kill all processes in the system |
 4. the application returns a status defined by the protocol back to master.
+
+5. The password is sent to the master while connecting to it the master should use the same password for further communication.
+
+6. The password is 64 bit number in decimal format which is generated randomly per session.
+
 

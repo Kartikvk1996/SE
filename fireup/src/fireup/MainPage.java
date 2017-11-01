@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fireup;
 
 import java.io.BufferedReader;
@@ -32,9 +27,8 @@ public class MainPage extends javax.swing.JFrame {
     }
 
     public void processAdded() {
-        WrappedProcess wp = fireupModel.processes.get(fireupModel.processes.size()-1);
+        WrappedProcess wp = fireupModel.processes.get(fireupModel.processes.size() - 1);
         String str = wp.procName + "       <" + wp.startTime + ">";
-        System.out.println(str);
         listModel.add(str);
         procList.updateUI();
     }
@@ -141,7 +135,7 @@ public class MainPage extends javax.swing.JFrame {
         jLabel3.setText("Choose an executable");
 
         jLabel4.setForeground(new java.awt.Color(0, 111, 36));
-        jLabel4.setText("Execute protocol/command");
+        jLabel4.setText("Execute protocol. (use $ for newline)");
 
         ProtocolRunner.setText("Run");
         ProtocolRunner.addActionListener(new java.awt.event.ActionListener() {
@@ -309,7 +303,7 @@ public class MainPage extends javax.swing.JFrame {
 
     private void terminateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminateActionPerformed
         int index = procList.getSelectedIndex();
-        if(index > -1) {
+        if (index > -1) {
             fireupModel.processes.get(index).kill();
             listModel.remove(index);
         }
@@ -317,14 +311,14 @@ public class MainPage extends javax.swing.JFrame {
 
     private void viewOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewOutputActionPerformed
         int index = procList.getSelectedIndex();
-        if(index > -1) {
+        if (index > -1) {
             showOutput(index);
         }
     }//GEN-LAST:event_viewOutputActionPerformed
 
     private void viewLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewLogActionPerformed
         int index = procList.getSelectedIndex();
-        if(index > -1) {
+        if (index > -1) {
             showError(index);
         }
     }//GEN-LAST:event_viewLogActionPerformed
@@ -333,7 +327,7 @@ public class MainPage extends javax.swing.JFrame {
         JFileChooser fileChooser = new JFileChooser(".");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setMultiSelectionEnabled(false);
-        if(fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             ExecutablePath.setText(file.getAbsolutePath());
         }
@@ -348,41 +342,37 @@ public class MainPage extends javax.swing.JFrame {
             String line;
             Socket sock = new Socket(fireupModel.getInetAddress(), fireupModel.getrunningPort());
             OutputStream os = sock.getOutputStream();
-            os.write((protocol.getText() + "\n").getBytes());
+            os.write((protocol.getText().replaceAll("[$]", "\n") + "\n").getBytes());
             BufferedReader br = new BufferedReader(new InputStreamReader(sock.getInputStream()));
             protocolOutput.append("$: " + protocol.getText() + "\n");
-            while((line = br.readLine()) != null)
+            while ((line = br.readLine()) != null) {
                 protocolOutput.append("> " + line + "\n");
+            }
         } catch (IOException ex) {
             System.err.println(ex);
         }
     }//GEN-LAST:event_ProtocolRunnerActionPerformed
 
     private void MasterConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MasterConnectActionPerformed
-        try {
-            Socket sock = new Socket(MasterIP.getText(), Integer.parseInt(MasterPort.getText()));
-            sock.getOutputStream().write("Hello there".getBytes());
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
+        fireupModel.connectToMaster(MasterIP.getText(), Integer.parseInt(MasterPort.getText()));
     }//GEN-LAST:event_MasterConnectActionPerformed
 
-    private void showOutput(int index) {
+    private void openEditor(String file) {
         try {
-            Runtime.getRuntime().exec(new String[] {"gedit", fireupModel.processes.get(index).getOutputFileName()});
-        } catch (IOException ex) {
-            System.err.println(ex);
-        }
-    }
-
-    private void showError(int index) {
-        try {
-            Runtime.getRuntime().exec(new String[]{"gedit", fireupModel.processes.get(index).getErrorFileName()});
+            Runtime.getRuntime().exec(new String[]{"gedit", file});
         } catch (IOException ex) {
             System.err.println(ex);
         }
     }
     
+    private void showOutput(int index) {
+        openEditor(fireupModel.processes.get(index).getOutputFileName());
+    }
+
+    private void showError(int index) {
+        openEditor(fireupModel.processes.get(index).getErrorFileName());
+    }
+
     public static void main(String args[]) {
         try {
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
@@ -398,12 +388,13 @@ public class MainPage extends javax.swing.JFrame {
         MainPage mainPage = new MainPage();
         fireupModel.setOberserver(mainPage);
         new Thread(fireupModel).start();
-        
+
         java.awt.EventQueue.invokeLater(() -> {
             mainPage.setVisible(true);
         });
-    }
 
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Browse;
     private javax.swing.JTextField ExecutablePath;
