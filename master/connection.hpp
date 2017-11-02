@@ -79,6 +79,7 @@
 
 
 #ifdef __unix__
+    #include<malloc.h>
     #include<netinet/in.h>
     #include<fcntl.h>
     #include<sys/stat.h>
