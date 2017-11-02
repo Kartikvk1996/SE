@@ -4,21 +4,25 @@
 
 
 /*------------------------------------------------------------Libraries----------------------------------------------------------------------*/
+
+#ifdef __unix__
+    #include<sys/types.h>
+    #include<pthread.h>
+    #include<signal.h>
+    #include<unistd.h>
+    #include<fcntl.h>
+#endif // __unix__
+
+
 #include<iostream>
 #include<bits/stdc++.h>
 #include<string>
 #include<string.h>
 #include<ctime>
-#include<sys/types.h>
-#include<pthread.h>
 #include<stdlib.h>
-#include<signal.h>
-#include<netinet/in.h>
-#include<unistd.h>
-#include<fcntl.h>
-#include<sys/stat.h>
-#include<sys/socket.h>
 #include<stdbool.h>
+
+#include"connection.hpp"
 
 
 /*  Enable debug mode
@@ -35,12 +39,12 @@
 
 using namespace std;
 
-/*------------------------------------------------------FUNCTION PROTOTYPE------------------------------------------------------------------------------*/
+/*----------------------------------------------------------FUNCTION PROTOTYPE-----------------------------------------------------------------*/
 
 void getTime(string &ctime);
 void sighandler(int signum);
 
-/*-------------------------------------------------------CLASS DECLARATION AND IMPLEMENTATION-----------------------------------------------------------*/
+/*----------------------------------------------CLASS DECLARATION AND IMPLEMENTATION-----------------------------------------------------------*/
 
 class masterInitialize
 {
@@ -49,10 +53,11 @@ private:
     unsigned short int queueSize;
     unsigned short int maxCrawlers;
     string startTime;
+    ServerConnection *server;
+    ClientConnection *client;
+
 
 public:
-    int server;
-
     // constructor
     masterInitialize()
     {
@@ -65,8 +70,8 @@ public:
 public:
     bool init();
     void display();
-    bool start_server();
-    bool stop_server();
+    bool start();
+    bool stop();
     bool write_log(string);
 };
 
@@ -157,52 +162,17 @@ bool masterInitialize::write_log(string message)
     It return true on successful creation of socket or false
     in case of failure
 */
-bool masterInitialize::start_server()
+bool masterInitialize::start()
 {
-    struct sockaddr_in server_address;
-	socklen_t clilen;
-
-	this->server = socket(AF_INET,SOCK_STREAM,0);
-	if(server < 0)
-	{
-	    #ifdef DEBUG
-	    {
-	        cout<<"Failed to create socket\n";
-	    }
-	    #endif // DEBUG
-
-		return false;
-	}
-
-	/* set all the content to zero  */
-	bzero((char *)&server_address,sizeof(server_address));
-
-	/* setup address family of internet */
-	server_address.sin_family=AF_INET;
-
-    /* Listen to any internal address */
-	server_address.sin_addr.s_addr = INADDR_ANY;
-	server_address.sin_port=htons(this->port);
-
-	int bind_stat=bind(server,(struct sockaddr *) &server_address, sizeof(server_address));
-	if(bind_stat<0)
-	{
-		#ifdef DEBUG
-	    {
-	        cout<<"Failed to bind socket\n";
-	    }
-	    #endif // DEBUG
-	}
-    /* Queue atmost maximum crawlers connection in parallel */
-	listen(server,this->maxCrawlers);
-	return true;
+    server=new ServerConnection("127.0.0.1",this->port,this->maxCrawlers);
+    return true;
 }
 
 /* This function stops the server
 */
-bool masterInitialize::stop_server()
+bool masterInitialize::stop()
 {
-    // store queue values to file
+    server->closeConnection();
     return true;
 }
 
@@ -231,6 +201,7 @@ void sighandler(int signum)
 {
     if(global->stop_server()==true)
     {
+
         global->write_log("Server stopped successfully");
         exit(EXIT_SUCCESS);
     }
@@ -244,6 +215,45 @@ void sighandler(int signum)
 
 
 /*---------------------------------------------------END OF FUNCTION DEFINITIONS--------------------------------------------------------------------------------*/
+
+
+class Master : public masterInitialize
+{
+
+private:
+    struct crawler
+    {
+        unsigned short int crawlerId;
+        unsigned int crawlerQueueSize;
+        string crawlerIpAddress;
+        unsigned short int crawlerPost;
+        string crawlerJoinTime;
+    };
+
+
+    vector<crawler> crawlerInfo;
+
+
+public:
+    string getQueueLinks();
+    bool addQueueLinks();
+    unsigned int getUrlId();
+    bool isUrlPresent();
+    bool addCrawler();
+    bool removeCrawler();
+    string requestLinks();          /* Requests links from crawler  */
+    bool sendLinks();               /* Send links to crawlers       */
+    void listenToCrawlers();
+    bool parseRequest();
+    bool sendAcknoledge();
+    void displayCrawlersInfo();
+
+
+};
+
+
+
+
 
 
 int main()
@@ -282,7 +292,6 @@ int main()
     while(1)
     {
         // do job
-        sleep(1);
     }
 
     return 0;
