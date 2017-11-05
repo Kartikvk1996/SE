@@ -1,48 +1,3 @@
-/*  Author  :   kartik v kalaghatagi
-    Date    :   29-10-2017
-*/
-
-
-/*------------------------------------------------------------Libraries----------------------------------------------------------------------*/
-
-#ifdef __unix__
-    #include<sys/types.h>
-    #include<pthread.h>
-    #include<signal.h>
-    #include<unistd.h>
-    #include<fcntl.h>
-#endif // __unix__
-
-
-#include<iostream>
-#include<bits/stdc++.h>
-#include<string>
-#include<string.h>
-#include<ctime>
-#include<stdlib.h>
-#include<stdbool.h>
-
-#include"connection.hpp"
-
-
-/*  Enable debug mode
-    0   -   off
-    1   -   on
-*/
-#define DEBUG 0
-
-
-#define CONFIG_FILE_PATH "config.txt"
-#define LOG_FILE_PATH "log.txt"
-
-
-
-using namespace std;
-
-/*----------------------------------------------------------FUNCTION PROTOTYPE-----------------------------------------------------------------*/
-
-void getTime(string &ctime);
-void sighandler(int signum);
 
 /*----------------------------------------------CLASS DECLARATION AND IMPLEMENTATION-----------------------------------------------------------*/
 
@@ -53,6 +8,7 @@ private:
     unsigned short int queueSize;
     unsigned short int maxCrawlers;
     string startTime;
+public:
     ServerConnection *server;
     ClientConnection *client;
 
@@ -92,7 +48,7 @@ bool masterInitialize::init()
         #ifdef DEBUG
         {
             cout<<"Failed to open config.txt file\n";
-
+            masterInitialize::write_log("Failed to open config.txt file to initialize");
         }
         #endif
         return false;
@@ -115,6 +71,7 @@ bool masterInitialize::init()
 
     free(buffer);
     fclose(fp);
+    masterInitialize::write_log("master variables initialized successfully");
     return true;
 }
 
@@ -165,6 +122,7 @@ bool masterInitialize::write_log(string message)
 bool masterInitialize::start()
 {
     server=new ServerConnection("127.0.0.1",this->port,this->maxCrawlers);
+    masterInitialize::write_log("Master server started");
     return true;
 }
 
@@ -173,126 +131,9 @@ bool masterInitialize::start()
 bool masterInitialize::stop()
 {
     server->closeConnection();
+    masterInitialize::write_log("Master server stopped");
     return true;
 }
 
 
 /*---------------------------------------------------END OF CLASS FUNCTIONS IMPLEMENTATIONS--------------------------------------------------------------*/
-
-masterInitialize *global;
-
-/*---------------------------------------------------FUNCTION DEFINITIONS--------------------------------------------------------------------------------*/
-
-void getTime(string &ctime)
-{
-    char buffer[100];
-    time_t currentTime;
-    struct tm *time_info;
-    time(&currentTime);
-    time_info=localtime(&currentTime);
-    strftime(buffer,100,"%d-%m-%Y %I:%M:%S",time_info);
-    ctime=buffer;
-    return ;
-}
-
-
-
-void sighandler(int signum)
-{
-    if(global->stop_server()==true)
-    {
-
-        global->write_log("Server stopped successfully");
-        exit(EXIT_SUCCESS);
-    }
-    else
-    {
-        global->write_log("Failed to stop server properly");
-        exit(EXIT_FAILURE);
-    }
-
-}
-
-
-/*---------------------------------------------------END OF FUNCTION DEFINITIONS--------------------------------------------------------------------------------*/
-
-
-class Master : public masterInitialize
-{
-
-private:
-    struct crawler
-    {
-        unsigned short int crawlerId;
-        unsigned int crawlerQueueSize;
-        string crawlerIpAddress;
-        unsigned short int crawlerPost;
-        string crawlerJoinTime;
-    };
-
-
-    vector<crawler> crawlerInfo;
-
-
-public:
-    string getQueueLinks();
-    bool addQueueLinks();
-    unsigned int getUrlId();
-    bool isUrlPresent();
-    bool addCrawler();
-    bool removeCrawler();
-    string requestLinks();          /* Requests links from crawler  */
-    bool sendLinks();               /* Send links to crawlers       */
-    void listenToCrawlers();
-    bool parseRequest();
-    bool sendAcknoledge();
-    void displayCrawlersInfo();
-
-
-};
-
-
-
-
-
-
-int main()
-{
-    /* Signal Handler for interrupt signal*/
-    signal(SIGINT, sighandler);
-
-    masterInitialize *m=new masterInitialize();
-    masterInitialize *global=m;
-
-
-    m->write_log("Starting Master");
-
-    /* Initialize Variables */
-    if(m->init()==true)
-    {
-        m->display();   /* Display information */
-        m->write_log("Variables Initialized successfully");
-    }
-    else
-    {
-        m->write_log("Failed to initialize Variables");
-    }
-
-    m->write_log("Starting Server");
-    if(m->start_server()==true)
-    {
-        m->write_log("Server Started successfully");
-    }
-    else
-    {
-        m->write_log("Failed to start server");
-    }
-
-
-    while(1)
-    {
-        // do job
-    }
-
-    return 0;
-}
