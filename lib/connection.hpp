@@ -39,6 +39,8 @@
                                                         (NOTE : Not necessary to call compulsory on destroy of object
                                                          this function is called automatically.)
 
+        vii)    bool isAlive()                      :   Tells connection is live or not ,returns true if live else false.
+
     ii) ClientConnection class which helps client program to communicate with server
         it supports two constructors
 
@@ -67,6 +69,8 @@
         vi)     void closeConnection()              :   closes the socket connection.
                                                         (NOTE : Not necessary to call compulsory on destroy of object
                                                          this function is called automatically.)
+
+        vii)    bool isAlive()                      :   Tells connection is live or not ,returns true if live else false.
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -127,6 +131,7 @@ private:
     string ipAddress;
     char *msg=NULL;
     string message;
+    bool serverAlive=false;
 
 public:
     /*  constructor */
@@ -137,7 +142,16 @@ public:
         this->port=8080;
         this->ipAddress="127.0.0.1";
         if(!serverConnect())
-            cout<<"Failed to start server";
+        {
+            #ifdef DEBUG
+                cout<<"SERVER :Failed to start server";
+            #endif // DEBUG
+            serverAlive=true;
+        }
+        else
+        {
+            serverAlive=true;
+        }
     }
 
     ServerConnection(string ipAddr,unsigned short int pt,unsigned short int mReq=10)
@@ -147,13 +161,23 @@ public:
         this->port=pt;
         this->ipAddress=ipAddr;
         if(!serverConnect())
-            cout<<"Failed to start server";
+        {
+            #ifdef DEBUG
+                cout<<"SERVER :Failed to start server";
+            #endif // DEBUG
+            serverAlive=true;
+        }
+        else
+        {
+            serverAlive=true;
+        }
     }
 
     ~ServerConnection()
     {
         free(msg);
         closeConnection();
+        serverAlive=false;
     }
 
 private:
@@ -165,6 +189,7 @@ public:
     unsigned short int getPort();           /* To get port number  */
     string getIpAddress();                  /* To get IP Address  */
     void closeConnection();                 /* To close connection  */
+    bool isAlive();                         /* To check connection is live or not   */
 };
 
 /*--------------------------------------------------END OF CLASS DECLARATION----------------------------------------------------*/
@@ -193,7 +218,7 @@ bool ServerConnection::serverConnect()
         {
             #ifdef DEBUG
             {
-                cout<<"Failed to create socket\n";
+                cout<<"SERVER :Failed to create socket\n";
             }
             #endif // DEBUG
 
@@ -215,7 +240,7 @@ bool ServerConnection::serverConnect()
         {
             #ifdef DEBUG
             {
-                cout<<"Failed to bind socket\n";
+                cout<<"SERVER :Failed to bind socket\n";
             }
             #endif // DEBUG
         }
@@ -228,7 +253,7 @@ bool ServerConnection::serverConnect()
         if (WSAStartup(MAKEWORD(2,2),&wsa) != 0)
         {
             #ifdef DEBUG
-                cout<<"Failed. Error Code : "<<WSAGetLastError()<<"\n";
+                cout<<"SERVER :Failed. Error Code : "<<WSAGetLastError()<<"\n";
             return false;
             #endif // DEBUG
         }
@@ -237,7 +262,7 @@ bool ServerConnection::serverConnect()
         if((this->serverFileDescriptor = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
         {
             #ifdef DEBUG
-                cout<<"Failed to create socket : "<< WSAGetLastError()<<"\n";
+                cout<<"SERVER :Failed to create socket : "<< WSAGetLastError()<<"\n";
             return false;
             #endif // DEBUG
 
@@ -250,7 +275,7 @@ bool ServerConnection::serverConnect()
         if( bind(this->serverFileDescriptor ,(struct sockaddr *)&server , sizeof(server)) == SOCKET_ERROR)
         {
             #ifdef DEBUG
-                cout<<"Bind failed with error code : "<< WSAGetLastError()<<"\n";
+                cout<<"SERVER :Bind failed with error code : "<< WSAGetLastError()<<"\n";
             return false;
             #endif // DEBUG
 
@@ -277,7 +302,7 @@ bool ServerConnection::writeData(string message)
         else
         {
             #ifdef DEBUG
-                cout<<"Failed to write to socket\n";
+                cout<<"SERVER :Failed to write to socket\n";
             #endif // DEBUG
             return false;
         }
@@ -289,7 +314,7 @@ bool ServerConnection::writeData(string message)
         else
         {
             #ifdef DEBUG
-                cout<<"Failed to write to socket\n";
+                cout<<"SERVER :Failed to write to socket\n";
             #endif // DEBUG
             return false;
         }
@@ -316,7 +341,7 @@ string ServerConnection::readData()
         if(newsockfd<0)
         {
             #ifdef DEBUG
-                cout<<"Failed to accept connection\n";
+                cout<<"SERVER :Failed to accept connection\n";
             #endif // DEBUG
             return NULL;
         }
@@ -329,7 +354,7 @@ string ServerConnection::readData()
         else
         {
             #ifdef DEBUG
-                cout<<"Failed to read from socket\n";
+                cout<<"SERVER :Failed to read from socket\n";
             #endif // DEBUG
             return NULL;
         }
@@ -342,7 +367,7 @@ string ServerConnection::readData()
             if((recv(this->clientSocket,msg,BUFFERSIZE,0))<0)
             {
                 #ifdef DEBUG
-                    cout<<"Failed to read data to socket\n";
+                    cout<<"SERVER :Failed to read data to socket\n";
                 #endif // DEBUG
                 return NULL;
             }
@@ -355,7 +380,7 @@ string ServerConnection::readData()
         else
         {
             #ifdef DEBUG
-                cout<<"Failed to accept connection\n";
+                cout<<"SERVER :Failed to accept connection\n";
             #endif // DEBUG
         }
     }
@@ -385,6 +410,7 @@ string ServerConnection::getIpAddress()
 */
 void ServerConnection::closeConnection()
 {
+    serverAlive=false;
     #ifdef __unix__
     {
         close(this->serverFileDescriptor);
@@ -396,6 +422,14 @@ void ServerConnection::closeConnection()
     }
     #endif // __unix__
 }
+
+/* Method isAlive() tells connected to server or not
+*/
+bool ServerConnection::isAlive()
+{
+    return this->serverAlive;
+}
+
 
 /*----------------------------------------END OF IMPLEMENTATION OF SERVER CONNECTION CLASS METHODS------------------------------------*/
 
@@ -425,6 +459,7 @@ private:
     string ipAddress;
     char *msg=NULL;
     string message;
+    bool clientAlive=false;
 
 
 public:
@@ -435,7 +470,11 @@ public:
         this->port=8080;
         this->ipAddress="127.0.0.1";
         if(!clientConnect())
-            cout<<"Failed to connect to server";
+        {
+            #ifdef DEBUG
+                cout<<"CLIENT :Failed to connect to Server";
+            #endif // DEBUG
+        }
     }
 
 
@@ -445,13 +484,24 @@ public:
         this->port=pt;
         this->ipAddress=ipAddr;
         if(!clientConnect())
-            cout<<"Failed to connect to server";
+        {
+            #ifdef DEBUG
+                cout<<"CLIENT :Failed to connect to Server";
+            #endif // DEBUG
+            clientAlive=false;
+        }
+        else
+        {
+            clientAlive=true;
+        }
+
     }
 
     ~ClientConnection()
     {
         free(msg);
         closeConnection();
+        clientAlive=false;
     }
 
 
@@ -464,6 +514,7 @@ public:
     unsigned short int getPort();           /* To get port value        */
     string getIpAddress();                  /* To get IP Address        */
     void closeConnection();                 /* To Close Connection      */
+    bool isAlive();                         /* To check connection is live or not   */
 };
 
 /*--------------------------------------------------END OF CLASS DECLARATION----------------------------------------------------*/
@@ -490,7 +541,7 @@ bool ClientConnection::clientConnect()
         {
             #ifdef DEBUG
             {
-                cout<<"Failed to create socket\n";
+                cout<<"CLIENT :Failed to create socket\n";
             }
             #endif // DEBUG
 
@@ -510,9 +561,10 @@ bool ClientConnection::clientConnect()
         {
             #ifdef DEBUG
             {
-                cout<<"Failed to connect to server\n";
+                cout<<"CLIENT :Failed to connect to server\n";
             }
             #endif // DEBUG
+            return false;
         }
 
         return true;
@@ -521,7 +573,7 @@ bool ClientConnection::clientConnect()
         if((serverfd=socket(AF_INET,SOCK_STREAM,0))==-1)
         {
             #ifdef DEBUG
-                cout<<"Failed to open to socket\n";
+                cout<<"CLIENT :Failed to open to socket\n";
             #endif // DEBUG
             return false;
 
@@ -539,7 +591,7 @@ bool ClientConnection::clientConnect()
         if(connect(serverfd,(struct sockaddr*)&server,sizeof(struct sockaddr))==-1)
         {
             #ifdef DEBUG
-                cout<<"Failed to connect to server\n";
+                cout<<"CLIENT :Failed to connect to server\n";
             #endif // DEBUG
             return false;
         }
@@ -561,7 +613,7 @@ bool ClientConnection::writeData(string message)
         else
         {
             #ifdef DEBUG
-                cout<<"Failed to write to socket\n";
+                cout<<"CLIENT :Failed to write to socket\n";
             #endif // DEBUG
             return false;
         }
@@ -571,7 +623,7 @@ bool ClientConnection::writeData(string message)
         else
         {
             #ifdef DEBUG
-                cout<<"Failed to write to socket\n";
+                cout<<"CLIENT :Failed to write to socket\n";
             #endif // DEBUG
             return false;
         }
@@ -596,7 +648,7 @@ string ClientConnection::readData()
         else
         {
             #ifdef DEBUG
-                cout<<"Failed to read from socket\n";
+                cout<<"CLIENT :Failed to read from socket\n";
             #endif // DEBUG
             return NULL;
         }
@@ -609,7 +661,7 @@ string ClientConnection::readData()
         else
         {
             #ifdef DEBUG
-                cout<<"Failed to read from socket\n";
+                cout<<"CLIENT :Failed to read from socket\n";
             #endif // DEBUG
             return NULL;
         }
@@ -642,7 +694,15 @@ void ClientConnection::closeConnection()
         closesocket(this->serverfd);
         WSACleanup();
     #endif // __unix__
+    clientAlive=false;
 
+}
+
+/* Method isAlive() tells connected to server or not
+*/
+bool ClientConnection::isAlive()
+{
+    return this->clientAlive;
 }
 
 /*--------------------------------------------------END OF CLASS DECLARATION----------------------------------------------------*/
