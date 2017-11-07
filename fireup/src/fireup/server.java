@@ -17,8 +17,12 @@ class server {
 				String line;
 				while((line=br.readLine()) != null)
 					System.out.println(line);
+				conn.getOutputStream().write(
+						"Hello\nBye!\n".getBytes()
+					);
+				conn.getOutputStream().close();
 				conn.close();
 			}
-		} catch(Exception e) {}
+		} catch(Exception e) { System.out.println("IOExecption");}
 	}
 }
