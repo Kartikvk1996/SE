@@ -4,7 +4,7 @@
 
 #include<iostream>
 #include<string>
-
+#include "json.hpp"
 #define CONNECT 1
 #define CREATE 2
 #define GET 3
@@ -13,7 +13,7 @@
 #define WRITE 6
 #define ACK 7
 using namespace std;
-
+using json=nlohmann:: json;
 class Protocol {
 
 private:string senderIP;
@@ -72,10 +72,19 @@ public:
 	}
 public:
 	string getJSON() {
-		
-		string jsonifiedString = "{ who:\""+who+"\",\nwhom:\""+whom+"\",\nIP:\""+receiverIP+"\",\nPort:\""+"8000"+"\",\nData:{\""+data+"\"}\n}";
-		return jsonifiedString;
+		json j;
+		 j=R"({"HelloWorld":"Hi"})"_json;
+		 string str="thank you!";
+		cout<< json::parse(str);
+		string jsonifiedString = "{ \"who:\"\""+who+"\",\n\"whom:\"\""+whom+"\",\n\"IP:\"\""+receiverIP+"\",\n\"Port:\"\""+"8000"+"\",\n\"Data:\"{\""+data+"\"}\n}";
+		return j.dump();
 	}
 
 
 };
+int main(){
+Protocol p("master1","master2",CONNECT);
+p.setData("Hi! Hello World!");
+cout<< p.getJSON();
+
+}

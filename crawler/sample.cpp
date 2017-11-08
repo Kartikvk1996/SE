@@ -14,16 +14,17 @@ struct urlInfo
 	string parsedTime;
 	string nameOfFile;
 	struct urlInfo *next;
+	FILE *of;
 };
 
 
 class doWork
 {
-      public:
-	void requestLinks(struct urlInfo ** , struct urlInfo **);       //Implement this function after knowing how "Crawler"(written by Kartik) sends URLs
-	void generateHTMLPage(struct urlInfo ** , struct urlInfo **);
-	void putItInFile(struct urlInfo **);
-	
+public:
+	//Implement this function after knowing how "Crawler"(written by Kartik) sends URLs
+	void requestLinks(struct urlInfo ** , struct urlInfo **);
+	void getHTMLPage(struct urlInfo*);
+	void printInfo(struct urlInfo *);
 };
 
 int main(void)
@@ -34,110 +35,66 @@ int main(void)
 	struct urlInfo * tail = NULL;
 
 	cwl.requestLinks(&head , &tail);
-	cwl.generateHTMLPage(&head , &tail);	
- 
   	return 0;
 }
 
-void doWork :: generateHTMLPage(struct urlInfo ** head , struct urlInfo ** tail)
+void doWork :: getHTMLPage(struct urlInfo *urlInfo)
 {
 	CURL *curl;
   	CURLcode res;
  
   	curl_global_init(CURL_GLOBAL_DEFAULT);
- 
-        curl = curl_easy_init();
+ 	curl = curl_easy_init();
 	
-	while((*head) != NULL)
-	{	
-		struct urlInfo *nodeToBeDeleted = (*head);
-		string url=(*head)->url;
-		char u[100];
-		strcpy( u , url.c_str() );
+	if(curl) {
 		
-		
-  		if(curl)
- 		{
-			FILE *fp=fopen("temp","w");
-    			curl_easy_setopt(curl, CURLOPT_URL, u);
-			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);			
-			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);//
-        		curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);	    //
-			res = curl_easy_perform(curl);
-			//cout<<sizeof(res);	
-    			if(res != CURLE_OK)
-     			  fprintf(stderr, "curl_easy_perform() failed: %s\n",curl_easy_strerror(res));
-			
-			curl_easy_cleanup(curl);
-  		}
-		
-		time_t now = time(0);
-   		string dateTime = ctime(&now);
-		(*head)->parsedTime = dateTime;
-		
-		doWork file;
-		file.putItInFile((head)); 
+		printInfo(urlInfo);
 
-  		curl_global_cleanup();
+		curl_easy_setopt(curl, CURLOPT_URL, urlInfo->url.c_str());
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, urlInfo->of);
+		res = curl_easy_perform(curl);
+			
+		if(res != CURLE_OK)
+   			fprintf(stderr, "curl_easy_perform() failed: %s\n",curl_easy_strerror(res));
 		
-		(*head)=(*head)->next;
-		delete(nodeToBeDeleted);
-		
+		curl_easy_cleanup(curl);
+		curl_global_cleanup();
+
+		time_t t = time(0);
+		urlInfo->parsedTime = ctime(&t);
 	}
-	(*tail) = NULL;
-		
 }
 
 void doWork :: requestLinks(struct urlInfo ** head , struct urlInfo ** tail)
 {
-	struct urlInfo *u;
-
-	u = new(struct urlInfo); 
-	if (u == NULL)
-        {
-		cout<<"Memory not allocated "<<endl;
-		return;
-	}
-
-	string value = "https://www.wikipedia.org/";
-	u->url = value;				//You can get URL from crawler(written by Kartik)
-	u->urlID = 10;				//u->urlID = < call appropriate function writeen by Queue implementing team >
-
-	ofstream f;
-  	string fileName = "dummyNameofHTMLFile";//To get 'fileName' call getFileID() function written by Kartik 
-	u->nameOfFile = "dummyNameofHTMLFile";	//u->nameOfFile = fileName;
-	f.open( fileName.c_str() );		//File is created
-	u->next = NULL;
+	struct urlInfo *u = new(struct urlInfo); 
 	
-	if((*head) == NULL)
-	{
-		(*head) = (*tail) = u;
-		return;
+	u->url = "https://www.wikipedia.org/";
+	u->urlID = 10;
+	u->of = fopen("temp", "w");
+
+	*head = u;
+	*tail = NULL;
+
+	for(urlInfo *u = *head; u != *tail; u = u->next) {
+		getHTMLPage(u);
+		printf("foo\n");
 	}
-	 
-	(*tail)->next = u;
-	(*tail) = u;		
-	
 }
 
-void doWork :: putItInFile(struct urlInfo ** currentNode)
-{
-	char nameOfFile[100];
-
-	string fileName = (*currentNode)->nameOfFile;
-	strcpy( nameOfFile , fileName.c_str() );
-	ofstream file (nameOfFile);
-
-  	if (file.is_open())
-  	{
-		file << "Name of File" 	<<"\t\t\t" << (*currentNode)->nameOfFile <<"\n";
-    		file << "URL-ID      " 	<<"\t\t\t" << (*currentNode)->urlID      <<"\n";
-		file << "URL         "  <<"\t\t\t" << (*currentNode)->url        <<"\n";
-		file << "Parsed Time "  <<"\t\t\t" << (*currentNode)->parsedTime <<"\n";
-   	 	file.close();
-  	}
-  	else 
-	        cout << "Unable to open file";
-  	return;
+void doWork :: printInfo(struct urlInfo *urlNode) {
+	fprintf(
+		urlNode->of,
+		"Name of File \t\t\t %s\n"
+		"URL-ID       \t\t\t %d\n"
+		"URL          \t\t\t %s\n"
+		"Parsed Time  \t\t\t %s\n\n",
+		(urlNode)->nameOfFile.c_str(),
+		(urlNode)->urlID,
+		(urlNode)->url.c_str(),
+		(urlNode)->parsedTime.c_str()
+	);
 }	

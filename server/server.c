@@ -60,7 +60,7 @@ int main()
 	// setup address family of internet
 	server_address.sin_family=AF_INET;
 
-	server_address.sin_addr.s_addr = INADDR_ANY;
+	server_address.sin_addr.s_addr = htons(INADDR_ANY);
 	server_address.sin_port=htons(PORT);	// htons = converts integer to bytes
 
 	int bind_stat=bind(sockfd,(struct sockaddr *) &server_address, sizeof(server_address));

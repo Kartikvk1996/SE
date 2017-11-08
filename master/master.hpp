@@ -1,4 +1,7 @@
 #include"master_init.hpp"
+#include"../lib/json.hpp"
+
+using json = nlohmann::json;
 
 class Master : public masterInitialize
 {
@@ -39,7 +42,7 @@ public:
     string requestLinks();          /* Requests links from crawler  */
     bool sendLinks();               /* Send links to crawlers       */
     void* listenToCrawlers();
-    bool parseRequest();
+    bool parseRequest(string);
     void sendAcknowledge();
     void displayCrawlersInfo();
 
@@ -62,9 +65,9 @@ void * Master::listenToCrawlers()
         if(!parseRequest(inputData))
         {
             #ifdef DEBUG
-                cout<<"Failed to parse request\n";
-                write_log("Failed to parse request");
+                cout<<"Failed to parse request\n"; 
             #endif // DEBUG
+	    write_log("Failed to parse request");
         }
         cout<<"Next\n";
     }
@@ -75,6 +78,12 @@ bool Master::parseRequest(string data)
 {
     //parse input data
     // send acknowledge
+	json parsedData=json::parse(data);
+	if(parsedData["protocol"]=="connect")
+    {
+        cout<<"Hello bassya";
+        return true;
+    }
 }
 
 
