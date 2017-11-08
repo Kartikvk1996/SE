@@ -8,11 +8,12 @@ private:
     string ipAddress;
     string masterIpAddress;
     unsigned short int masterPort;
-    unsigned short int maxWorkerThreads;
     string startTime;
     unsigned int sendQueueSize;
     unsigned int receiveQueueSize;
 public:
+    unsigned short int maxWorkerThreads;
+
     ServerConnection *server;
     ClientConnection *client;
 
@@ -33,6 +34,7 @@ public:
     void start();
     void stop();
     bool write_log(string);
+    unsigned short int getMaxWorkerThreads();
     string getMasterIp();
     unsigned short int getMasterPort();
 };
@@ -164,5 +166,6 @@ unsigned short int CrawlerInitialize::getMasterPort()
 {
     return this->masterPort;
 }
+
 
 /*---------------------------------------------------END OF CLASS FUNCTIONS IMPLEMENTATIONS--------------------------------------------------------------*/

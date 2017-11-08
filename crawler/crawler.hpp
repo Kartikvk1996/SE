@@ -30,6 +30,7 @@ public:
         this->CrawlerId=0;
         this->init();
         this->start();
+        this->run();
     }
 
     ~Crawler()
@@ -40,6 +41,7 @@ public:
 
 
 private:
+    void run();
     void display();
     bool sendLinks();
     string requestLinks();
@@ -54,23 +56,21 @@ public:
     unsigned short int getFileId();
 };
 
+void Crawler::run()
+{
+    thread worker[this->maxWorkerThreads];
+    doWork *dw[this->maxWorkerThreads];
+    for(int ittr=0;ittr<maxWorkerThreads;ittr++)
+    {
+        dw[ittr]=new doWork(string("Thread "+ittr),this);
+        worker[ittr]=thread(doWork::crawl,dw[ittr]);
+        worker[ittr].join();
+    }
+}
+
 
 void * Crawler::listenToMaster()
 {
-     while(1)
-    {
-        cout<<"Listening to client\n";
-        string inputData=server->readData();
-        write_log("received an incoming request");
-        if(!parseRequest(inputData))
-        {
-            #ifdef DEBUG
-                cout<<"Failed to parse request\n";
-            #endif // DEBUG
-            write_log("Failed to parse request");
-        }
-        cout<<"Next\n";
-    }
 }
 
 
