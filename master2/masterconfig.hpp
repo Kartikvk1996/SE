@@ -6,7 +6,7 @@ using namespace std;
 
 #include "../include/debug.h"
 #include "../include/util.hpp"
-#include "Slave.cpp"
+#include "slaveconfig.hpp"
 
 class MasterConfig {
 
