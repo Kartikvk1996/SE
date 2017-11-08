@@ -139,12 +139,14 @@ bool Socket :: writeData(string data) {
  * the read multiple times for getting whole data.
  */
 string Socket :: readData() {
-	if (read(fd, msg, SOCK_BUFFER_SIZE) > 0) {
-		return string(msg);
-	} else {
-		dprintf("Socket:: Failed to read from socket\n");
-		return NULL;
-	}
+	try {
+		if (read(fd, msg, SOCK_BUFFER_SIZE) > 0) {
+			return string(msg);
+		} else {
+			dprintf("Socket:: Failed to read from socket\n");
+			return "";
+		}
+	} catch(...){}
 }
 
 /* returns the port value on which socket connection is open */

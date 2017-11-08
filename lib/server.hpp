@@ -36,9 +36,8 @@ public:
 	void run() {
 		while(true) {
 			Socket *sock = server->acceptConn();
-			thread t(handler, sock);
+			thread(handler, sock).detach();
 			dprintf("accepted a connection on thread\n");
-			t.join();
 		}
 	}
 };
