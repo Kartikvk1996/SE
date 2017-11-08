@@ -1,0 +1,1 @@
+./hashgen.out < methods > phashes.hpp
