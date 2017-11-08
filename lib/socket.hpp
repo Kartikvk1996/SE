@@ -77,14 +77,14 @@ public:
 	}
 
 	~Socket() {
-		sock_close();
+		closeConn();
 	}
 
 	bool writeData(string message);	/* To write data to socket */
 	string readData();		/* To read data to socket */
 	ushort getPort();		/* To get port number */
 	string getHost();		/* To get IP Address */
-	void sock_close();		/* To close connection */
+	void closeConn();		/* To close connection */
 	bool isAlive();			/* To check connection liveness */
 };
 
@@ -158,7 +158,7 @@ string Socket :: getHost() {
 }
 
 /* closes the socket connection */
-void Socket :: sock_close() {
+void Socket :: closeConn() {
 	alive = false;
 	close(fd);
 }
