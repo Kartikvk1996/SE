@@ -37,7 +37,7 @@ public:
     }
 };
 
-
+/*
 int main(int argc, char **argv) {
     MasterConfig config("127.0.0.1", 80);
     config.addSlave(new Slave("192.168.2.2", 73));
@@ -46,3 +46,4 @@ int main(int argc, char **argv) {
 
     cout << config.toString() << endl;
 }
+*/
