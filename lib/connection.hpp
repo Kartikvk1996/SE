@@ -19,25 +19,28 @@
 
         This class provides following methods :-
 
-        i)      bool serverConnect()                :   which is private and is called for every new object
-                                                        and opens socket connection for given IP Address
-                                                        on success it returns true else false.
+        i)      bool serverConnect()                            :   which is private and is called for every new object
+                                                                    and opens socket connection for given IP Address
+                                                                    on success it returns true else false.
 
-        ii)     bool writeData(string message)      :   This method take data in the form of string
-                                                        writes it to the socket on success it returns
-                                                        true else false on failure.
+        ii)     socket accept()                                 :   Is a blocking function call that returns socket
 
-        iii)    string readData()                   :   This methods reads the data present in the socket
-                                                        stream on success it returns string else NULL value
-                                                        is returned.
 
-        iV)     int getPort()                       :   Returns the port on which socket is open.
+        ii)     bool writeData(socket fd,string message)        :   This method take socket file descriptor & data in the form of string
+                                                                    writes it to the socket stream, on success it returns
+                                                                    true else false on failure.
 
-        v)      string getIpAddress()               :   Returns the IP Address.
+        iii)    string readData(socket fd)                      :   This methods reads the data present in the socket
+                                                                    stream provided as argument on success it returns string
+                                                                    else NULL value is returned.
 
-        vi)     void closeConnection()              :   closes the socket connection.
-                                                        (NOTE : Not necessary to call compulsory on destroy of object
-                                                         this function is called automatically.)
+        iV)     int getPort()                                   :   Returns the port on which socket is open.
+
+        v)      string getIpAddress()                           :   Returns the IP Address.
+
+        vi)     void closeConnection()                          :   closes the socket connection.
+                                                                    (NOTE : Not necessary to call compulsory on destroy of object
+                                                                    this function is called automatically.)
 
         vii)    bool isAlive()                      :   Tells connection is live or not ,returns true if live else false.
 
@@ -103,7 +106,7 @@
 
 
 #define BUFFERSIZE 65535
-
+#define CSOCKET int
 
 using namespace std;
 
@@ -116,11 +119,10 @@ private:
     #ifdef __unix__
         int serverFileDescriptor;
         struct sockaddr_in serverAddress,clientAddress;
-        int newsockfd;
         socklen_t clientRequestLength;
     #elif __WIN32
         WSADATA wsa;
-        SOCKET serverFileDescriptor,clientSocket ;
+        SOCKET serverFileDescriptor ;
         struct sockaddr_in server , client;
         int sockfdSize;
     #endif // __unix__
@@ -184,8 +186,9 @@ private:
     bool serverConnect();
 
 public:
-    bool writeData(string message);         /* To write data to socket  */
-    string readData();                      /* To read data to socket  */
+    CSOCKET acceptConnection();              /* Accept the new connection    */
+    bool writeData(CSOCKET ,string);         /* To write data to socket  */
+    string readData(CSOCKET);                /* To read data to socket  */
     unsigned short int getPort();           /* To get port number  */
     string getIpAddress();                  /* To get IP Address  */
     void closeConnection();                 /* To close connection  */
@@ -288,16 +291,59 @@ bool ServerConnection::serverConnect()
 
 }
 
+CSOCKET ServerConnection::acceptConnection()
+{
+    #ifdef __unix__
+    {
+        /* accept the request   */
+        clientRequestLength=sizeof(clientAddress);
+
+        CSOCKET newsockfd;
+
+        newsockfd=accept(this->serverFileDescriptor, (struct sockaddr *) &clientAddress, &clientRequestLength);
+        if(newsockfd<0)
+        {
+            #ifdef DEBUG
+                cout<<"SERVER :Failed to accept connection\n";
+            #endif // DEBUG
+            return -1;
+        }
+        return newsockfd;
+    }
+    #elif __WIN32
+    {
+        this->sockfdSize = sizeof(struct sockaddr_in);
+        CSOCKET newsockfd;
+
+        if((newsockfd = accept(this->serverFileDescriptor , (struct sockaddr *)&this->client, &this->sockfdSize)) != INVALID_SOCKET )
+        {
+            return newsockfd;
+        }
+        else
+        {
+            #ifdef DEBUG
+                cout<<"SERVER :Failed to accept connection\n";
+            #endif // DEBUG
+            return -1;
+        }
+    }
+    #endif // __unix__
+}
+
+
+
+
+
 /*  Method writeData() writes the data to the socket
     connection , returns true on success
     else false is returned on failure
 */
 
-bool ServerConnection::writeData(string message)
+bool ServerConnection::writeData(CSOCKET fd,string message)
 {
     #ifdef __unix__
     {
-        if(write(this->newsockfd,message.c_str(),message.length())>0)
+        if(write(fd,message.c_str(),message.length())>0)
             return true;
         else
         {
@@ -309,7 +355,7 @@ bool ServerConnection::writeData(string message)
     }
     #elif __WIN32
     {
-        if((send(this->clientSocket , message.c_str() , message.length() , 0))>0)
+        if((send(fd , message.c_str() , message.length() , 0))>0)
             return true;
         else
         {
@@ -330,23 +376,13 @@ bool ServerConnection::writeData(string message)
     connection returns string containing read data on success
     else NULL value is returned on failure
 */
-string ServerConnection::readData()
+string ServerConnection::readData(CSOCKET fd)
 {
 
     #ifdef __unix__
     {
-        /* accept the request   */
-        clientRequestLength=sizeof(clientAddress);
-        newsockfd=accept(this->serverFileDescriptor, (struct sockaddr *) &clientAddress, &clientRequestLength);
-        if(newsockfd<0)
-        {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to accept connection\n";
-            #endif // DEBUG
-            return NULL;
-        }
 
-        if(read(this->newsockfd,msg,BUFFERSIZE)>0)
+        if(read(fd,msg,BUFFERSIZE)>0)
         {
             message=msg;
             return message;
@@ -361,31 +397,20 @@ string ServerConnection::readData()
     }
     #elif __WIN32
     {
-        this->sockfdSize = sizeof(struct sockaddr_in);
-        if((this->clientSocket = accept(this->serverFileDescriptor , (struct sockaddr *)&this->client, &this->sockfdSize)) != INVALID_SOCKET )
+        if((recv(fd,msg,BUFFERSIZE,0))<0)
         {
-            if((recv(this->clientSocket,msg,BUFFERSIZE,0))<0)
-            {
-                #ifdef DEBUG
-                    cout<<"SERVER :Failed to read data to socket\n";
-                #endif // DEBUG
-                return NULL;
-            }
-            else
-            {
-                message=msg;
-                return message;
-            }
+            #ifdef DEBUG
+                cout<<"SERVER :Failed to read data to socket\n";
+            #endif // DEBUG
+            return NULL;
         }
         else
         {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to accept connection\n";
-            #endif // DEBUG
+            message=msg;
+            return message;
         }
     }
     #endif // __unix__
-
 }
 
 
