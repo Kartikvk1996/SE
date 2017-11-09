@@ -12,7 +12,6 @@
 #include <iostream>
 #include <string>
 #include "../json.hpp"
-`
 /* include function in [phash.hpp] and generated hash values */
 #include "phashes.hpp"
 
@@ -78,8 +77,18 @@ public:
 	}
 
 public:
-	string getJSON() {
-		return "{ \"who:\"\"" + who + "\",\n\"whom:\"\"" + whom + "\",\n\"IP:\"\"" + receiverIP + "\",\n\"Port:\"\"" + "8000" + "\",\n\"Data:\"{\"" + data + "\"}\n}";
+	json getJSON() {
+	//	return "{ \"who:\"\"" + who + "\",\n\"whom:\"\"" + whom + "\",\n\"IP:\"\"" + receiverIP + "\",\n\"Port:\"\"" + "8000" + "\",\n\"Data:\"{\"" + data + "\"}\n}";
+json j;
+j["who"]=who;
+j["whom"]=whom;
+j["receiverIP"]=receiverIP;
+j["senderIP"]=senderIP;
+j["receiverPort"]=receiverPort;
+j["senderPort"]=senderPort;
+j["data"]=data;
+j["method"]=method;
+return j;
 	}
 
 public:
@@ -89,19 +98,16 @@ public:
 		whom=j["whom"].get<string>();
 		receiverIP=j["receiverIP"].get<string>();
 		senderIP=j["senderIP"].get<string>();
-		receiverPort=j["receiverPort"].get<string>();
-		senderPort=j["senderPort"].get<string>();
+		receiverPort=j["receiverPort"].get<int>();
+		senderPort=j["senderPort"].get<int>();
 		data=j["data"].get<string>();
 		method=j["method"].get<string>();
 
 
 	}
+
+
 };
-
-void lookUp(){
-
-	
-}
 
 int main()
 {
