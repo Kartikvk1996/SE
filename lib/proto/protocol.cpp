@@ -12,7 +12,7 @@
 #include <iostream>
 #include <string>
 #include "../json.hpp"
-
+`
 /* include function in [phash.hpp] and generated hash values */
 #include "phashes.hpp"
 
@@ -45,7 +45,7 @@ public:
 		whom = receiver;
 		setMethod(method);
 	}
-
+	
 	void setMethod(int pmethod) {
 		switch (pmethod) {
 			case METHOD_CONNECT:
@@ -81,7 +81,27 @@ public:
 	string getJSON() {
 		return "{ \"who:\"\"" + who + "\",\n\"whom:\"\"" + whom + "\",\n\"IP:\"\"" + receiverIP + "\",\n\"Port:\"\"" + "8000" + "\",\n\"Data:\"{\"" + data + "\"}\n}";
 	}
+
+public:
+	Protocol(string jsonString){
+		json j=json::parse(jsonString);
+		who=j["who"].get<string>();
+		whom=j["whom"].get<string>();
+		receiverIP=j["receiverIP"].get<string>();
+		senderIP=j["senderIP"].get<string>();
+		receiverPort=j["receiverPort"].get<string>();
+		senderPort=j["senderPort"].get<string>();
+		data=j["data"].get<string>();
+		method=j["method"].get<string>();
+
+
+	}
 };
+
+void lookUp(){
+
+	
+}
 
 int main()
 {
