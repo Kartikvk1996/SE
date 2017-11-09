@@ -1,0 +1,87 @@
+{
+	"title" : "mango",
+	"nresults" : 12334,
+	"results" : [
+		{
+			"result-type" : "webpage",
+			"proxy-link" : "https://en.wikipedia.org/wiki/Mango"
+        },
+        {
+			"result-type" : "webpage",
+			"proxy-link" : "https://www.organicfacts.net/health-benefits/fruit/mango.html"
+        },
+        {
+			"result-type" : "webpage",
+			"proxy-link" : "http://mango.org/en/About-Mangos/Mango-Facts"
+        },
+        {
+			"result-type" : "webpage",
+			"proxy-link" : "http://study.com/academy/lesson/about-mango-fruit-lesson-for-kids.html"
+        },
+        {
+			"result-type" : "webpage",
+			"proxy-link" : "https://www.fruitsandveggiesmorematters.org/mango"
+        },
+        {
+			"result-type" : "webpage",
+			"proxy-link" : "http://www.care2.com/greenliving/10-health-benefits-of-mangos.html"
+        },
+        {
+			"result-type" : "webpage",
+			"proxy-link" : "http://foodfacts.mercola.com/mango.html"
+        },
+        {
+			"result-type" : "webpage",
+			"proxy-link" : "http://www.fruitsinfo.com/mango-health-benefits-nutrition-values.php"
+        },
+        {
+			"result-type" : "webpage",
+			"proxy-link" : "http://www.indiamarks.com/mango-the-national-fruit-india/"
+        },
+        {
+			"result-type" : "webpage",
+			"proxy-link" : "http://www.culturalindia.net/national-symbols/national-fruit.html"
+        },
+        {
+            "result-type" : "image",
+            "link": "http://cdn.akc.org/content/article-body-image/mango.jpg"
+        },
+        {
+            "result-type" : "image",
+            "link": "http://www.mango.org/Mangos/media/Media/Images/Consumer%20Page%20Teaser/haden.png"
+        },
+        {
+            "result-type" : "image",
+            "link": "http://gubanu.com/wp-content/uploads/2017/08/Mango-tree.jpg"
+        },
+        {
+            "result-type" : "image",
+            "link": "https://2rt9loawzcmbvlze40mhj9n0-wpengine.netdna-ssl.com/wp-content/uploads/2015/04/mangoes.jpg"
+        },
+		{
+			"result-type" : "specific",
+			"content" : [
+				{
+					"key" : "Name",
+					"value" : "Mango",
+					"weight" : 0.223
+                },
+                {
+					"key" : "Type",
+					"value" : "Fruit",
+					"weight" : 0.434
+                }
+            ],
+            "related_searches" : [
+                {
+                    "Name": "Banana",
+                    "image_link": "https://www.organicfacts.net/wp-content/uploads/2013/05/Banana3-700x525.jpg"
+                },
+                {
+                    "Name": "Pineapple",
+                    "image_link": "https://www.organicfacts.net/wp-content/uploads/2013/06/Pineapple-700x525.jpg"
+                }
+            ]
+		}
+	]
+}
