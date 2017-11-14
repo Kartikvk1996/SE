@@ -13,7 +13,7 @@ private:
 
     mutex mtx;
     mutex queueLock;
-
+    mutex writeFileLock;
     struct urlInfo
     {
         unsigned int urlId;
@@ -55,8 +55,10 @@ private:
     bool updateLinks();
     
     /* Parse input data from master */
-    bool parseRequest(string);
+    void parseRequest(string);
     bool sendAcknowledge();
+
+    /* to store current instance to file */
     void writeCurrentInstance();
 
 public:
@@ -65,17 +67,17 @@ public:
     unsigned short int getFileId();
     /* To give links to worker threads */
     string getLocalLinks();
-
+    void writeToFile();
 };
 
 void Crawler::run()
 {
-    thread worker[this->maxWorkerThreads];
+    thread workers[this->maxWorkerThreads];
     Worker *dw[this->maxWorkerThreads];
     for(int ittr=0;ittr<maxWorkerThreads;ittr++)
     {
-        dw[ittr]=new doWork(string("Thread "+ittr),this);
-        worker[ittr]=thread(doWork::crawl,dw[ittr]);
+        dw[ittr]=new Worker(string("Thread "+ittr),this);
+        worker[ittr]=thread(Worker::crawl,dw[ittr]);
         worker[ittr].detach();
     }
 }
@@ -83,7 +85,12 @@ void Crawler::run()
 
 void * Crawler::listenToMaster()
 {
-    
+    while(1)
+    {
+        CSOCKET fd=server->acceptConnection();
+        thread w (Crawler::parseRequest,this,server->readData(fd));
+        w.detach();
+    }    
 }
 
 
@@ -95,7 +102,7 @@ unsigned short int Crawler::getFileId()
     return fileId;
 }
 
-bool Crawler::parseRequest(string data)
+void Crawler::parseRequest(string data)
 {
 
 }
@@ -108,3 +115,25 @@ string Crawler::getLocalLinks()
     lockQueue.unlock();
     //return data
 }
+
+
+void Crawler::writeToFile(unsigned long int urlId,string url,unsigned long int hash,unsigned int depth,string fileName)
+{
+    writeFileLock.lock();
+    FILE *fp=fopen("urlInfo.txt","a+");
+    if(fp==NULL)
+        throw "File 'urlInfo.txt' Not Found";
+    if(fprintf(fp,"%ld %s %ld %d %s",urlId,url,hash,depth,fileName)==-1)
+        throw "Failed to write to urlInfo.txt file\n";
+
+    catch(const char * e)
+    {
+        cout<<e<<"\n";
+    }
+    fclose(fp);
+    writeFileLock.unlock();
+    return;
+}
+
+
+
