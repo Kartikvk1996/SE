@@ -12,15 +12,15 @@ class MasterConfig {
 
     string ip;
     string port;
-    vector<Slave*> slaves;
+    vector<SlaveConfig*> slaves;
 
 public:
-    MasterConfig(string ip, ushort port) {
+    MasterConfig(string ip, string port) {
         this->ip = ip;
-        this->port = ushort2str(port);
+        this->port = port;
     }
 
-    void addSlave(Slave *slave) {
+    void addSlave(SlaveConfig *slave) {
         slaves.push_back(slave);
     }
 
@@ -34,6 +34,18 @@ public:
         }
 
         return "{\"ip\": \"" + ip + "\",\"port\": \"" + port + "\",\"slaves\": [" + s_slaves + "]}";
+    }
+
+    int getSlaveCount() {
+        return slaves.size();
+    }
+
+    string getHost() {
+        return ip;
+    }
+
+    string getPort() {
+        return port;
     }
 };
 

@@ -5,8 +5,8 @@ using json = nlohmann::json;
 #include "masterconfig.hpp"
 #include "../lib/server.hpp"
 #include "../lib/connection.hpp"
-
 #include "../lib/proto/phashes.hpp"
+#include "../lib/proto/pdu.hpp"
 
 void handle_request(Socket *s);
 
@@ -25,42 +25,49 @@ public:
 	}
 };
 
-void handle_connect(json &req) {
-	
+void handle_connect(Socket *s, PDU &pdu) {
+	config.addSlave(new SlaveConfig(pdu.getSenderIp(), pdu.getSenderPort()));
+	/* send back the ACK */
+	PDU p(config.getHost(), config.getPort(), pdu.getSenderIp(), pdu.getSenderPort(), METHOD_ACK);
+	json j;
+	j["PID"] = config.getSlaveCount();
+	p.setData(j);
+	s->writeData(p.getJSON());
 }
 
-void handle_get(json &req) {
+void handle_get(Socket *s, PDU &pdu) {
 
 }
 
-void handle_update(json &req) {
+void handle_update(Socket *s, PDU &pdu) {
 
 }
 
-void handle_ack(json &req) {
+void handle_ack(Socket *s, PDU &pdu) {
 
 }
 
 void handle_request(Socket *s) {
 	string str = s->readData();
-	json req = json::parse(str);
-	const char *cstr = req["method"].get<string>().c_str();
-	cout << cstr << endl;
+	PDU pdu(str);
+	const char *cstr = pdu.getMethod().c_str();
 	switch(phash(cstr)) {
 		case METHOD_CONNECT:
-			handle_connect(req);
+			handle_connect(s, pdu);
 			break;
 		case METHOD_GET:
-			handle_get(req);
+			handle_get(s, pdu);
 			break;
 		case METHOD_UPDATE:
-			handle_update(req);
+			handle_update(s, pdu);
 			break;
 		case METHOD_ACK:
-			handle_ack(req);
+			handle_ack(s, pdu);
 			break;
 	}
 }
+
+MasterConfig config;
 
 int main(int argc, char *argv[]) {
 	Master master(argv[1], atoi(argv[2]));

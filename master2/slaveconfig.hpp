@@ -4,14 +4,14 @@ using namespace std;
 
 #include "../include/util.hpp"
 
-class Slave {
+class SlaveConfig {
     string ip;
     string port;
 
 public:
-    Slave(string ip, ushort port) {
+    SlaveConfig(string ip, string port) {
         this->ip = ip;
-        this->port = ushort2str(port);
+        this->port = port;
     }
 
     string toString() {
