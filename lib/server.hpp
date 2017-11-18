@@ -24,20 +24,9 @@ private:
 	socket_handler handler;
 	
 public:
-	Server(ServerSocket *serverSock) {
-		this->server = serverSock;
-	}
+	Server(ServerSocket *serverSock);
 	
-	Server(string host, ushort port, socket_handler handler) {
-		server = new ServerSocket(host, port, MAX_CONNS);
-		this->handler = handler;
-	}
+	Server(string host, ushort port, socket_handler handler);
 
-	void run() {
-		while(true) {
-			Socket *sock = server->acceptConn();
-			thread(handler, sock).detach();
-			dprintf("accepted a connection on thread\n");
-		}
-	}
+	void run();
 };

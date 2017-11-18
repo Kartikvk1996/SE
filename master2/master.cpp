@@ -16,8 +16,9 @@ public:
 	MasterConfig *config;
 	Server *mserver;
 	
-	Master(string host, ushort port) {
-		mserver = new Server(host, port, handle_request);
+	Master(MasterConfig *config) {
+		this->config = config;
+		mserver = new Server(config->getHost(), stoi(config->getPort()), handle_request);
 	}
 	
 	void run() {
@@ -25,12 +26,14 @@ public:
 	}
 };
 
+MasterConfig *config;
+
 void handle_connect(Socket *s, PDU &pdu) {
-	config.addSlave(new SlaveConfig(pdu.getSenderIp(), pdu.getSenderPort()));
+	config->addSlave(new SlaveConfig(pdu.getSenderIp(), pdu.getSenderPort()));
 	/* send back the ACK */
-	PDU p(config.getHost(), config.getPort(), pdu.getSenderIp(), pdu.getSenderPort(), METHOD_ACK);
+	PDU p(config->getHost(), config->getPort(), pdu.getSenderIp(), pdu.getSenderPort(), METHOD_ACK);
 	json j;
-	j["PID"] = config.getSlaveCount();
+	j["PID"] = config->getSlaveCount();
 	p.setData(j);
 	s->writeData(p.getJSON());
 }
@@ -67,9 +70,8 @@ void handle_request(Socket *s) {
 	}
 }
 
-MasterConfig config;
-
 int main(int argc, char *argv[]) {
-	Master master(argv[1], atoi(argv[2]));
+	config = new MasterConfig(argv[1], argv[2]);
+	Master master(config);
 	master.run();
 }

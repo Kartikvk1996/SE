@@ -2,10 +2,7 @@
  * file: [pdu.cpp]
  */
 
-#include "pdu.hpp"
-
-using namespace std;
-using json = nlohmann::json;
+#include "./pdu.hpp"
 
 PDU::PDU(string sender_ip, string sender_port, string receiver_ip, string receiver_port, int method)
 {

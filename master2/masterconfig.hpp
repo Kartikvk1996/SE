@@ -1,12 +1,11 @@
 #include <string>
 #include <iostream>
 #include <bits/stdc++.h>
-
-using namespace std;
-
-#include "../include/debug.h"
+#include "../include/debug.hpp"
 #include "../include/util.hpp"
 #include "slaveconfig.hpp"
+
+using namespace std;
 
 class MasterConfig {
 
@@ -15,47 +14,15 @@ class MasterConfig {
     vector<SlaveConfig*> slaves;
 
 public:
-    MasterConfig(string ip, string port) {
-        this->ip = ip;
-        this->port = port;
-    }
+    MasterConfig(string ip, string port);
 
-    void addSlave(SlaveConfig *slave) {
-        slaves.push_back(slave);
-    }
+    void addSlave(SlaveConfig *slave);
 
-    string toString() {
+    string toString();
 
-        string s_slaves = "";
-        
-        for(int i = 0; i < slaves.size(); ++i) {
-            s_slaves += i ? ',' : ' ';
-            s_slaves += slaves[i]->toString();
-        }
+    int getSlaveCount();
 
-        return "{\"ip\": \"" + ip + "\",\"port\": \"" + port + "\",\"slaves\": [" + s_slaves + "]}";
-    }
+    string getHost();
 
-    int getSlaveCount() {
-        return slaves.size();
-    }
-
-    string getHost() {
-        return ip;
-    }
-
-    string getPort() {
-        return port;
-    }
+    string getPort();
 };
-
-/*
-int main(int argc, char **argv) {
-    MasterConfig config("127.0.0.1", 80);
-    config.addSlave(new Slave("192.168.2.2", 73));
-    config.addSlave(new Slave("192.168.2.3", 74));
-    config.addSlave(new Slave("192.168.2.4", 75));
-
-    cout << config.toString() << endl;
-}
-*/
