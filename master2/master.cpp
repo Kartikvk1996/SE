@@ -34,8 +34,8 @@ void handle_connect(Socket *s, PDU &pdu) {
 	PDU p(config->getHost(), config->getPort(), pdu.getSenderIp(), pdu.getSenderPort(), METHOD_ACK);
 	json j;
 	j["PID"] = config->getSlaveCount();
-	p.setData(j);
-	s->writeData(p.getJSON());
+	p.setData(j.dump());
+	s->writeData(p.toString());
 }
 
 void handle_get(Socket *s, PDU &pdu) {
@@ -71,6 +71,12 @@ void handle_request(Socket *s) {
 }
 
 int main(int argc, char *argv[]) {
+
+	if(argc < 3) {
+		printf("usage : %s hostaddr port\n", argv[0]);
+		return 0;
+	}
+
 	config = new MasterConfig(argv[1], argv[2]);
 	Master master(config);
 	master.run();

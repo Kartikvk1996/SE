@@ -49,5 +49,7 @@ public:
 
 	string getSenderPort();
 
+	string toString();
+
 };
 
