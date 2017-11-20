@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c
+CFLAGS=-c -std=c++11
 
 doit: pdu.o socket.o server.o
 	+$(MAKE) -C ./proto/phashes/
