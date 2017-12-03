@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Vector;
 import javax.swing.JFileChooser;
+import jdk.nashorn.internal.parser.JSONParser;
 
 /**
  *
@@ -380,6 +381,14 @@ public class MainPage extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
+        /* read a JSON object */
+        JSONParser jp = new JSONParser("{\"name\": 123}", jdk.nashorn.internal.runtime.Context.getGlobal(), false);
+        Object n = jp.parse();
+                
+        System.out.print(n);
+        
+        
+        
         try {
             fireupModel = new Fireup();
         } catch (IOException ex) {

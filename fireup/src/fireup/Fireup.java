@@ -10,6 +10,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
+import jdk.nashorn.internal.objects.Global;
+import jdk.nashorn.internal.parser.JSONParser;
 
 /**
  *
@@ -57,6 +59,21 @@ public class Fireup implements Runnable {
                 OutputStream os = conn.getOutputStream();
 
                 String tsecret, data;
+                
+                /* read a JSON object */
+                JSONParser jp = new JSONParser(br.readLine(), null, false);
+                Object o = jp.parse();
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 
                 tsecret = br.readLine();
                 if (!this.secret.equals(tsecret + "\n")) {
