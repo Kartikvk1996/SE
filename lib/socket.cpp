@@ -60,7 +60,11 @@ bool Socket ::sock_connect() {
 
 /*  writes 'data' on socket returns true as success, false otherwise. */
 bool Socket ::writeData(string data) {
-    if (write(fd, data.c_str(), data.length()) > 0) {
+
+    char nullb = -1;
+
+    if ((write(fd, data.c_str(), data.length()) >= 0) &&
+        (write(fd, &nullb, 1) >= 0)) {
         return true;
     } else {
         dprintf("Socket:: Failed to write to socket\n");
@@ -74,15 +78,25 @@ bool Socket ::writeData(string data) {
  */
 string Socket ::readData()
 {
+    string str = "";
+    int status;
+    char buffer[SOCK_BUFFER_SIZE];
     try {
-        if (read(fd, msg, SOCK_BUFFER_SIZE) > 0) {
-            return string(msg);
-        } else {
+        while((status = read(fd, buffer, SOCK_BUFFER_SIZE-1)) >= 0) {
+
+            int end = (buffer[status - 1] == EOSS) ? status - 1 : status;
+            buffer[end] = '\0';
+            str += buffer;
+            if(status != end) {
+                break;
+            }
+        }
+        if(buffer[status - 1] == -1) {
             dprintf("Socket:: Failed to read from socket\n");
-            return "";
         }
     }
     catch (...) {}
+    return str;
 }
 
 /* returns the port value on which socket connection is open */

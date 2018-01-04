@@ -7,6 +7,10 @@
  * 	Madhusoodan Pataki [7 Nov 2017]
  */
 
+// multi-include guard.
+#ifndef SOCKET_INCLUDED
+#define SOCKET_INCLUDED
+
 #ifdef __unix__
 	#include<malloc.h>
 	#include<netinet/in.h>
@@ -37,7 +41,8 @@
 	#define close closesocket
 #endif
 
-#define SOCK_BUFFER_SIZE 65535
+#define SOCK_BUFFER_SIZE 1024
+#define EOSS (-1)
 
 #include <iostream>
 #include "../include/debug.hpp"
@@ -54,7 +59,6 @@ protected:
 private:
 	string host;
 	ushort port;
-	char msg[SOCK_BUFFER_SIZE];
 #ifdef __WIN32
 	static WSADATA wsa;
 #endif
@@ -86,3 +90,5 @@ public:
 	ServerSocket(string host, ushort port, ushort maxConns);
 	Socket* acceptConn();
 };
+
+#endif

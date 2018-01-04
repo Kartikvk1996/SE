@@ -11,22 +11,26 @@
 
 #include <thread>
 #include "socket.hpp"
+#include "reqhandler.hpp"
 
 using namespace std;
 
 #define MAX_CONNS ((ushort)10)
-typedef void (*socket_handler)(Socket *sock);
 
 class Server {
 	
 private:
 	ServerSocket *server;
-	socket_handler handler;
+	ReqHandler *handler;
 	
 public:
 	Server(ServerSocket *serverSock);
 	
-	Server(string host, ushort port, socket_handler handler);
+	Server(string host, ushort port, ReqHandler *handler);
+
+	string getHost();
+
+	ushort getPort();
 
 	void run();
 };
