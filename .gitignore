@@ -2,3 +2,4 @@
 /fireup/build/
 .vscode/
 *.o
+*.test
