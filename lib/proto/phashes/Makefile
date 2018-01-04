@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c
+CFLAGS=-c -std=c++11 -g
 
 phash.o: phash.cpp methods
 	$(CC) hashgen.cpp phash.cpp -o hashgenerator

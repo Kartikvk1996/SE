@@ -1,8 +1,11 @@
 CC=g++
-CFLAGS=-c -std=c++11
+CFLAGS=-c -g -std=c++11
 
-doit: pdu.o socket.o server.o
+doit: pdu.o socket.o server.o reqhandler.o
 	+$(MAKE) -C ./proto/phashes/
+
+reqhandler.o: reqhandler.cpp reqhandler.hpp
+	$(CC) $(CFLAGS) $<
 
 pdu.o: ./proto/pdu.cpp ./proto/pdu.hpp
 	+$(MAKE) -C ./proto/phashes/
