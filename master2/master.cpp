@@ -18,7 +18,11 @@ public:
 	
 	Master(MasterConfig *config) {
 		this->config = config;
-		mserver = new Server(config->getHost(), stoi(config->getPort()), handle_request);
+		mserver = new Server(
+				config->getHost(),
+				stoi(config->getPort()),
+				handle_request
+			);
 	}
 	
 	void run() {
@@ -29,25 +33,41 @@ public:
 MasterConfig *config;
 
 void handle_connect(Socket *s, PDU &pdu) {
-	config->addSlave(new SlaveConfig(pdu.getSenderIp(), pdu.getSenderPort()));
-	/* send back the ACK */
-	PDU p(config->getHost(), config->getPort(), pdu.getSenderIp(), pdu.getSenderPort(), METHOD_ACK);
+	/* assuming whoever is connecting is fireup. */
+	config->addSlave(new SlaveConfig(
+		pdu.getSenderIp(), pdu.getSenderPort(), "fireup"));
+
+	/* send back the ACK with some random PID */
+	PDU p(config->getHost(), config->getPort(), 
+		pdu.getSenderIp(), pdu.getSenderPort(),
+		METHOD_ACK);
 	json j;
 	j["PID"] = config->getSlaveCount();
 	p.setData(j.dump());
 	s->writeData(p.toString());
 }
 
-void handle_get(Socket *s, PDU &pdu) {
+void reportStatus(Socket *s) {
+	s->writeData("I am fine friend.");
+}
 
+void handle_get(Socket *s, PDU &pdu) {
+	json jdata = json::parse(pdu.getData());
+	string resource = jdata["resource"].get<string>();
+
+	if(resource == "status") {
+		reportStatus(s);
+	} else if(resource == "config") {
+		s->writeData(config->toString());
+	}
 }
 
 void handle_update(Socket *s, PDU &pdu) {
-
+	/* not yet defined */
 }
 
 void handle_ack(Socket *s, PDU &pdu) {
-
+	/* not yet defined */
 }
 
 void handle_request(Socket *s) {
@@ -70,6 +90,12 @@ void handle_request(Socket *s) {
 	}
 }
 
+/*
+ * args:
+ *	host: IP on which to bind the server. This actually initialises
+ *  	   the master-config.
+ *	port: port on which the server should be listening.
+ */
 int main(int argc, char *argv[]) {
 
 	if(argc < 3) {
