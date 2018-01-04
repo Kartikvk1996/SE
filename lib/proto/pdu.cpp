@@ -84,7 +84,8 @@ PDU::PDU(string jsonString)
     senderIP = j["senderIP"].get<string>();
     receiverPort = j["receiverPort"].get<string>();
     senderPort = j["senderPort"].get<string>();
-    data = j["data"].get<string>();
+    jdata = j["data"];
+    data = jdata.get<string>();
     method = j["method"].get<string>();
 }
 
@@ -99,6 +100,14 @@ string PDU::getSenderPort()
 
 string PDU::toString() {
     return getJSON().dump();
+}
+
+string PDU::getData() {
+    return data;
+}
+
+json PDU::getDataAsJson() {
+    return jdata;
 }
 
 #if 0

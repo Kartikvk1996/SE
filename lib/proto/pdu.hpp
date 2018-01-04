@@ -28,10 +28,15 @@ private:
 						 Suggested : lookup with ip provided.This also acts as verification.Else I'll leave it upto u guys*/
 	string data;
 
+	/* this is json version of data it will be set when you parse
+	 * the data from the string. */
+	json jdata;			
+
 public:
 	PDU(string sender_ip, string sender_port, string receiver_ip, string receiver_port, int method);
 
-	/*Another Constructor initializing sender/receiver module names instead of ip*/
+	/* Another Constructor initializing sender/receiver module names
+	 * instead of ip */
 	PDU(string sender, string receiver, int method);
 	
 	PDU(string jsonString);
@@ -51,5 +56,8 @@ public:
 
 	string toString();
 
+	string getData();
+
+	json getDataAsJson();
 };
 
