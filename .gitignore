@@ -1,3 +1,4 @@
 /fireup/nbproject/private/
 /fireup/build/
 .vscode/
+*.o
