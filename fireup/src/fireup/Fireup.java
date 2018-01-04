@@ -10,8 +10,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
-import jdk.nashorn.internal.objects.Global;
-import jdk.nashorn.internal.parser.JSONParser;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,6 +26,13 @@ public class Fireup implements Runnable {
     private MainPage mainPage;
     private String secret;
 
+    private static final String METHOD = "METHOD";
+    private static final String CREATE = "CREATE";
+    private static final String SECRET = "SECRET";
+    private static final String STATUS = "STATUS";
+    private static final String ARGS = "ARGS";
+    private static final String CMD = "CMD";
+
     Fireup() throws UnknownHostException, IOException {
         processes = new ArrayList<>();
         hostAddress = InetAddress.getLocalHost();
@@ -34,7 +41,7 @@ public class Fireup implements Runnable {
         fireupPort = servSock.getLocalPort();
 
         Random r = new Random();
-        secret = "" + Math.abs((((long) r.nextInt()) << 32) | r.nextInt()) + "\n";
+        secret = Math.abs((((long) r.nextInt()) << 32) | r.nextInt()) + "";
     }
 
     public void setOberserver(MainPage mainPage) {
@@ -53,53 +60,32 @@ public class Fireup implements Runnable {
     @Override
     public void run() {
         while (true) {
-            try {
-                Socket conn = servSock.accept();
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            try (Socket conn = servSock.accept()) {
+                
+                char buffer[] = new char[1024];
+                
+                InputStreamReader isr = new InputStreamReader(conn.getInputStream());
+                isr.read(buffer);
                 OutputStream os = conn.getOutputStream();
-
-                String tsecret, data;
+                String data = new String(buffer), line;
                 
-                /* read a JSON object */
-                JSONParser jp = new JSONParser(br.readLine(), null, false);
-                Object o = jp.parse();
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                tsecret = br.readLine();
-                if (!this.secret.equals(tsecret + "\n")) {
-                    os.write("Auth error\n".getBytes());
+                JsonObject jreq = new JsonObject(data);
+                JsonObject jres = new JsonObject();
+                if (!this.secret.equals(jreq.get(SECRET))) {
+                    jres.set("status", "Auth Error");
                 } else {
-                    data = br.readLine();
-
-                    /* TODO: process the string someway */
-                    String tokens[] = data.split(" ");
-                    String cmds[] = new String[tokens.length - 1];
-                    for (int i = 0; i < cmds.length; i++) {
-                        cmds[i] = tokens[i + 1];
-                    }
-                    
-                    os.write(secret.getBytes());
-                    switch (tokens[0].toUpperCase()) {
-                        case "CREATE":
-                            os.write((createProcess(cmds) + "\n").getBytes());
+                    jres.set(SECRET, this.secret);
+                    switch (jreq.get(METHOD).toUpperCase()) {
+                        case CREATE:
+                            jres.set(STATUS, createProcess(jreq.get(CMD), jreq.get(ARGS)));
                             break;
                         default:
                     }
                 }
+                os.write(jres.toString().getBytes());
                 os.flush();
-                conn.close();
             } catch (IOException ex) {
-                System.err.println(ex);
+                Logger.getLogger(Fireup.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -115,8 +101,11 @@ public class Fireup implements Runnable {
     void connectToMaster(String host, int port) {
         try {
             Socket sock = new Socket(host, port);
-            String buf = secret + "host=" + getInetAddress() + " port=" + getrunningPort() + "\n";
-            sock.getOutputStream().write(buf.getBytes());
+            JsonObject jreq = new JsonObject();
+            jreq.set("SECRET", secret);
+            jreq.set("HOST", getInetAddress());
+            jreq.set("PORT", getrunningPort());
+            sock.getOutputStream().write(jreq.toString().getBytes());
         } catch (IOException ex) {
             System.out.println(ex);
         }

@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Vector;
 import javax.swing.JFileChooser;
-import jdk.nashorn.internal.parser.JSONParser;
 
 /**
  *
@@ -340,15 +339,14 @@ public class MainPage extends javax.swing.JFrame {
 
     private void ProtocolRunnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProtocolRunnerActionPerformed
         try {
-            String line;
             Socket sock = new Socket(fireupModel.getInetAddress(), fireupModel.getrunningPort());
             OutputStream os = sock.getOutputStream();
-            os.write((protocol.getText().replaceAll("[$]", "\n") + "\n").getBytes());
-            BufferedReader br = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+            os.write(protocol.getText().getBytes());
+            InputStreamReader isr = new InputStreamReader(sock.getInputStream());
             protocolOutput.append("$: " + protocol.getText() + "\n");
-            while ((line = br.readLine()) != null) {
-                protocolOutput.append("> " + line + "\n");
-            }
+            char buffer[] = new char[1024];
+            isr.read(buffer);
+            protocolOutput.append("> " + new String(buffer) + "\n");
         } catch (IOException ex) {
             System.err.println(ex);
         }
@@ -380,14 +378,6 @@ public class MainPage extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-
-        /* read a JSON object */
-        JSONParser jp = new JSONParser("{\"name\": 123}", jdk.nashorn.internal.runtime.Context.getGlobal(), false);
-        Object n = jp.parse();
-                
-        System.out.print(n);
-        
-        
         
         try {
             fireupModel = new Fireup();
