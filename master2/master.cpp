@@ -7,88 +7,88 @@ using json = nlohmann::json;
 #include "../lib/connection.hpp"
 #include "../lib/proto/phashes.hpp"
 #include "../lib/proto/pdu.hpp"
+#include "../lib/reqhandler.hpp"
 
 void handle_request(Socket *s);
 
-class Master
+class Master : public ReqHandler
 {
 public:
 	MasterConfig *config;
 	Server *mserver;
 	
-	Master(MasterConfig *config) {
-		this->config = config;
+	Master(string host, string port) : ReqHandler() {
+		config = new MasterConfig(host, port);
 		mserver = new Server(
 				config->getHost(),
 				stoi(config->getPort()),
-				handle_request
+				this
 			);
 	}
 	
 	void run() {
 		mserver->run();
 	}
+
+	void handle_connect(Socket *s, PDU &pdu) {
+		/* assuming whoever is connecting is fireup. */
+		config->addSlave(new SlaveConfig(
+			pdu.getSenderIp(), pdu.getSenderPort(), "fireup"));
+
+		/* send back the ACK with some random PID */
+		PDU p(config->getHost(), config->getPort(), 
+			pdu.getSenderIp(), pdu.getSenderPort(),
+			METHOD_ACK);
+		json j;
+		j["PID"] = config->getSlaveCount();
+		p.setData(j.dump());
+		s->writeData(p.toString());
+	}
+
+	void reportStatus(Socket *s) {
+		s->writeData("I am fine friend.");
+	}
+
+	void handle_get(Socket *s, PDU &pdu) {
+		json jdata = json::parse(pdu.getData());
+		string resource = jdata["resource"].get<string>();
+
+		if(resource == "status") {
+			reportStatus(s);
+		} else if(resource == "config") {
+			s->writeData(config->toString());
+		}
+	}
+
+	void handle_update(Socket *s, PDU &pdu) {
+		/* not yet defined */
+	}
+
+	void handle_ack(Socket *s, PDU &pdu) {
+		/* not yet defined */
+	}
+
+	/* override the ReqHandler method. */
+	void handle(Socket *s) {
+		string str = s->readData();
+		PDU pdu(str);
+		const char *cstr = pdu.getMethod().c_str();
+		switch(phash(cstr)) {
+			case METHOD_CONNECT:
+				handle_connect(s, pdu);
+				break;
+			case METHOD_GET:
+				handle_get(s, pdu);
+				break;
+			case METHOD_UPDATE:
+				handle_update(s, pdu);
+				break;
+			case METHOD_ACK:
+				handle_ack(s, pdu);
+				break;
+		}
+	}
 };
-
-MasterConfig *config;
-
-void handle_connect(Socket *s, PDU &pdu) {
-	/* assuming whoever is connecting is fireup. */
-	config->addSlave(new SlaveConfig(
-		pdu.getSenderIp(), pdu.getSenderPort(), "fireup"));
-
-	/* send back the ACK with some random PID */
-	PDU p(config->getHost(), config->getPort(), 
-		pdu.getSenderIp(), pdu.getSenderPort(),
-		METHOD_ACK);
-	json j;
-	j["PID"] = config->getSlaveCount();
-	p.setData(j.dump());
-	s->writeData(p.toString());
-}
-
-void reportStatus(Socket *s) {
-	s->writeData("I am fine friend.");
-}
-
-void handle_get(Socket *s, PDU &pdu) {
-	json jdata = json::parse(pdu.getData());
-	string resource = jdata["resource"].get<string>();
-
-	if(resource == "status") {
-		reportStatus(s);
-	} else if(resource == "config") {
-		s->writeData(config->toString());
-	}
-}
-
-void handle_update(Socket *s, PDU &pdu) {
-	/* not yet defined */
-}
-
-void handle_ack(Socket *s, PDU &pdu) {
-	/* not yet defined */
-}
-
-void handle_request(Socket *s) {
-	string str = s->readData();
-	PDU pdu(str);
-	const char *cstr = pdu.getMethod().c_str();
-	switch(phash(cstr)) {
-		case METHOD_CONNECT:
-			handle_connect(s, pdu);
-			break;
-		case METHOD_GET:
-			handle_get(s, pdu);
-			break;
-		case METHOD_UPDATE:
-			handle_update(s, pdu);
-			break;
-		case METHOD_ACK:
-			handle_ack(s, pdu);
-			break;
-	}
-}
 
 /*
  * args:
@@ -103,7 +103,6 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
-	config = new MasterConfig(argv[1], argv[2]);
-	Master master(config);
+	Master master(argv[1], argv[2]);
 	master.run();
 }
