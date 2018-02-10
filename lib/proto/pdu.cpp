@@ -2,7 +2,7 @@
  * file: [pdu.cpp]
  */
 
-#include "./pdu.hpp"
+#include "proto/pdu.hpp"
 
 PDU::PDU(string sender_ip, string sender_port, string receiver_ip, string receiver_port, int method)
 {

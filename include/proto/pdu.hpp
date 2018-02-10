@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <string>
-#include "../json.hpp"
+#include "json.hpp"
 #include "./phashes.hpp"
 
 using namespace std;

@@ -1,13 +1,12 @@
-#include "../lib/json.hpp"
+#include "json.hpp"
 using json = nlohmann::json;
 
 #include <thread>
 #include "masterconfig.hpp"
-#include "../lib/server.hpp"
-#include "../lib/connection.hpp"
-#include "../lib/proto/phashes.hpp"
-#include "../lib/proto/pdu.hpp"
-#include "../lib/reqhandler.hpp"
+#include "server.hpp"
+#include "proto/phashes.hpp"
+#include "proto/pdu.hpp"
+#include "reqhandler.hpp"
 
 void handle_request(Socket *s);
 

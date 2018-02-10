@@ -1,6 +1,6 @@
-#include "../lib/server.hpp"
-#include "../lib/proto/pdu.hpp"
-#include "../include/util.cpp"
+#include "server.hpp"
+#include "proto/pdu.hpp"
+#include "../lib/util.cpp"
 #include "linereader.hpp"
 
 class DataManager : public ReqHandler {
@@ -31,6 +31,9 @@ public:
 
     }
 
+
+
+
     /* read the request and process it. refer /docs/ffcdmgrproto.md
      * for the  protocol used here*/
     void handle(Socket *s) {
@@ -41,9 +44,9 @@ public:
 
         /* first line tells which type of request is this. */
         if(type == "RGEN") {
-            
+            /* send the query to reader. */
         } else if(type =="FFC") {
-            
+            /* send the query to writer. */
         }
     }
 

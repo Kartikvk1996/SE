@@ -1,3 +1,6 @@
+#ifndef PHASHES
+#define PHASHES
+
 #define METHOD_CONNECT	(44682)	//CONNECT
 #define METHOD_CREATE	(8380)	//CREATE
 #define METHOD_GET	(54006)	//GET
@@ -5,3 +8,5 @@
 #define METHOD_KILL	(15870)	//KILL
 #define METHOD_WRITE	(39327)	//WRITE
 #define METHOD_ACK	(56969)	//ACK
+
+#endif

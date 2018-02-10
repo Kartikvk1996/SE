@@ -1,14 +1,8 @@
 CC=g++
-CFLAGS= -c -std=c++11
+CFLAGS= -c -std=c++11 -I ../include/
 
-dmgr: dmgr.cpp linereader.o reader.o writer.o ../lib/pdu.o ../lib/reqhandler.o 
-	$(CC) -o dmgr -std=c++11 -g $^ ../lib/server.o ../lib/socket.o ../lib/proto/phashes/phash.o -lpthread
-
-linereader.o: linereader.cpp linereader.hpp
-	$(CC) $(CFLAGS) $<
-
-../include/util.o: ../include/util.cpp
-	+$(MAKE) -C ../include/
+dmgr: dmgr.cpp reader.o writer.o ../lib/linereader.o ../lib/proto/pdu.o ../lib/reqhandler.o 
+	$(CC) -I ../include/ -o dmgr -std=c++11 -g $^ ../lib/server.o ../lib/socket.o ../include/proto/phashes/phash.o -lpthread
 
 reader.o: reader.cpp
 	$(CC) $(CFLAGS) $<

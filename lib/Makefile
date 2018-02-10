@@ -1,20 +1,22 @@
 CC=g++
-CFLAGS=-c -g -std=c++11
+CFLAGS=-c -g -std=c++11 -I ../include/
 
-doit: pdu.o socket.o server.o reqhandler.o
-	+$(MAKE) -C ./proto/phashes/
+doit: pdu.o socket.o server.o reqhandler.o linereader.o
+	pwd
 
-reqhandler.o: reqhandler.cpp reqhandler.hpp
+reqhandler.o: reqhandler.cpp
 	$(CC) $(CFLAGS) $<
 
-pdu.o: ./proto/pdu.cpp ./proto/pdu.hpp
-	+$(MAKE) -C ./proto/phashes/
+pdu.o: ./proto/
+	+$(MAKE) -C ./proto/
+
+socket.o: socket.cpp
 	$(CC) $(CFLAGS) $<
 
-socket.o: socket.cpp socket.hpp
+server.o: server.cpp
 	$(CC) $(CFLAGS) $<
 
-server.o: server.cpp server.hpp
+linereader.o: linereader.cpp
 	$(CC) $(CFLAGS) $<
 
 .PHONY: clean

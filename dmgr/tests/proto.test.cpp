@@ -1,6 +1,6 @@
 #include <iostream>
-#include "../../lib/socket.hpp"
-#include "../../lib/proto/pdu.hpp"
+#include "socket.hpp"
+#include "proto/pdu.hpp"
 
 using namespace std;
 

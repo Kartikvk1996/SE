@@ -1,23 +1,22 @@
 CC=g++
-CFLAGS= -c -std=c++11 -g
-TFLAGS= ../../lib/server.o ../../lib/socket.o ../../lib/proto/phashes/phash.o -lpthread
+CFLAGS= -std=c++11 -g -I ../../include/ ../../lib/proto/pdu.o ../../lib/server.o ../../lib/socket.o ../../include/proto/phashes/phash.o  -lpthread
+
+tests: ../../lib/proto/pdu.o connect.test status.test config.test
 
 
-tests: connecttest statustest configtest
-
-connecttest: connect.test.cpp ../../lib/pdu.o
-	$(CC) -o connect.test $^ $(TFLAGS)
-
-statustest: status.test.cpp ../../lib/pdu.o
-	$(CC) -o status.test $^ $(TFLAGS)
-
-configtest: config.test.cpp ../../lib/pdu.o
-	$(CC) -o config.test $^ $(TFLAGS)
-
-../../lib/pdu.o:
+../../lib/proto/pdu.o:
 	+$(MAKE) -C ../../lib/
+
+connect.test: connect.test.cpp
+	$(CC) -o connect.test $^ $(CFLAGS)
+
+status.test: status.test.cpp
+	$(CC) -o status.test $^ $(CFLAGS)
+
+config.test: config.test.cpp
+	$(CC) -o config.test $^ $(CFLAGS)
 
 .PHONY: clean
 
 clean:
-	rm *.o master2.*.test
+	rm *.test
