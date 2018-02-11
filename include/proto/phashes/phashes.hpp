@@ -9,4 +9,13 @@
 #define METHOD_WRITE	(39327)	//WRITE
 #define METHOD_ACK	(56969)	//ACK
 
+//# These are some hashes for identification of the process types.
+#define FFC	(37987)	//FFC
+#define CRAWLER	(21172)	//CRAWLER
+#define RGEN	(21406)	//RGEN
+#define WRITER	(94611)	//WRITER
+#define READER	(22115)	//READER
+#define DMGR	(41076)	//DMGR
+#define WS	(11132)	//WS
+
 #endif
