@@ -1,28 +1,38 @@
 using namespace std;
 
 #include "word.hpp"
+#include "dochead.hpp"
+#include "socket.hpp"
+#include "streamreader.cpp"
 
 class Writer {
 
 private:
-    char * fileName;
+    string wordfile, docfile;
 
 public:
-    Writer(char * wfile) {
-        fileName = wfile;
+    Writer(string wordfile, string docfile) {
+        this->wordfile = wordfile;
+        this->docfile = docfile;
     }
 
+    /* each word is on a line with it's frequency 
+     * extract it then index the from each word */
+    void writeDoc(DocHead *dochead, Socket *sock) {
 
-    /*
-     * Implementation note.
-     * 
-     * Read the document /docs/dmgrproto.md before going through the code below.
-     * 
-     */
+        StreamReader sr(sock);
+        char buffer[64];
+        char word[64];
+        int freq; 
 
-    void write(Word word) {
+        for(int i=0; i<dochead->dsize; ++i) {
 
-        /* write the word to file here */
+            sr.readLine(buffer, 64);
+            sscanf(buffer, "%s%d", word, &freq);
+
+            printf("%s    %d\n", word, freq);
+
+        }
 
 
     }

@@ -1,15 +1,23 @@
 #include "server.hpp"
 #include "proto/pdu.hpp"
 #include "../lib/util.cpp"
-#include "linereader.hpp"
+#include "dmgrdu.hpp"
+#include "reader.cpp"
+#include "writer.cpp"
+#include "logger.hpp"
+#include "proto/phashes/phashes.hpp"
+
+Logger logger;
 
 class DataManager : public ReqHandler {
 
     Server *server;
+    Reader *reader;
+    Writer *writer;
 
 public:
 
-    DataManager(string mhost, ushort mport) {
+    DataManager(string mhost, ushort mport, string wordfile, string docfile) {
 
         /*
          * TODO: You really need to check this call.
@@ -26,27 +34,27 @@ public:
         PDU p(server->getHost(), ushort2str(server->getPort()),
             mhost, ushort2str(mport), METHOD_ACK);
 
+        cout << p.toString() << endl;
+
         Socket s(mhost, mport);
         s.writeData(p.toString());
 
+        writer = new Writer(wordfile, docfile);
     }
-
-
 
 
     /* read the request and process it. refer /docs/ffcdmgrproto.md
      * for the  protocol used here*/
     void handle(Socket *s) {
-        string data = s->readData();
-        LineReader lr(data);
-
-        string type = lr.nextLine();
-
-        /* first line tells which type of request is this. */
-        if(type == "RGEN") {
-            /* send the query to reader. */
-        } else if(type =="FFC") {
-            /* send the query to writer. */
+        DMgrPDU *pdu = new DMgrPDU();
+        if(s->readBytes(pdu, sizeof(DMgrPDU)) > 0) {
+            switch(pdu->type) {
+                case FFC:
+                    writer->writeDoc(&pdu->dochead, s);
+                    break;
+                case RGEN:
+                    reader->replyQuery(pdu->query, s);
+            }
         }
     }
 
@@ -86,6 +94,6 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    DataManager dmgr(argv[1], atoi(argv[2]));
+    DataManager dmgr(argv[1], atoi(argv[2]), "wordfile", "docfile");
     dmgr.run();
 }
