@@ -342,6 +342,7 @@ public class MainPage extends javax.swing.JFrame {
             Socket sock = new Socket(fireupModel.getInetAddress(), fireupModel.getrunningPort());
             OutputStream os = sock.getOutputStream();
             os.write(protocol.getText().getBytes());
+            os.write(-1);
             InputStreamReader isr = new InputStreamReader(sock.getInputStream());
             protocolOutput.append("$: " + protocol.getText() + "\n");
             char buffer[] = new char[1024];
