@@ -1,5 +1,9 @@
 #define dprintf printf
 
+#include "logger.hpp"
+
+extern Logger logger;
+
 typedef unsigned short ushort;
 typedef unsigned int uint;
 

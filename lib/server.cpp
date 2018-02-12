@@ -18,7 +18,7 @@ void Server::run() {
 	while(true) {
 		Socket *sock = server->acceptConn();
 		thread(thread_piece, handler, sock).detach();
-		dprintf("accepted a connection on thread\n");
+		logger.log("accepted a connection on thread");
 	}
 }
 

@@ -45,10 +45,11 @@
 #define EOSS (-1)
 
 #include <iostream>
-#include "../include/debug.hpp"
+#include "debug.hpp"
+#include "stream.hpp"
 using namespace std;
 
-class Socket {
+class Socket : public Stream {
 
 protected:
 	struct sockaddr_in addr;
@@ -71,12 +72,14 @@ public:
 	Socket(string host, ushort port);
 	~Socket();
 
-	bool writeData(string message);	/* To write data to socket */
-	string readData();		/* To read data to socket */
-	ushort getPort();		/* To get port number */
-	string getHost();		/* To get IP Address */
-	void closeConn();		/* To close connection */
-	bool isAlive();			/* To check connection liveness */
+	bool writeData(string message);			/* To write strings to socket */
+	string readData();						/* To read strings to socket */
+	int readBytes(void *ptr, int size);		/* low level API to read data */
+	int writeBytes(void *ptr, int size);	/* low level API to write data */
+	ushort getPort();						/* To get port number */
+	string getHost();						/* To get IP Address */
+	void closeConn();						/* To close connection */
+	bool isAlive();							/* To check connection liveness */
 };
 
 class ServerSocket : public Socket {

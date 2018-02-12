@@ -57,36 +57,39 @@ void PDU::setMethod(int pmethod)
 /* separate function to load data/PDU*/
 void PDU::setData(string bufferedData)
 {
-    data = bufferedData;
+    jdata = json::parse(bufferedData);
+}
+
+string PDU::getSenderType() {
+    return who;
 }
 
 json PDU::getJSON()
 {
-    //	return "{ \"who:\"\"" + who + "\",\n\"whom:\"\"" + whom + "\",\n\"IP:\"\"" + receiverIP + "\",\n\"Port:\"\"" + "8000" + "\",\n\"Data:\"{\"" + data + "\"}\n}";
     json j;
-    j["who"] = who;
-    j["whom"] = whom;
-    j["receiverIP"] = receiverIP;
-    j["senderIP"] = senderIP;
-    j["receiverPort"] = receiverPort;
-    j["senderPort"] = senderPort;
-    j["data"] = data;
-    j["method"] = method;
+    j[WHO] = who;
+    j[WHOM] = whom;
+    j[RECIEVERIP] = receiverIP;
+    j[SENDERIP] = senderIP;
+    j[RECEIVERPORT] = receiverPort;
+    j[SENDERPORT] = senderPort;
+    j[DATA] = jdata;
+    j[METHOD] = method;
     return j;
 }
 
-PDU::PDU(string jsonString)
+PDU::PDU(string &jsonString)
 {
     json j = json::parse(jsonString);
-    who = j["who"].get<string>();
-    whom = j["whom"].get<string>();
-    receiverIP = j["receiverIP"].get<string>();
-    senderIP = j["senderIP"].get<string>();
-    receiverPort = j["receiverPort"].get<string>();
-    senderPort = j["senderPort"].get<string>();
-    jdata = j["data"];
-    data = jdata.get<string>();
-    method = j["method"].get<string>();
+    who = j[WHO].get<string>();
+    whom = j[WHOM].get<string>();
+    receiverIP = j[RECIEVERIP].get<string>();
+    senderIP = j[SENDERIP].get<string>();
+    receiverPort = j[RECEIVERPORT].get<string>();
+    senderPort = j[SENDERPORT].get<string>();
+    jdata = j[DATA];
+    data = jdata.dump();
+    method = j[METHOD].get<string>();
 }
 
 string PDU::getSenderIp()

@@ -9,5 +9,6 @@ using namespace std;
 
 
 std::string ushort2str(ushort i);
+void cstoupper(char *str);
 
 #endif

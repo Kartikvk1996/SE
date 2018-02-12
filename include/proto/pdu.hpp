@@ -16,6 +16,16 @@
 
 using namespace std;
 using json = nlohmann::json;
+
+#define WHO 			"WHO"
+#define WHOM 			"WHOM"
+#define SENDERIP 		"SENDERIP"
+#define SENDERPORT 		"SENDERPORT"
+#define RECIEVERIP 		"RECIEVERIP"
+#define RECEIVERPORT 	"RECEIVERPORT"
+#define DATA			"DATA"
+#define METHOD			"METHOD"
+
 class PDU
 {
 private:
@@ -39,7 +49,7 @@ public:
 	 * instead of ip */
 	PDU(string sender, string receiver, int method);
 	
-	PDU(string jsonString);
+	PDU(string &jsonString);
 
 	string getMethod();
 
@@ -57,6 +67,8 @@ public:
 	string toString();
 
 	string getData();
+
+	string getSenderType();
 
 	json getDataAsJson();
 };

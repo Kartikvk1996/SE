@@ -58,6 +58,14 @@ bool Socket ::sock_connect() {
     return true;
 }
 
+int Socket ::writeBytes(void *buffer, int size) {
+    return write(fd, buffer, size);
+}
+
+int Socket ::readBytes(void *buffer, int size) {
+    return read(fd, buffer, size);
+}
+
 /*  writes 'data' on socket returns true as success, false otherwise. */
 bool Socket ::writeData(string data) {
 
