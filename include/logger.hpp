@@ -16,8 +16,11 @@ public:
 
     Logger(char *fileName, char *mode);
 
-    void log(string logent);
+    void log(string type, string logent);
 
+    void ilog(string logent);
+
+    void errlog(string logent);
 };
 
 #endif
