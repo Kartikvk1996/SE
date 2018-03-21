@@ -1,65 +1,66 @@
 #include "server.hpp"
 #include "proto/pdu.hpp"
-#include "../lib/util.cpp"
+#include "proto/errpdu.hpp"
 #include "dmgrdu.hpp"
-#include "reader.cpp"
 #include "writer.cpp"
 #include "logger.hpp"
+#include "errors.hpp"
 #include "proto/phashes/phashes.hpp"
 
 Logger logger;
 
-class DataManager : public ReqHandler {
+class DataManager : public Probable {
 
-    Server *server;
-    Reader *reader;
     Writer *writer;
 
 public:
 
-    DataManager(string mhost, ushort mport, string wordfile, string docfile) {
-
-        /*
-         * TODO: You really need to check this call.
-         * 1. Although it makes sense that server's constructor is
-         *   called with hostname as an argument, it's redundant where
-         *   the computer connected to a single network interface. btw
-         *   we are not handling mulitple n/w interfaces in the Socket.
-         * 2. Port number assigned by constructor is not at all good,
-         *   they should be set dynamically.
-         */
-        server = new Server("127.0.0.1", 5002, this);
+    DataManager(string mhost, ushort mport, string wordfile, string docfile):
+        Probable() {
 
         /* report to the master that you are running on port X */
-        PDU p(server->getHost(), ushort2str(server->getPort()),
-            mhost, ushort2str(mport), METHOD_ACK);
-
-        cout << p.toString() << endl;
-
         Socket s(mhost, mport);
-        s.writeData(p.toString());
+        s.writeData(PDU(METHOD_CONNECT).toString());
 
         writer = new Writer(wordfile, docfile);
     }
 
 
+    void handle_get(Socket *s, PDU &pdu) {
+        PDU *out;
+        try {
+            string resource = (pdu.getDataAsJson())[GET_RESOURCE];
+            if(resource != "writers") {
+                out = new ErrorPDU(ERROR_PROTO_RESOURCE, "resource " + resource + " not found");
+                logger.elog("resource " + resource + " not found.");
+            } else {
+                out = new PDU();
+                out->setJData(getWritersJSONList());
+            }
+        } catch(...) {
+            logger.elog("Request has no resource field");
+            out = new ErrorPDU(ERROR_PROTO_FIELD, "Request has no resource field");
+        }
+        s->writeData(out->toString());
+    }
+
+    json getWritersJSONList() {
+        return json();
+    }
+
     /* read the request and process it. refer /docs/ffcdmgrproto.md
      * for the  protocol used here*/
     void handle(Socket *s) {
-        DMgrPDU *pdu = new DMgrPDU();
-        if(s->readBytes(pdu, sizeof(DMgrPDU)) > 0) {
-            switch(pdu->type) {
-                case FFC:
-                    writer->writeDoc(&pdu->dochead, s);
-                    break;
-                case RGEN:
-                    reader->replyQuery(pdu->query, s);
-            }
+        string str = s->readData();
+        PDU pdu(str);
+        const char *cstr = pdu.getMethod().c_str();
+        switch(phash(cstr)) {
+            case METHOD_GET:
+                handle_get(s, pdu);
+                break;
+            default:
+                Probable::def_handler(s, pdu);
         }
-    }
-
-    void run() {
-        server->run();
     }
 
     char **split(char *buffer, char delim) {
@@ -81,6 +82,8 @@ public:
     }
 
 };
+
+string PROCESS_ROLE = "dmgr";
 
 /*
  * args:

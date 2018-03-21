@@ -1,6 +1,7 @@
 #ifndef PNAMES_INCLUDED
 #define PNAMES_INCLUDED
 
+#define PN_GUEST    "GUEST"
 #define PN_FFC      "FFC"
 #define PN_CRAWLER  "CRAWLER"
 #define PN_RGEN     "RGEN"

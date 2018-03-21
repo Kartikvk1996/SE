@@ -1,9 +1,12 @@
 #include <iostream>
 #include "socket.hpp"
 #include "proto/pdu.hpp"
+#include "logger.hpp"
 
 using namespace std;
 
+Logger logger;
+string PROCESS_ROLE = "guest";
 /*
  * Master Status Test.
  *
@@ -21,7 +24,7 @@ int main(int argc, char **argv) {
 
 	Socket *s = new Socket(string(argv[1]), atoi(argv[2]));
 
-	PDU p("localhost", "100", argv[1], argv[2], METHOD_GET);
+	PDU p(METHOD_STATUS);
 	p.setData("{\"resource\": \"status\"}");
 
 	s->writeData(p.toString());

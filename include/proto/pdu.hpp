@@ -8,6 +8,8 @@
  * Declares some method-types, and a wrapper class to build the PDU.
  * 
  */
+#ifndef PDU_INCLUDED
+#define PDU_INCLUDED
 
 #include <iostream>
 #include <string>
@@ -19,23 +21,18 @@ using json = nlohmann::json;
 
 #define WHO 			"WHO"
 #define WHOM 			"WHOM"
-#define SENDERIP 		"SENDERIP"
-#define SENDERPORT 		"SENDERPORT"
-#define RECIEVERIP 		"RECIEVERIP"
-#define RECEIVERPORT 	"RECEIVERPORT"
 #define DATA			"DATA"
 #define METHOD			"METHOD"
+
+extern string PROCESS_ROLE;
 
 class PDU
 {
 private:
-	string senderIP;
-	string receiverIP;
-	string senderPort;
-	string receiverPort;
+	void setWho(string pname);	//capitalizes things
+protected:
 	string method;
-	string who, whom; /*This indicates which module is trying to communicate to whom ,I highly advise against initializing this normally
-						 Suggested : lookup with ip provided.This also acts as verification.Else I'll leave it upto u guys*/
+	string who;
 	string data;
 
 	/* this is json version of data it will be set when you parse
@@ -43,12 +40,10 @@ private:
 	json jdata;			
 
 public:
-	PDU(string sender_ip, string sender_port, string receiver_ip, string receiver_port, int method);
+	PDU(int method);
 
-	/* Another Constructor initializing sender/receiver module names
-	 * instead of ip */
-	PDU(string sender, string receiver, int method);
-	
+	PDU();
+
 	PDU(string &jsonString);
 
 	string getMethod();
@@ -58,11 +53,9 @@ public:
 	/* separate function to load data/PDU*/
 	void setData(string bufferedData);
 
+	void setJData(json jobj);
+
 	json getJSON();
-
-	string getSenderIp();
-
-	string getSenderPort();
 
 	string toString();
 
@@ -73,3 +66,4 @@ public:
 	json getDataAsJson();
 };
 
+#endif

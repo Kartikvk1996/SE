@@ -5,3 +5,4 @@
 *.test
 /beats/nbproject/private/
 /beats/build/
+/se/nbproject/private/

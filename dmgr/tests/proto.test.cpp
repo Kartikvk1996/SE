@@ -1,16 +1,15 @@
 #include <iostream>
 #include "socket.hpp"
 #include "proto/pdu.hpp"
+#include "logger.hpp"
 
 using namespace std;
 
 /*
- * Master Config Test.
- *
- * this code tests the master2 running at argv[1] on port argv[2]
- * It sends a status packet to the master2 and shows the status
- * of the server sent as it.
+ * Protocol test.
  */
+
+Logger logger;
 
 int main(int argc, char **argv) {
 

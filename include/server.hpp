@@ -9,6 +9,9 @@
 * that socket
 */
 
+#ifndef SERVER_INCLUDED
+#define SERVER_INCLUDED
+
 #include <thread>
 #include "socket.hpp"
 #include "reqhandler.hpp"
@@ -26,7 +29,9 @@ private:
 public:
 	Server(ServerSocket *serverSock);
 	
-	Server(string host, ushort port, ReqHandler *handler);
+	Server(ReqHandler *handler);
+
+	Server(ushort port, ReqHandler *handler);
 
 	string getHost();
 
@@ -34,3 +39,5 @@ public:
 
 	void run();
 };
+
+#endif

@@ -68,6 +68,8 @@ public class Beats {
         TLogger.log("Connecting to master @(" + masterIP + ", " + masterPort + ")");
         
         /* Check whether the masterPort is valid. (masterPort>-1) else return */
+        if(masterPort < 0)
+            return;
         
         /* Register to master by creating a JSON object and send it to master */
         

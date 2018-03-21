@@ -17,6 +17,7 @@ public:
         this->strm = strm;
         pos = 0;
         size = 0;
+        buffer = NULL;
     }
 
     /* returns number of bytes read */

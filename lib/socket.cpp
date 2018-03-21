@@ -109,7 +109,7 @@ string Socket ::readData()
 
 /* returns the port value on which socket connection is open */
 ushort Socket ::getPort() {
-    return port;
+    return ntohs(addr.sin_port);
 }
 
 /* returns the Host Address */
@@ -132,8 +132,12 @@ bool Socket ::isAlive() {
 
 /* server socket implementation */
 
-ServerSocket::ServerSocket(string host, ushort port, ushort maxConns) : Socket() {
-    set_sock(host, port);
+string ServerSocket::getLocalHost() {
+    return "127.0.0.1";
+}
+
+ServerSocket::ServerSocket(ushort port, ushort maxConns) : Socket() {
+    set_sock(getLocalHost(), port);
     this->maxConns = maxConns;
     if (!(alive = ServerSocket::sock_connect())) {
         dprintf("ServerSocket:: Failed to start server\n");
@@ -144,11 +148,19 @@ ServerSocket::ServerSocket(string host, ushort port, ushort maxConns) : Socket()
 Socket *ServerSocket ::acceptConn() {
     socklen_t cli_len = sizeof(c_addr);
     sock_t nfd = accept(fd, (struct sockaddr *)&c_addr, &cli_len);
+
     if (nfd == INVALID_SOCKET) {
         dprintf("ServerSocket:: Failed to accept connection\n");
         return NULL;
     }
-    return new Socket(nfd);
+
+    Socket *endPoint = new Socket(nfd);
+    endPoint->set_sock(
+        inet_ntoa(c_addr.sin_addr),
+        (int) ntohs(c_addr.sin_port)
+    );
+
+    return endPoint;
 }
 
 /* binds the created socket to the port */
@@ -159,6 +171,11 @@ bool ServerSocket ::sock_connect() {
     if (status == SOCKET_ERROR) {
         dprintf("ServerSocket:: Failed to bind socket\n");
         return false;
+    }
+
+    socklen_t len;
+    if(getsockname(fd, (struct sockaddr*)&addr, &len) == -1) {
+        logger.elog("getting the port number failed");
     }
     listen(fd, maxConns);
     return true;

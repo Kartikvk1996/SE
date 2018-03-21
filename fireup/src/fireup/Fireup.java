@@ -111,8 +111,7 @@ public class Fireup implements Runnable {
                         default:
                     }
                 }
-                jres.setFixedParams(getInetAddress(), "" + getrunningPort(),
-                        conn.getInetAddress().getHostAddress(), "" + conn.getPort());
+                jres.setFixedParams(getrunningPort());
                 os.write(jres.toString().getBytes());
                 os.write(-1);
                 os.close();
@@ -135,10 +134,8 @@ public class Fireup implements Runnable {
             Socket sock = new Socket(host, port);
             JsonWrapper jreq = new JsonWrapper();
             jreq.set("SECRET", secret);
-            jreq.set("HOST", getInetAddress());
-            jreq.set("PORT", getrunningPort());
             jreq.set(METHOD, "CONNECT");
-            jreq.setFixedParams(getInetAddress(), getrunningPort() + "", host, port + "");
+            jreq.setFixedParams(getrunningPort());
             sock.getOutputStream().write(jreq.toString().getBytes());
             sock.getOutputStream().write(-1);
             sock.getOutputStream().flush();
@@ -162,7 +159,7 @@ public class Fireup implements Runnable {
 
     private String[] getCommandLine(JsonWrapper jreq) {
         String args[] = jreq.get(ARGS).split("[ \t]");
-        String executable = SEHOME + jreq.get(CMD);
+        String executable = SEHOME + "/" + jreq.get(CMD);
         String cmdchunks[] = new String[1 + args.length];
         cmdchunks[0] = executable;
         for (int i = 0; i < args.length; i++) {

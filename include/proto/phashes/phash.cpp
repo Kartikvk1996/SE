@@ -1,8 +1,8 @@
 #include "phash.hpp"
 
-int phash(const char *str) {
-    const int mod = (int)1e5;
-    int x = 0, i = 0;
+hash_t phash(const char *str) {
+    const hash_t mod = (hash_t)1e5;
+    hash_t x = 0, i = 0;
     for( ; str[i]; ++i)
         x = ((x * 127) % mod + str[i]) % mod;
     return x;

@@ -2,38 +2,54 @@
 
 Logger logger;
 
-Master::Master(string host, string port, string configFile) : ReqHandler() {
-	this->ip = host;
-	this->port = port;
-	mserver = new Server(
-			getHost(),
-			stoi(getPort()),
-			this
-		);
+Master::Master(string configFile) : Probable() {
+	
 }
 
-void Master::run() {
-	mserver->run();
+void Master::introduce(Socket *sock, PDU &pdu) {
+	map<string, Slave*>:: iterator iter;
+	for(iter = slaves.begin(); slaves.end() != iter; ++iter) {
+		Slave* slv = iter->second;
+		vector<Process*> processes = slv->getProcesses();
+		for(int i=0; i<processes.size(); ++i){
+			processes[i]->sendPDU(new IntroPDU(sock->getHost(), ushort2str(sock->getPort())), false);
+		}
+	}
 }
 
 void Master::handle_connect(Socket *s, PDU &pdu) {
+	
+	/* If he is a guest then just introduce it to everyone. */
+	if(pdu.getSenderType() == PN_GUEST) {
+		introduce(s, pdu);
+		return;
+	}
 
-	cout << pdu.toString() << endl;
+	json conndata = pdu.getDataAsJson();
 
-	/* assuming whoever is connecting is fireup. */
-	slaves[pdu.getSenderIp()] = new Slave(this, pdu.getSenderIp(), pdu.getSenderPort());
+	if(pdu.getSenderType() == PN_FIREUP) {
+		slaves[s->getHost()] = 
+			new Slave(this, s->getHost(), 
+				conndata[CONNECT_S_PORT].get<ushort>());
+		schedule();
+		return;
+	}
 
-	/* send back the ACK with some random PID */
-	PDU p(getHost(), getPort(), 
-		pdu.getSenderIp(), pdu.getSenderPort(),
-		METHOD_ACK);
+	/* This is some process we created send back the ACK with PID */
+	
+	slaves[s->getHost()]->addProcessEntry(
+		new Process(
+			s->getHost(), 
+			conndata[CONNECT_S_PORT].get<ushort>(), 
+			pdu.getSenderType()
+		)
+	);
+
+	PDU p(METHOD_ACK);
 	json j;
 	j["PID"] = getSlaveCount();
-	p.setData(j.dump());
+	p.setJData(j);
 	s->writeData(p.toString());
-
-	if(pdu.getSenderType() == PN_FIREUP)
-		schedule();
 }
 
 string Master::toString() {
@@ -47,19 +63,11 @@ string Master::toString() {
 		s_slaves += iter->second->toString();
 	}
 
-	return "{\"ip\": \"" + getHost() + "\",\"port\": \"" + getPort() + "\",\"slaves\": [" + s_slaves + "]}";
+	return "{\"ip\": \"" + getHost() + "\",\"port\": \"" + ushort2str(getPort()) + "\",\"slaves\": [" + s_slaves + "]}";
 }
 
 int Master::getSlaveCount() {
 	return slaves.size();
-}
-
-string Master::getHost() {
-	return ip;
-}
-
-string Master::getPort() {
-	return port;
 }
 
 void Master::schedule() {
@@ -69,30 +77,15 @@ void Master::schedule() {
 	 * set of processes per machine.
 	 */
 
-	logger.log("trying to schedule jobs");
+	logger.ilog("trying to schedule jobs");
 
 	map<string, Slave*>:: iterator iter;
 	for(iter = slaves.begin(); slaves.end() != iter; ++iter) {
 		Slave* slv = iter->second;
 		if(slv->getProcessCount() < 2) {
-			slv->createProcess("crawler");
+			//slv->createProcess("crawler");
 			slv->createProcess("dmgr");
 		}
-	}
-}
-
-void Master::reportStatus(Socket *s) {
-	s->writeData("I am fine friend.");
-}
-
-void Master::handle_get(Socket *s, PDU &pdu) {
-	json jdata = json::parse(pdu.getData());
-	string resource = jdata["resource"].get<string>();
-
-	if(resource == "status") {
-		reportStatus(s);
-	} else if(resource == "config") {
-		s->writeData(toString());
 	}
 }
 
@@ -104,6 +97,11 @@ void Master::handle_ack(Socket *s, PDU &pdu) {
 	/* not yet defined */
 }
 
+/* just leaving for backward compatibility */
+void Master::handle_get(Socket *s, PDU &pdu) {
+
+}
+
 /* override the ReqHandler method. */
 void Master::handle(Socket *s) {
 	string str = s->readData();
@@ -113,18 +111,21 @@ void Master::handle(Socket *s) {
 		case METHOD_CONNECT:
 			handle_connect(s, pdu);
 			break;
-		case METHOD_GET:
-			handle_get(s, pdu);
-			break;
 		case METHOD_UPDATE:
 			handle_update(s, pdu);
 			break;
 		case METHOD_ACK:
 			handle_ack(s, pdu);
 			break;
+		case METHOD_GET:
+			handle_get(s, pdu);
+			break;
+		default:
+			Probable::def_handler(s, pdu);
 	}
 }
 
+string PROCESS_ROLE = "master";
 
 /*
  * args:
@@ -133,12 +134,7 @@ void Master::handle(Socket *s) {
  *	port: port on which the server should be listening.
  */
 int main(int argc, char *argv[]) {
-
-	if(argc < 3) {
-		printf("usage : %s hostaddr port\n", argv[0]);
-		return 0;
-	}
-
-	Master master(argv[1], argv[2], "configFile");
+	Master master("configFile");
+	printf("master running on port  [%d]\n", master.getPort());
 	master.run();
 }

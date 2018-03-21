@@ -1,4 +1,8 @@
 #ifndef PHASH
 #define PHASH
-    int phash(const char *str);
+    
+    typedef unsigned int hash_t;
+
+    hash_t phash(const char *str);
+    
 #endif

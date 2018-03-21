@@ -20,7 +20,7 @@ public:
 
     void ilog(string logent);
 
-    void errlog(string logent);
+    void elog(string logent);
 };
 
 #endif

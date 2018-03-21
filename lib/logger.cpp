@@ -18,6 +18,6 @@ void Logger::ilog(string logent) {
     log("INFO", logent);
 }
 
-void Logger::errlog(string logent) {
+void Logger::elog(string logent) {
     log("ERROR", logent);
 }

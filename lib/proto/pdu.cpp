@@ -4,30 +4,29 @@
 
 #include "proto/pdu.hpp"
 
-PDU::PDU(string sender_ip, string sender_port, string receiver_ip, string receiver_port, int method)
-{
-    setMethod(method);
-    senderIP = sender_ip;
-    senderPort = sender_port;
-    receiverIP = receiver_ip;
-    receiverPort = receiver_port;
+void PDU::setWho(string pname) {
+    who = pname;
+    for(auto &c : who) c = toupper(c);
 }
 
-/*Another Constructor initializing sender/receiver module names instead of ip*/
-PDU::PDU(string sender, string receiver, int method)
-{
-    who = sender;
-    whom = receiver;
+PDU::PDU(int method) {
     setMethod(method);
+    setWho(PROCESS_ROLE);
 }
 
-string PDU::getMethod()
-{
+PDU::PDU() {
+    setWho(PROCESS_ROLE);
+}
+
+void PDU::setJData(json jobj) {
+	jdata = jobj;
+}
+
+string PDU::getMethod() {
     return method;
 }
 
-void PDU::setMethod(int pmethod)
-{
+void PDU::setMethod(int pmethod) {
     switch (pmethod)
     {
     case METHOD_CONNECT:
@@ -51,12 +50,20 @@ void PDU::setMethod(int pmethod)
     case METHOD_ACK:
         method = "ACK";
         break;
+    case METHOD_STATUS:
+        method = "STATUS";
+        break;
+    case METHOD_INTRO:
+        method = "INTRO";
+        break;
+    case METHOD_ERROR:
+        method = "ERROR";
+        break;
     }
 }
 
 /* separate function to load data/PDU*/
-void PDU::setData(string bufferedData)
-{
+void PDU::setData(string bufferedData) {
     jdata = json::parse(bufferedData);
 }
 
@@ -64,41 +71,20 @@ string PDU::getSenderType() {
     return who;
 }
 
-json PDU::getJSON()
-{
+json PDU::getJSON() {
     json j;
     j[WHO] = who;
-    j[WHOM] = whom;
-    j[RECIEVERIP] = receiverIP;
-    j[SENDERIP] = senderIP;
-    j[RECEIVERPORT] = receiverPort;
-    j[SENDERPORT] = senderPort;
     j[DATA] = jdata;
     j[METHOD] = method;
     return j;
 }
 
-PDU::PDU(string &jsonString)
-{
+PDU::PDU(string &jsonString) {
     json j = json::parse(jsonString);
-    who = j[WHO].get<string>();
-    whom = j[WHOM].get<string>();
-    receiverIP = j[RECIEVERIP].get<string>();
-    senderIP = j[SENDERIP].get<string>();
-    receiverPort = j[RECEIVERPORT].get<string>();
-    senderPort = j[SENDERPORT].get<string>();
     jdata = j[DATA];
     data = jdata.dump();
     method = j[METHOD].get<string>();
-}
-
-string PDU::getSenderIp()
-{
-    return senderIP;
-}
-string PDU::getSenderPort()
-{
-    return senderPort;
+    setWho(j[WHO].get<string>());
 }
 
 string PDU::toString() {

@@ -1,8 +1,17 @@
 CC=g++
 CFLAGS=-c -g -std=c++11 -I ../include/
 
-doit: pdu.o socket.o server.o reqhandler.o linereader.o logger.o stream.o
+doit: pdu.o socket.o server.o reqhandler.o linereader.o logger.o stream.o probable.o node.o util.o errpdu.o
 	pwd
+
+util.o: util.cpp
+	$(CC) $(CFLAGS) $<
+
+probable.o: probable.cpp
+	$(CC) $(CFLAGS) $<
+
+node.o: node.cpp
+	$(CC) $(CFLAGS) $<
 
 logger.o: logger.cpp
 	$(CC) $(CFLAGS) $<
@@ -13,6 +22,7 @@ stream.o: stream.cpp
 reqhandler.o: reqhandler.cpp
 	$(CC) $(CFLAGS) $<
 
+errpdu.o:
 pdu.o: ./proto/
 	+$(MAKE) -C ./proto/
 

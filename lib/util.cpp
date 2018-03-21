@@ -1,4 +1,8 @@
-#include "./util.hpp"
+#include "util.hpp"
+#include <ctype.h>
+#include <string>
+
+using namespace std;
 
 string ushort2str(ushort i) {
 	char buf[16];

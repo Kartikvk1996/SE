@@ -87,10 +87,10 @@ class ServerSocket : public Socket {
 private:
 	ushort maxConns;
 	sockaddr_in c_addr;
-
+	string getLocalHost();
 	bool sock_connect();
 public:
-	ServerSocket(string host, ushort port, ushort maxConns);
+	ServerSocket(ushort port, ushort maxConns);
 	Socket* acceptConn();
 };
 

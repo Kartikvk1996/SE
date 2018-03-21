@@ -4,7 +4,6 @@
 
 extern Logger logger;
 
-typedef unsigned short ushort;
-typedef unsigned int uint;
+#include "types.hpp"
 
 #define BUF_SIZE 65536

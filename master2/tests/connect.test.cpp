@@ -4,6 +4,10 @@
 
 using namespace std;
 
+#include "logger.hpp"
+
+Logger logger;
+string PROCESS_ROLE = "testers";
 /*
  * Master Connect Test.
  *
@@ -21,7 +25,7 @@ int main(int argc, char **argv) {
 
 	Socket *s = new Socket(string(argv[1]), atoi(argv[2]));
 
-	PDU p("localhost", "100", argv[1], argv[2], METHOD_CONNECT);
+	PDU p(METHOD_CONNECT);
 
 	s->writeData(p.toString());
 	cout << s->readData();

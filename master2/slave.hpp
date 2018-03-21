@@ -6,36 +6,56 @@
 #include <bits/stdc++.h>
 #include "util.hpp"
 #include "master.hpp"
+#include "proto/pdu.hpp"
 
 using namespace std;
+
+/**
+ * Slave at high level represents a computer node. While there will
+ * be many processes. For sake of simplicity we set the port of slave
+ * as the port on which fireup is listenting.
+ */
 
 class Master;
 class Process {
     string type;
-    string ip;
-    string port;
+    string host;
+    ushort port;
 
 public:
-    Process(string ip, string port, string type) {
-        this->ip = ip;
+    Process(string host, ushort port, string type) {
+        this->host = host;
         this->port = port;
         this->type = type;
     }
+
+    string getHost() {
+        return host;
+    }
+
+    ushort getPort() {
+        return port;
+    }
+    
+    string sendPDU(PDU *pdu, bool recvBack);
 };
 
 class Slave {
     Master *master;
-    string ip;
-    string port;
+    string host;
+    ushort agentPort;
     vector<Process*> processes;
 
 public:
-    Slave(Master *master, string ip, string port);
+    vector<Process*> getProcesses();
+    Slave(Master *master, string host, ushort port);
     int createProcess(string type);
     string toString();
     string getHost();
-    string getPort();
+    ushort getAgentPort();
     int getProcessCount();
+    string sendPDU(PDU *pdu, bool recvBack);
+    void addProcessEntry(Process* proc);
 };
 
 #endif

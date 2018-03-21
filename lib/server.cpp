@@ -8,9 +8,14 @@ void thread_piece(ReqHandler *handler, Socket *sock) {
 Server::Server(ServerSocket *serverSock) {
 	this->server = serverSock;
 }
-	
-Server::Server(string host, ushort port, ReqHandler *handler) {
-	server = new ServerSocket(host, port, MAX_CONNS);
+
+Server::Server(ReqHandler *handler) {
+	server = new ServerSocket(0, MAX_CONNS);
+	this->handler = handler;
+}
+
+Server::Server(ushort port, ReqHandler *handler) {
+	server = new ServerSocket(port, MAX_CONNS);
 	this->handler = handler;
 }
 
@@ -18,7 +23,7 @@ void Server::run() {
 	while(true) {
 		Socket *sock = server->acceptConn();
 		thread(thread_piece, handler, sock).detach();
-		logger.log("accepted a connection on thread");
+		logger.ilog("accepted a connection on thread");
 	}
 }
 

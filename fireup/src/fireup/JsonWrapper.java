@@ -32,14 +32,11 @@ class JsonWrapper {
         json.add(key, value.toString());
     }
 
-    void setFixedParams( String senderip, String senderport,
-            String rcvrip, String rcvrport) {
+    void setFixedParams(int listenPort) {
         set("WHO", "FIREUP");
-        set("WHOM", "MASTER");
-        set("SENDERIP", senderip);
-        set("SENDERPORT", senderport);
-        set("RECIEVERIP", rcvrip);
-        set("RECEIVERPORT", rcvrport);
+        JsonObject dobj = new JsonObject();
+        dobj.add("PORT", listenPort);
+        json.add("DATA", dobj);
     }
     
     @Override
