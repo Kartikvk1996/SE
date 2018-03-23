@@ -1,9 +1,0 @@
-total 56
-drwxr-xr-x 3 mmp mmp  4096 Dec  4 10:22 .
-drwxr-xr-x 7 mmp mmp  4096 Dec  3 10:59 ..
--rw-r--r-- 1 mmp mmp 34125 Nov 13 08:16 fireup.jar
-drwxr-xr-x 2 mmp mmp  4096 Nov 13 08:16 lib
--rw-r--r-- 1 mmp mmp     0 Dec  4 10:22 Mon_Dec_04_10:22:01_IST_2017err.txt
--rw-r--r-- 1 mmp mmp     0 Dec  4 10:22 Mon_Dec_04_10:22:01_IST_2017out.txt
--rw-r--r-- 1 mmp mmp  1321 Nov 13 08:16 README.TXT
--rw-r--r-- 1 mmp mmp  1442 Nov 13 08:16 server.class
