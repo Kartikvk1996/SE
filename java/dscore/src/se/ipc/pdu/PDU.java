@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import json.Json;
 import json.JsonObject;
+import se.ipc.Consts;
 
 public class PDU {
 
@@ -109,13 +110,18 @@ public class PDU {
     }
 
     public void setValue(String dsv, String value) throws JsonPathNotExistsException {
-        String chunks[] = dsv.split(".");
-        JsonObject parent = jObj;
+        String chunks[] = dsv.split("[.]");
+        JsonObject parent = jObj, child;
+        
+        if(jObj.get(chunks[0]) == null)
+            jObj.set(chunks[0], new JsonObject());
+        
         for (int i = 0; i < chunks.length-1; i++) {
-            parent = parent.get(chunks[i]).asObject();
-            if(parent == null) {
-                throw new JsonPathNotExistsException("path doesn't exist");
+            child = parent.get(chunks[i]).asObject();
+            if(child == null) {
+                parent.set(chunks[i], (child = new JsonObject()));
             }
+            parent = child;
         }
         parent.set(chunks[chunks.length - 1], value);
     }
@@ -125,7 +131,9 @@ public class PDU {
     }
     
     public ConnectPDU toConnectPDU() {
-        ConnectPDU cpdu = new ConnectPDU();
+        int port = Integer.parseInt(
+                getValue(Consts.jPath(DATA, ConnectPDU.CONNECT_PORT)));
+        ConnectPDU cpdu = new ConnectPDU(port);
         cpdu.setJsonObject(jObj);
         return cpdu;
     }

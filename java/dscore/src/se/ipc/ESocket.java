@@ -20,6 +20,7 @@ public class ESocket {
 
     public void send(PDU iPDU) throws IOException {
         socket.getOutputStream().write(iPDU.toString().getBytes());
+        socket.getOutputStream().flush();
     }
 
     public String getHost() {
