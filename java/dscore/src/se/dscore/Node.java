@@ -13,8 +13,8 @@ public class Node implements RequestHandler {
 
     private boolean running = false;
     private Server server;
-    private MasterProxy mproxy;
     private int HEARTBEAT_INTERVAL = 2000;
+    protected MasterProxy mproxy;
     
     final void commonInit() throws IOException {
          server = new Server(this);       
@@ -32,7 +32,7 @@ public class Node implements RequestHandler {
 
     public void run() throws IOException {
         /* Create a heartbeat sending thread */
-        new Thread(new Heartbeat(mproxy, this, HEARTBEAT_INTERVAL), "Heartbeat").start();
+        //new Thread(new Heartbeat(mproxy, this, HEARTBEAT_INTERVAL), "Heartbeat").start();
         running = true;
         server.run();
     }
