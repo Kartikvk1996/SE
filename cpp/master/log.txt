@@ -1,0 +1,15 @@
+29-10-2017 09:50:17	Starting Master
+29-10-2017 09:50:17	Variables Initialized successfully
+29-10-2017 09:50:17	Starting Server
+29-10-2017 09:50:17	Server Started successfully
+29-10-2017 09:50:23	Server stopped successfully
+29-10-2017 09:51:25	Starting Master
+29-10-2017 09:51:25	Variables Initialized successfully
+29-10-2017 09:51:25	Starting Server
+29-10-2017 09:51:25	Server Started successfully
+29-10-2017 09:51:39	Server stopped successfully
+29-10-2017 09:52:11	Starting Master
+29-10-2017 09:52:11	Variables Initialized successfully
+29-10-2017 09:52:11	Starting Server
+29-10-2017 09:52:11	Server Started successfully
+29-10-2017 09:52:18	Server stopped successfully

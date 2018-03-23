@@ -1,0 +1,11 @@
+#These are the methods used in PDU
+CONNECT
+CREATE
+GET
+UPDATE
+KILL
+WRITE
+ACK
+STATUS
+INTRO
+ERROR

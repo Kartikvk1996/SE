@@ -1,0 +1,602 @@
+execve("./generator", ["./generator", "METHOD", "methods.proto", "PC", "processes.proto", "GET", "getattrs.proto", "GUEST", "guestattrs.proto", "ERROR", "errors.proto"], [/* 71 vars */]) = 0
+brk(NULL)                               = 0x2243000
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f747e0ff000
+close(3)                                = 0
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f747e0fe000
+mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f747db29000
+mprotect(0x7f747dce9000, 2097152, PROT_NONE) = 0
+mmap(0x7f747dee9000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7f747dee9000
+mmap(0x7f747deef000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f747deef000
+close(3)                                = 0
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f747e0fd000
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f747e0fc000
+arch_prctl(ARCH_SET_FS, 0x7f747e0fd700) = 0
+mprotect(0x7f747dee9000, 16384, PROT_READ) = 0
+mprotect(0x600000, 4096, PROT_READ)     = 0
+mprotect(0x7f747e118000, 4096, PROT_READ) = 0
+munmap(0x7f747e0ff000, 102381)          = 0
+fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 4), ...}) = 0
+brk(NULL)                               = 0x2243000
+brk(0x2264000)                          = 0x2264000
+write(1, "#ifndef PHASHES\n", 16)       = 16
+write(1, "#define PHASHES\n", 16)       = 16
+write(1, "\n", 1)                       = 1
+rt_sigaction(SIGINT, {SIG_IGN, [], SA_RESTORER, 0x7f747db5e4b0}, {SIG_DFL, [], 0}, 8) = 0
+rt_sigaction(SIGQUIT, {SIG_IGN, [], SA_RESTORER, 0x7f747db5e4b0}, {SIG_DFL, [], 0}, 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+clone(child_stack=0, flags=CLONE_PARENT_SETTID|SIGCHLD, parent_tidptr=0x7fff8849e47c) = 15841
+wait4(15841, strace: Process 15841 attached
+ <unfinished ...>
+[pid 15841] rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+[pid 15841] rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+[pid 15841] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 15841] execve("/bin/sh", ["sh", "-c", "./hashgenerator \"ERROR_\" < error"...], [/* 71 vars */]) = 0
+[pid 15841] brk(NULL)                   = 0x55694d28e000
+[pid 15841] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15841] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 15841] open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[pid 15841] fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+[pid 15841] mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7fe15ad26000
+[pid 15841] close(3)                    = 0
+[pid 15841] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15841] open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+[pid 15841] read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+[pid 15841] fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+[pid 15841] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fe15ad25000
+[pid 15841] mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7fe15a750000
+[pid 15841] mprotect(0x7fe15a910000, 2097152, PROT_NONE) = 0
+[pid 15841] mmap(0x7fe15ab10000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7fe15ab10000
+[pid 15841] mmap(0x7fe15ab16000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7fe15ab16000
+[pid 15841] close(3)                    = 0
+[pid 15841] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fe15ad24000
+[pid 15841] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fe15ad23000
+[pid 15841] arch_prctl(ARCH_SET_FS, 0x7fe15ad24700) = 0
+[pid 15841] mprotect(0x7fe15ab10000, 16384, PROT_READ) = 0
+[pid 15841] mprotect(0x55694c1e1000, 8192, PROT_READ) = 0
+[pid 15841] mprotect(0x7fe15ad3f000, 4096, PROT_READ) = 0
+[pid 15841] munmap(0x7fe15ad26000, 102381) = 0
+[pid 15841] getuid()                    = 1000
+[pid 15841] getgid()                    = 1000
+[pid 15841] getpid()                    = 15841
+[pid 15841] rt_sigaction(SIGCHLD, {0x55694bfd5540, ~[RTMIN RT_1], SA_RESTORER, 0x7fe15a7854b0}, NULL, 8) = 0
+[pid 15841] geteuid()                   = 1000
+[pid 15841] brk(NULL)                   = 0x55694d28e000
+[pid 15841] brk(0x55694d2af000)         = 0x55694d2af000
+[pid 15841] getppid()                   = 15840
+[pid 15841] stat("/home/mmp/mmp/mjp/se/include/proto/phashes", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0
+[pid 15841] stat(".", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0
+[pid 15841] geteuid()                   = 1000
+[pid 15841] getegid()                   = 1000
+[pid 15841] rt_sigaction(SIGINT, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15841] rt_sigaction(SIGINT, {0x55694bfd5540, ~[RTMIN RT_1], SA_RESTORER, 0x7fe15a7854b0}, NULL, 8) = 0
+[pid 15841] rt_sigaction(SIGQUIT, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15841] rt_sigaction(SIGQUIT, {SIG_DFL, ~[RTMIN RT_1], SA_RESTORER, 0x7fe15a7854b0}, NULL, 8) = 0
+[pid 15841] rt_sigaction(SIGTERM, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15841] rt_sigaction(SIGTERM, {SIG_DFL, ~[RTMIN RT_1], SA_RESTORER, 0x7fe15a7854b0}, NULL, 8) = 0
+[pid 15841] open("errors.proto", O_RDONLY) = 3
+[pid 15841] fcntl(0, F_DUPFD, 10)       = 10
+[pid 15841] close(0)                    = 0
+[pid 15841] fcntl(10, F_SETFD, FD_CLOEXEC) = 0
+[pid 15841] dup2(3, 0)                  = 0
+[pid 15841] close(3)                    = 0
+[pid 15841] clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fe15ad249d0) = 15842
+[pid 15841] wait4(-1, strace: Process 15842 attached
+ <unfinished ...>
+[pid 15842] execve("./hashgenerator", ["./hashgenerator", "ERROR_"], [/* 71 vars */]) = 0
+[pid 15842] brk(NULL)                   = 0x1901000
+[pid 15842] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15842] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 15842] open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[pid 15842] fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+[pid 15842] mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f563863a000
+[pid 15842] close(3)                    = 0
+[pid 15842] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15842] open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+[pid 15842] read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+[pid 15842] fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+[pid 15842] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f5638639000
+[pid 15842] mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f5638064000
+[pid 15842] mprotect(0x7f5638224000, 2097152, PROT_NONE) = 0
+[pid 15842] mmap(0x7f5638424000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7f5638424000
+[pid 15842] mmap(0x7f563842a000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f563842a000
+[pid 15842] close(3)                    = 0
+[pid 15842] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f5638638000
+[pid 15842] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f5638637000
+[pid 15842] arch_prctl(ARCH_SET_FS, 0x7f5638638700) = 0
+[pid 15842] mprotect(0x7f5638424000, 16384, PROT_READ) = 0
+[pid 15842] mprotect(0x600000, 4096, PROT_READ) = 0
+[pid 15842] mprotect(0x7f5638653000, 4096, PROT_READ) = 0
+[pid 15842] munmap(0x7f563863a000, 102381) = 0
+[pid 15842] fstat(0, {st_mode=S_IFREG|0664, st_size=52, ...}) = 0
+[pid 15842] brk(NULL)                   = 0x1901000
+[pid 15842] brk(0x1923000)              = 0x1923000
+[pid 15842] read(0, "#These are the attributes of the"..., 4096) = 52
+[pid 15842] fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 4), ...}) = 0
+[pid 15842] write(1, "\n", 1)           = 1
+[pid 15842] write(1, "//#These are the attributes of t"..., 45) = 45
+[pid 15842] write(1, "\n", 1)           = 1
+[pid 15842] write(1, "#define ERROR_CODE\t(24557)\t//COD"..., 34) = 34
+[pid 15842] write(1, "#define ERROR_MSG\t(52545)\t//MSG\n", 32) = 32
+[pid 15842] read(0, "", 4096)           = 0
+[pid 15842] exit_group(0)               = ?
+[pid 15842] +++ exited with 0 +++
+[pid 15841] <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 15842
+[pid 15841] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=15842, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+[pid 15841] rt_sigreturn({mask=[]})     = 15842
+[pid 15841] dup2(10, 0)                 = 0
+[pid 15841] close(10)                   = 0
+[pid 15841] exit_group(0)               = ?
+[pid 15841] +++ exited with 0 +++
+<... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 15841
+rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=15841, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+rt_sigaction(SIGINT, {SIG_IGN, [], SA_RESTORER, 0x7f747db5e4b0}, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, 8) = 0
+rt_sigaction(SIGQUIT, {SIG_IGN, [], SA_RESTORER, 0x7f747db5e4b0}, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+clone(child_stack=0, flags=CLONE_PARENT_SETTID|SIGCHLD, parent_tidptr=0x7fff8849e47c) = 15843
+wait4(15843, strace: Process 15843 attached
+ <unfinished ...>
+[pid 15843] rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+[pid 15843] rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+[pid 15843] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 15843] execve("/bin/sh", ["sh", "-c", "./hashgenerator \"GUEST_\" < guest"...], [/* 71 vars */]) = 0
+[pid 15843] brk(NULL)                   = 0x55f155b8e000
+[pid 15843] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15843] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 15843] open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[pid 15843] fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+[pid 15843] mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f49b1759000
+[pid 15843] close(3)                    = 0
+[pid 15843] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15843] open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+[pid 15843] read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+[pid 15843] fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+[pid 15843] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f49b1758000
+[pid 15843] mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f49b1183000
+[pid 15843] mprotect(0x7f49b1343000, 2097152, PROT_NONE) = 0
+[pid 15843] mmap(0x7f49b1543000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7f49b1543000
+[pid 15843] mmap(0x7f49b1549000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f49b1549000
+[pid 15843] close(3)                    = 0
+[pid 15843] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f49b1757000
+[pid 15843] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f49b1756000
+[pid 15843] arch_prctl(ARCH_SET_FS, 0x7f49b1757700) = 0
+[pid 15843] mprotect(0x7f49b1543000, 16384, PROT_READ) = 0
+[pid 15843] mprotect(0x55f155a89000, 8192, PROT_READ) = 0
+[pid 15843] mprotect(0x7f49b1772000, 4096, PROT_READ) = 0
+[pid 15843] munmap(0x7f49b1759000, 102381) = 0
+[pid 15843] getuid()                    = 1000
+[pid 15843] getgid()                    = 1000
+[pid 15843] getpid()                    = 15843
+[pid 15843] rt_sigaction(SIGCHLD, {0x55f15587d540, ~[RTMIN RT_1], SA_RESTORER, 0x7f49b11b84b0}, NULL, 8) = 0
+[pid 15843] geteuid()                   = 1000
+[pid 15843] brk(NULL)                   = 0x55f155b8e000
+[pid 15843] brk(0x55f155baf000)         = 0x55f155baf000
+[pid 15843] getppid()                   = 15840
+[pid 15843] stat("/home/mmp/mmp/mjp/se/include/proto/phashes", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0
+[pid 15843] stat(".", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0
+[pid 15843] geteuid()                   = 1000
+[pid 15843] getegid()                   = 1000
+[pid 15843] rt_sigaction(SIGINT, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15843] rt_sigaction(SIGINT, {0x55f15587d540, ~[RTMIN RT_1], SA_RESTORER, 0x7f49b11b84b0}, NULL, 8) = 0
+[pid 15843] rt_sigaction(SIGQUIT, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15843] rt_sigaction(SIGQUIT, {SIG_DFL, ~[RTMIN RT_1], SA_RESTORER, 0x7f49b11b84b0}, NULL, 8) = 0
+[pid 15843] rt_sigaction(SIGTERM, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15843] rt_sigaction(SIGTERM, {SIG_DFL, ~[RTMIN RT_1], SA_RESTORER, 0x7f49b11b84b0}, NULL, 8) = 0
+[pid 15843] open("guestattrs.proto", O_RDONLY) = 3
+[pid 15843] fcntl(0, F_DUPFD, 10)       = 10
+[pid 15843] close(0)                    = 0
+[pid 15843] fcntl(10, F_SETFD, FD_CLOEXEC) = 0
+[pid 15843] dup2(3, 0)                  = 0
+[pid 15843] close(3)                    = 0
+[pid 15843] clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7f49b17579d0) = 15844
+[pid 15843] wait4(-1, strace: Process 15844 attached
+ <unfinished ...>
+[pid 15844] execve("./hashgenerator", ["./hashgenerator", "GUEST_"], [/* 71 vars */]) = 0
+[pid 15844] brk(NULL)                   = 0x22d7000
+[pid 15844] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15844] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 15844] open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[pid 15844] fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+[pid 15844] mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7fdf513a1000
+[pid 15844] close(3)                    = 0
+[pid 15844] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15844] open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+[pid 15844] read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+[pid 15844] fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+[pid 15844] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fdf513a0000
+[pid 15844] mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7fdf50dcb000
+[pid 15844] mprotect(0x7fdf50f8b000, 2097152, PROT_NONE) = 0
+[pid 15844] mmap(0x7fdf5118b000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7fdf5118b000
+[pid 15844] mmap(0x7fdf51191000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7fdf51191000
+[pid 15844] close(3)                    = 0
+[pid 15844] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fdf5139f000
+[pid 15844] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fdf5139e000
+[pid 15844] arch_prctl(ARCH_SET_FS, 0x7fdf5139f700) = 0
+[pid 15844] mprotect(0x7fdf5118b000, 16384, PROT_READ) = 0
+[pid 15844] mprotect(0x600000, 4096, PROT_READ) = 0
+[pid 15844] mprotect(0x7fdf513ba000, 4096, PROT_READ) = 0
+[pid 15844] munmap(0x7fdf513a1000, 102381) = 0
+[pid 15844] fstat(0, {st_mode=S_IFREG|0664, st_size=49, ...}) = 0
+[pid 15844] brk(NULL)                   = 0x22d7000
+[pid 15844] brk(0x22f9000)              = 0x22f9000
+[pid 15844] read(0, "#These are the attributes for in"..., 4096) = 49
+[pid 15844] fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 4), ...}) = 0
+[pid 15844] write(1, "\n", 1)           = 1
+[pid 15844] write(1, "//#These are the attributes for "..., 41) = 41
+[pid 15844] write(1, "\n", 1)           = 1
+[pid 15844] write(1, "#define GUEST_HOST\t(68392)\t//HOS"..., 34) = 34
+[pid 15844] write(1, "#define GUEST_PORT\t(55329)\t//POR"..., 34) = 34
+[pid 15844] read(0, "", 4096)           = 0
+[pid 15844] exit_group(0)               = ?
+[pid 15844] +++ exited with 0 +++
+[pid 15843] <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 15844
+[pid 15843] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=15844, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+[pid 15843] rt_sigreturn({mask=[]})     = 15844
+[pid 15843] dup2(10, 0)                 = 0
+[pid 15843] close(10)                   = 0
+[pid 15843] exit_group(0)               = ?
+[pid 15843] +++ exited with 0 +++
+<... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 15843
+rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=15843, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+rt_sigaction(SIGINT, {SIG_IGN, [], SA_RESTORER, 0x7f747db5e4b0}, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, 8) = 0
+rt_sigaction(SIGQUIT, {SIG_IGN, [], SA_RESTORER, 0x7f747db5e4b0}, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+clone(child_stack=0, flags=CLONE_PARENT_SETTID|SIGCHLD, parent_tidptr=0x7fff8849e47c) = 15845
+wait4(15845, strace: Process 15845 attached
+ <unfinished ...>
+[pid 15845] rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+[pid 15845] rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+[pid 15845] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 15845] execve("/bin/sh", ["sh", "-c", "./hashgenerator \"GET_\" < getattr"...], [/* 71 vars */]) = 0
+[pid 15845] brk(NULL)                   = 0x55e93a52e000
+[pid 15845] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15845] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 15845] open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[pid 15845] fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+[pid 15845] mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7fcbfbbd0000
+[pid 15845] close(3)                    = 0
+[pid 15845] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15845] open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+[pid 15845] read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+[pid 15845] fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+[pid 15845] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fcbfbbcf000
+[pid 15845] mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7fcbfb5fa000
+[pid 15845] mprotect(0x7fcbfb7ba000, 2097152, PROT_NONE) = 0
+[pid 15845] mmap(0x7fcbfb9ba000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7fcbfb9ba000
+[pid 15845] mmap(0x7fcbfb9c0000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7fcbfb9c0000
+[pid 15845] close(3)                    = 0
+[pid 15845] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fcbfbbce000
+[pid 15845] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fcbfbbcd000
+[pid 15845] arch_prctl(ARCH_SET_FS, 0x7fcbfbbce700) = 0
+[pid 15845] mprotect(0x7fcbfb9ba000, 16384, PROT_READ) = 0
+[pid 15845] mprotect(0x55e939393000, 8192, PROT_READ) = 0
+[pid 15845] mprotect(0x7fcbfbbe9000, 4096, PROT_READ) = 0
+[pid 15845] munmap(0x7fcbfbbd0000, 102381) = 0
+[pid 15845] getuid()                    = 1000
+[pid 15845] getgid()                    = 1000
+[pid 15845] getpid()                    = 15845
+[pid 15845] rt_sigaction(SIGCHLD, {0x55e939187540, ~[RTMIN RT_1], SA_RESTORER, 0x7fcbfb62f4b0}, NULL, 8) = 0
+[pid 15845] geteuid()                   = 1000
+[pid 15845] brk(NULL)                   = 0x55e93a52e000
+[pid 15845] brk(0x55e93a54f000)         = 0x55e93a54f000
+[pid 15845] getppid()                   = 15840
+[pid 15845] stat("/home/mmp/mmp/mjp/se/include/proto/phashes", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0
+[pid 15845] stat(".", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0
+[pid 15845] geteuid()                   = 1000
+[pid 15845] getegid()                   = 1000
+[pid 15845] rt_sigaction(SIGINT, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15845] rt_sigaction(SIGINT, {0x55e939187540, ~[RTMIN RT_1], SA_RESTORER, 0x7fcbfb62f4b0}, NULL, 8) = 0
+[pid 15845] rt_sigaction(SIGQUIT, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15845] rt_sigaction(SIGQUIT, {SIG_DFL, ~[RTMIN RT_1], SA_RESTORER, 0x7fcbfb62f4b0}, NULL, 8) = 0
+[pid 15845] rt_sigaction(SIGTERM, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15845] rt_sigaction(SIGTERM, {SIG_DFL, ~[RTMIN RT_1], SA_RESTORER, 0x7fcbfb62f4b0}, NULL, 8) = 0
+[pid 15845] open("getattrs.proto", O_RDONLY) = 3
+[pid 15845] fcntl(0, F_DUPFD, 10)       = 10
+[pid 15845] close(0)                    = 0
+[pid 15845] fcntl(10, F_SETFD, FD_CLOEXEC) = 0
+[pid 15845] dup2(3, 0)                  = 0
+[pid 15845] close(3)                    = 0
+[pid 15845] clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fcbfbbce9d0) = 15846
+[pid 15845] wait4(-1, strace: Process 15846 attached
+ <unfinished ...>
+[pid 15846] execve("./hashgenerator", ["./hashgenerator", "GET_"], [/* 71 vars */]) = 0
+[pid 15846] brk(NULL)                   = 0x17a2000
+[pid 15846] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15846] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 15846] open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[pid 15846] fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+[pid 15846] mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f3befe72000
+[pid 15846] close(3)                    = 0
+[pid 15846] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15846] open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+[pid 15846] read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+[pid 15846] fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+[pid 15846] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f3befe71000
+[pid 15846] mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f3bef89c000
+[pid 15846] mprotect(0x7f3befa5c000, 2097152, PROT_NONE) = 0
+[pid 15846] mmap(0x7f3befc5c000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7f3befc5c000
+[pid 15846] mmap(0x7f3befc62000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f3befc62000
+[pid 15846] close(3)                    = 0
+[pid 15846] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f3befe70000
+[pid 15846] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f3befe6f000
+[pid 15846] arch_prctl(ARCH_SET_FS, 0x7f3befe70700) = 0
+[pid 15846] mprotect(0x7f3befc5c000, 16384, PROT_READ) = 0
+[pid 15846] mprotect(0x600000, 4096, PROT_READ) = 0
+[pid 15846] mprotect(0x7f3befe8b000, 4096, PROT_READ) = 0
+[pid 15846] munmap(0x7f3befe72000, 102381) = 0
+[pid 15846] fstat(0, {st_mode=S_IFREG|0664, st_size=54, ...}) = 0
+[pid 15846] brk(NULL)                   = 0x17a2000
+[pid 15846] brk(0x17c4000)              = 0x17c4000
+[pid 15846] read(0, "#These are the attributes used b"..., 4096) = 54
+[pid 15846] fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 4), ...}) = 0
+[pid 15846] write(1, "\n", 1)           = 1
+[pid 15846] write(1, "//#These are the attributes used"..., 47) = 47
+[pid 15846] write(1, "\n", 1)           = 1
+[pid 15846] write(1, "#define GET_RESOURCE\t(15918)\t//R"..., 40) = 40
+[pid 15846] read(0, "", 4096)           = 0
+[pid 15846] exit_group(0)               = ?
+[pid 15846] +++ exited with 0 +++
+[pid 15845] <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 15846
+[pid 15845] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=15846, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+[pid 15845] rt_sigreturn({mask=[]})     = 15846
+[pid 15845] dup2(10, 0)                 = 0
+[pid 15845] close(10)                   = 0
+[pid 15845] exit_group(0)               = ?
+[pid 15845] +++ exited with 0 +++
+<... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 15845
+rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=15845, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+rt_sigaction(SIGINT, {SIG_IGN, [], SA_RESTORER, 0x7f747db5e4b0}, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, 8) = 0
+rt_sigaction(SIGQUIT, {SIG_IGN, [], SA_RESTORER, 0x7f747db5e4b0}, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+clone(child_stack=0, flags=CLONE_PARENT_SETTID|SIGCHLD, parent_tidptr=0x7fff8849e47c) = 15847
+wait4(15847, strace: Process 15847 attached
+ <unfinished ...>
+[pid 15847] rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+[pid 15847] rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+[pid 15847] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 15847] execve("/bin/sh", ["sh", "-c", "./hashgenerator \"PC_\" < processe"...], [/* 71 vars */]) = 0
+[pid 15847] brk(NULL)                   = 0x561f27fa5000
+[pid 15847] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15847] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 15847] open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[pid 15847] fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+[pid 15847] mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7fe56c0e3000
+[pid 15847] close(3)                    = 0
+[pid 15847] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15847] open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+[pid 15847] read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+[pid 15847] fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+[pid 15847] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fe56c0e2000
+[pid 15847] mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7fe56bb0d000
+[pid 15847] mprotect(0x7fe56bccd000, 2097152, PROT_NONE) = 0
+[pid 15847] mmap(0x7fe56becd000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7fe56becd000
+[pid 15847] mmap(0x7fe56bed3000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7fe56bed3000
+[pid 15847] close(3)                    = 0
+[pid 15847] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fe56c0e1000
+[pid 15847] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fe56c0e0000
+[pid 15847] arch_prctl(ARCH_SET_FS, 0x7fe56c0e1700) = 0
+[pid 15847] mprotect(0x7fe56becd000, 16384, PROT_READ) = 0
+[pid 15847] mprotect(0x561f26b74000, 8192, PROT_READ) = 0
+[pid 15847] mprotect(0x7fe56c0fc000, 4096, PROT_READ) = 0
+[pid 15847] munmap(0x7fe56c0e3000, 102381) = 0
+[pid 15847] getuid()                    = 1000
+[pid 15847] getgid()                    = 1000
+[pid 15847] getpid()                    = 15847
+[pid 15847] rt_sigaction(SIGCHLD, {0x561f26968540, ~[RTMIN RT_1], SA_RESTORER, 0x7fe56bb424b0}, NULL, 8) = 0
+[pid 15847] geteuid()                   = 1000
+[pid 15847] brk(NULL)                   = 0x561f27fa5000
+[pid 15847] brk(0x561f27fc6000)         = 0x561f27fc6000
+[pid 15847] getppid()                   = 15840
+[pid 15847] stat("/home/mmp/mmp/mjp/se/include/proto/phashes", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0
+[pid 15847] stat(".", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0
+[pid 15847] geteuid()                   = 1000
+[pid 15847] getegid()                   = 1000
+[pid 15847] rt_sigaction(SIGINT, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15847] rt_sigaction(SIGINT, {0x561f26968540, ~[RTMIN RT_1], SA_RESTORER, 0x7fe56bb424b0}, NULL, 8) = 0
+[pid 15847] rt_sigaction(SIGQUIT, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15847] rt_sigaction(SIGQUIT, {SIG_DFL, ~[RTMIN RT_1], SA_RESTORER, 0x7fe56bb424b0}, NULL, 8) = 0
+[pid 15847] rt_sigaction(SIGTERM, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15847] rt_sigaction(SIGTERM, {SIG_DFL, ~[RTMIN RT_1], SA_RESTORER, 0x7fe56bb424b0}, NULL, 8) = 0
+[pid 15847] open("processes.proto", O_RDONLY) = 3
+[pid 15847] fcntl(0, F_DUPFD, 10)       = 10
+[pid 15847] close(0)                    = 0
+[pid 15847] fcntl(10, F_SETFD, FD_CLOEXEC) = 0
+[pid 15847] dup2(3, 0)                  = 0
+[pid 15847] close(3)                    = 0
+[pid 15847] clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fe56c0e19d0) = 15848
+[pid 15847] wait4(-1, strace: Process 15848 attached
+ <unfinished ...>
+[pid 15848] execve("./hashgenerator", ["./hashgenerator", "PC_"], [/* 71 vars */]) = 0
+[pid 15848] brk(NULL)                   = 0x1f05000
+[pid 15848] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15848] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 15848] open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[pid 15848] fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+[pid 15848] mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7fa2da0d2000
+[pid 15848] close(3)                    = 0
+[pid 15848] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15848] open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+[pid 15848] read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+[pid 15848] fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+[pid 15848] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fa2da0d1000
+[pid 15848] mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7fa2d9afc000
+[pid 15848] mprotect(0x7fa2d9cbc000, 2097152, PROT_NONE) = 0
+[pid 15848] mmap(0x7fa2d9ebc000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7fa2d9ebc000
+[pid 15848] mmap(0x7fa2d9ec2000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7fa2d9ec2000
+[pid 15848] close(3)                    = 0
+[pid 15848] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fa2da0d0000
+[pid 15848] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fa2da0cf000
+[pid 15848] arch_prctl(ARCH_SET_FS, 0x7fa2da0d0700) = 0
+[pid 15848] mprotect(0x7fa2d9ebc000, 16384, PROT_READ) = 0
+[pid 15848] mprotect(0x600000, 4096, PROT_READ) = 0
+[pid 15848] mprotect(0x7fa2da0eb000, 4096, PROT_READ) = 0
+[pid 15848] munmap(0x7fa2da0d2000, 102381) = 0
+[pid 15848] fstat(0, {st_mode=S_IFREG|0664, st_size=110, ...}) = 0
+[pid 15848] brk(NULL)                   = 0x1f05000
+[pid 15848] brk(0x1f27000)              = 0x1f27000
+[pid 15848] read(0, "# These are some hashes for iden"..., 4096) = 110
+[pid 15848] fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 4), ...}) = 0
+[pid 15848] write(1, "\n", 1)           = 1
+[pid 15848] write(1, "//# These are some hashes for id"..., 67) = 67
+[pid 15848] write(1, "\n", 1)           = 1
+[pid 15848] write(1, "#define PC_FFC\t(37987)\t//FFC\n", 29) = 29
+[pid 15848] write(1, "#define PC_CRAWLER\t(21172)\t//CRA"..., 37) = 37
+[pid 15848] write(1, "#define PC_RGEN\t(21406)\t//RGEN\n", 31) = 31
+[pid 15848] write(1, "#define PC_WRITER\t(94611)\t//WRIT"..., 35) = 35
+[pid 15848] write(1, "#define PC_READER\t(22115)\t//READ"..., 35) = 35
+[pid 15848] write(1, "#define PC_DMGR\t(41076)\t//DMGR\n", 31) = 31
+[pid 15848] write(1, "#define PC_WS\t(11132)\t//WS\n", 27) = 27
+[pid 15848] write(1, "#define PC_GUEST\t(5592)\t//GUEST\n", 32) = 32
+[pid 15848] read(0, "", 4096)           = 0
+[pid 15848] exit_group(0)               = ?
+[pid 15848] +++ exited with 0 +++
+[pid 15847] <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 15848
+[pid 15847] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=15848, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+[pid 15847] rt_sigreturn({mask=[]})     = 15848
+[pid 15847] dup2(10, 0)                 = 0
+[pid 15847] close(10)                   = 0
+[pid 15847] exit_group(0)               = ?
+[pid 15847] +++ exited with 0 +++
+<... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 15847
+rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=15847, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+rt_sigaction(SIGINT, {SIG_IGN, [], SA_RESTORER, 0x7f747db5e4b0}, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, 8) = 0
+rt_sigaction(SIGQUIT, {SIG_IGN, [], SA_RESTORER, 0x7f747db5e4b0}, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, 8) = 0
+rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+clone(child_stack=0, flags=CLONE_PARENT_SETTID|SIGCHLD, parent_tidptr=0x7fff8849e47c) = 15849
+wait4(15849, strace: Process 15849 attached
+ <unfinished ...>
+[pid 15849] rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+[pid 15849] rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+[pid 15849] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+[pid 15849] execve("/bin/sh", ["sh", "-c", "./hashgenerator \"METHOD_\" < meth"...], [/* 71 vars */]) = 0
+[pid 15849] brk(NULL)                   = 0x5562a7856000
+[pid 15849] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15849] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 15849] open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[pid 15849] fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+[pid 15849] mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f50eeb1c000
+[pid 15849] close(3)                    = 0
+[pid 15849] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15849] open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+[pid 15849] read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+[pid 15849] fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+[pid 15849] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f50eeb1b000
+[pid 15849] mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f50ee546000
+[pid 15849] mprotect(0x7f50ee706000, 2097152, PROT_NONE) = 0
+[pid 15849] mmap(0x7f50ee906000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7f50ee906000
+[pid 15849] mmap(0x7f50ee90c000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f50ee90c000
+[pid 15849] close(3)                    = 0
+[pid 15849] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f50eeb1a000
+[pid 15849] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f50eeb19000
+[pid 15849] arch_prctl(ARCH_SET_FS, 0x7f50eeb1a700) = 0
+[pid 15849] mprotect(0x7f50ee906000, 16384, PROT_READ) = 0
+[pid 15849] mprotect(0x5562a6a9e000, 8192, PROT_READ) = 0
+[pid 15849] mprotect(0x7f50eeb35000, 4096, PROT_READ) = 0
+[pid 15849] munmap(0x7f50eeb1c000, 102381) = 0
+[pid 15849] getuid()                    = 1000
+[pid 15849] getgid()                    = 1000
+[pid 15849] getpid()                    = 15849
+[pid 15849] rt_sigaction(SIGCHLD, {0x5562a6892540, ~[RTMIN RT_1], SA_RESTORER, 0x7f50ee57b4b0}, NULL, 8) = 0
+[pid 15849] geteuid()                   = 1000
+[pid 15849] brk(NULL)                   = 0x5562a7856000
+[pid 15849] brk(0x5562a7877000)         = 0x5562a7877000
+[pid 15849] getppid()                   = 15840
+[pid 15849] stat("/home/mmp/mmp/mjp/se/include/proto/phashes", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0
+[pid 15849] stat(".", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0
+[pid 15849] geteuid()                   = 1000
+[pid 15849] getegid()                   = 1000
+[pid 15849] rt_sigaction(SIGINT, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15849] rt_sigaction(SIGINT, {0x5562a6892540, ~[RTMIN RT_1], SA_RESTORER, 0x7f50ee57b4b0}, NULL, 8) = 0
+[pid 15849] rt_sigaction(SIGQUIT, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15849] rt_sigaction(SIGQUIT, {SIG_DFL, ~[RTMIN RT_1], SA_RESTORER, 0x7f50ee57b4b0}, NULL, 8) = 0
+[pid 15849] rt_sigaction(SIGTERM, NULL, {SIG_DFL, [], 0}, 8) = 0
+[pid 15849] rt_sigaction(SIGTERM, {SIG_DFL, ~[RTMIN RT_1], SA_RESTORER, 0x7f50ee57b4b0}, NULL, 8) = 0
+[pid 15849] open("methods.proto", O_RDONLY) = 3
+[pid 15849] fcntl(0, F_DUPFD, 10)       = 10
+[pid 15849] close(0)                    = 0
+[pid 15849] fcntl(10, F_SETFD, FD_CLOEXEC) = 0
+[pid 15849] dup2(3, 0)                  = 0
+[pid 15849] close(3)                    = 0
+[pid 15849] clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7f50eeb1a9d0) = 15850
+[pid 15849] wait4(-1, strace: Process 15850 attached
+ <unfinished ...>
+[pid 15850] execve("./hashgenerator", ["./hashgenerator", "METHOD_"], [/* 71 vars */]) = 0
+[pid 15850] brk(NULL)                   = 0x11b1000
+[pid 15850] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15850] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 15850] open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+[pid 15850] fstat(3, {st_mode=S_IFREG|0644, st_size=102381, ...}) = 0
+[pid 15850] mmap(NULL, 102381, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f2944924000
+[pid 15850] close(3)                    = 0
+[pid 15850] access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+[pid 15850] open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+[pid 15850] read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\t\2\0\0\0\0\0"..., 832) = 832
+[pid 15850] fstat(3, {st_mode=S_IFREG|0755, st_size=1868984, ...}) = 0
+[pid 15850] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f2944923000
+[pid 15850] mmap(NULL, 3971488, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f294434e000
+[pid 15850] mprotect(0x7f294450e000, 2097152, PROT_NONE) = 0
+[pid 15850] mmap(0x7f294470e000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7f294470e000
+[pid 15850] mmap(0x7f2944714000, 14752, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f2944714000
+[pid 15850] close(3)                    = 0
+[pid 15850] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f2944922000
+[pid 15850] mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f2944921000
+[pid 15850] arch_prctl(ARCH_SET_FS, 0x7f2944922700) = 0
+[pid 15850] mprotect(0x7f294470e000, 16384, PROT_READ) = 0
+[pid 15850] mprotect(0x600000, 4096, PROT_READ) = 0
+[pid 15850] mprotect(0x7f294493d000, 4096, PROT_READ) = 0
+[pid 15850] munmap(0x7f2944924000, 102381) = 0
+[pid 15850] fstat(0, {st_mode=S_IFREG|0664, st_size=95, ...}) = 0
+[pid 15850] brk(NULL)                   = 0x11b1000
+[pid 15850] brk(0x11d3000)              = 0x11d3000
+[pid 15850] read(0, "#These are the methods used in P"..., 4096) = 95
+[pid 15850] fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 4), ...}) = 0
+[pid 15850] write(1, "\n", 1)           = 1
+[pid 15850] write(1, "//#These are the methods used in"..., 37) = 37
+[pid 15850] write(1, "\n", 1)           = 1
+[pid 15850] write(1, "#define METHOD_CONNECT\t(44682)\t/"..., 41) = 41
+[pid 15850] write(1, "#define METHOD_CREATE\t(8380)\t//C"..., 38) = 38
+[pid 15850] write(1, "#define METHOD_GET\t(54006)\t//GET"..., 33) = 33
+[pid 15850] write(1, "#define METHOD_UPDATE\t(20041)\t//"..., 39) = 39
+[pid 15850] write(1, "#define METHOD_KILL\t(15870)\t//KI"..., 35) = 35
+[pid 15850] write(1, "#define METHOD_WRITE\t(39327)\t//W"..., 37) = 37
+[pid 15850] write(1, "#define METHOD_ACK\t(56969)\t//ACK"..., 33) = 33
+[pid 15850] write(1, "#define METHOD_STATUS\t(21234)\t//"..., 39) = 39
+[pid 15850] write(1, "#define METHOD_INTRO\t(97996)\t//I"..., 37) = 37
+[pid 15850] write(1, "#define METHOD_ERROR\t(80328)\t//E"..., 37) = 37
+[pid 15850] read(0, "", 4096)           = 0
+[pid 15850] exit_group(0)               = ?
+[pid 15850] +++ exited with 0 +++
+[pid 15849] <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 15850
+[pid 15849] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=15850, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+[pid 15849] rt_sigreturn({mask=[]})     = 15850
+[pid 15849] dup2(10, 0)                 = 0
+[pid 15849] close(10)                   = 0
+[pid 15849] exit_group(0)               = ?
+[pid 15849] +++ exited with 0 +++
+<... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 15849
+rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7f747db5e4b0}, NULL, 8) = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=15849, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+write(1, "#endif\n", 7)                 = 7
+exit_group(0)                           = ?
++++ exited with 0 +++
