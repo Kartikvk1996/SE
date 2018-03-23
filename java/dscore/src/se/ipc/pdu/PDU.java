@@ -98,14 +98,14 @@ public class PDU {
     }
 
     public String getValue(String dsv) {
-        String chunks[] = dsv.split(".");
+        String chunks[] = dsv.split("[.]");
         JsonObject json = jObj;
-        for (String chunk : chunks) {
-            json = json.get(chunk).asObject();
+        for (int i = 0; i < chunks.length - 1; i++) {
+            json = json.get(chunks[i]).asObject();
             if(json == null)
                 return "";
         }
-        return json.asString();
+        return json.get(chunks[chunks.length - 1]).asString();
     }
 
     public void setValue(String dsv, String value) throws JsonPathNotExistsException {
@@ -119,4 +119,15 @@ public class PDU {
         }
         parent.set(chunks[chunks.length - 1], value);
     }
+    
+    void setJsonObject(JsonObject jobj) {
+        this.jObj = jobj;
+    }
+    
+    public ConnectPDU toConnectPDU() {
+        ConnectPDU cpdu = new ConnectPDU();
+        cpdu.setJsonObject(jObj);
+        return cpdu;
+    }
+    
 }

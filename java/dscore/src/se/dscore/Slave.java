@@ -11,6 +11,7 @@ public class Slave extends Probable {
         /* report to the master that you are running on port X */
         ESocket sock = new ESocket(mproxy.getHost(), mproxy.getPort());
         sock.send(new ConnectPDU());
+        sock.close();
     }
     
 }

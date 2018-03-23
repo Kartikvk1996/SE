@@ -32,6 +32,7 @@ public class Server {
             new Thread(() -> {
                 try {
                     handler.handle(sock);
+                    sock.close();
                 } catch (IOException ex) {
                     Logger.elog(Logger.HIGH, ex.getMessage());
                 }

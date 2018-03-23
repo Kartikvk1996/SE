@@ -19,6 +19,7 @@ public class Master extends Probable {
     
     public Master(String configFile) throws IOException {
         super();
+        slaves = new HashMap<>();
     }
 
     void introduce(ESocket sock, PDU pdu) throws IOException {
@@ -32,10 +33,9 @@ public class Master extends Probable {
     }
 
     @Override
-    public void handle_connect(ESocket sock, ConnectPDU gpdu) throws IOException {
+    public void handle_connect(ESocket sock, ConnectPDU pdu) throws IOException {
 
-        System.out.println(gpdu);
-        ConnectPDU pdu = (ConnectPDU)gpdu;
+        System.out.println(pdu);
         
         /* If he is a guest then just introduce it to everyone. */
         if (pdu.getWho().equals(PDU.PN_GUEST)) {
@@ -51,6 +51,10 @@ public class Master extends Probable {
             return;
         }
 
+        String host = sock.getHost();
+        if(!slaves.containsKey(host))
+            slaves.put(host, new SlaveProxy(this, host, 100));
+        
         /* This is some process we created send back the ACK with PID */
         slaves.get(sock.getHost()).addProcessEntry(
                 new Process(
@@ -119,7 +123,7 @@ public class Master extends Probable {
         PDU pdu = PDU.fromStream(socket.getInputStream());
         switch(pdu.getMethod()) {
             case PDU.METHOD_CONNECT:
-                handle_connect(socket, (ConnectPDU)pdu);
+                handle_connect(socket, pdu.toConnectPDU());
                 break;
             default:
                 super.def_handler(socket, pdu);
