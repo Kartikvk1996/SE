@@ -11,7 +11,6 @@ public class Dmgr extends Slave {
         super(mproxy);
     }
     
-    
     public static void main(String[] args) throws IOException {
         PDU.setProcessRole("dmgr");
         //Integer.parseInt(args[1])

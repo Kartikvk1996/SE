@@ -2,12 +2,10 @@ package se.dscore;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import se.ipc.Consts;
 import se.ipc.ESocket;
-import se.ipc.pdu.JsonPathNotExistsException;
+import se.ipc.pdu.CreatePDU;
 import se.ipc.pdu.PDU;
-import se.util.Logger;
 
 class SlaveProxy {
 
@@ -24,6 +22,7 @@ class SlaveProxy {
         this.host = host;
         this.agentPort = agentPort;
         this.master = master;
+        this.processes = new ArrayList<>();
     }
 
     @Override
@@ -32,14 +31,10 @@ class SlaveProxy {
     }
 
     void createProcess(String type) throws IOException {
-        PDU pdu = new PDU((String)PDU.METHOD_CREATE);
-        try {
-            pdu.setValue(Consts.jPath(Consts.DATA, Consts.CMD), "java -jar " + type);
-            pdu.setValue(Consts.jPath(Consts.DATA, Consts.ARGS), master.getHost() + " " + master.getPort());
-        } catch (JsonPathNotExistsException ex) {
-            Logger.ilog(Logger.HIGH, Arrays.toString(ex.getStackTrace()));
-        }
-        
+        PDU pdu = new CreatePDU(
+                type,
+                master.getHost() + " " + master.getPort()
+            );
         sendPDU(pdu, false);
     }
 

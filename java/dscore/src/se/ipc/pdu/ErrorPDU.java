@@ -1,14 +1,15 @@
 package se.ipc.pdu;
 
 import java.lang.reflect.Field;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jsonparser.DictObject;
 
-public class IntroPDU extends PDU {
+public class ErrorPDU extends PDU {
 
-    public String host;
-    public int port;
-    
-    public IntroPDU(DictObject jObject) throws InvalidPDUException {
+    public String errMessage;
+
+    public ErrorPDU(DictObject jObject) throws InvalidPDUException {
         super(jObject);
         for (Field field : getClass().getDeclaredFields()) {
             try {
@@ -19,19 +20,9 @@ public class IntroPDU extends PDU {
         }
     }
     
-    
-    public IntroPDU(String host, int port) {
-        super(PDUConsts.METHOD_INTRO);
-        this.host = host;
-        this.port = port;
-    }
-    
-    public String getGuestHost() {
-        return host;
-    }
-    
-    public int getGuestPort() {
-        return port;
+    public ErrorPDU(String msg) {
+        super(PDUConsts.METHOD_ERROR);
+        this.errMessage = msg;
     }
     
 }

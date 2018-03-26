@@ -1,6 +1,6 @@
 package fireup;
 
-import java.io.BufferedReader;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -55,11 +55,8 @@ public class MainPage extends javax.swing.JFrame {
         extCommandLine = new javax.swing.JTextField();
         ExternalProgramRun = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        protocol = new javax.swing.JTextField();
-        ProtocolRunner = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        protocolOutput = new javax.swing.JTextArea();
+        output = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         MasterIP = new javax.swing.JTextField();
         MasterPort = new javax.swing.JTextField();
@@ -134,24 +131,14 @@ public class MainPage extends javax.swing.JFrame {
 
         jLabel3.setText("Choose an executable");
 
-        jLabel4.setForeground(new java.awt.Color(0, 111, 36));
-        jLabel4.setText("Execute protocol. (use $ for newline)");
-
-        ProtocolRunner.setText("Run");
-        ProtocolRunner.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ProtocolRunnerActionPerformed(evt);
-            }
-        });
-
-        protocolOutput.setEditable(false);
-        protocolOutput.setBackground(new java.awt.Color(0, 0, 0));
-        protocolOutput.setColumns(20);
-        protocolOutput.setForeground(new java.awt.Color(24, 184, 1));
-        protocolOutput.setLineWrap(true);
-        protocolOutput.setRows(5);
-        protocolOutput.setWrapStyleWord(true);
-        jScrollPane2.setViewportView(protocolOutput);
+        output.setEditable(false);
+        output.setBackground(new java.awt.Color(0, 0, 0));
+        output.setColumns(20);
+        output.setForeground(new java.awt.Color(24, 184, 1));
+        output.setLineWrap(true);
+        output.setRows(5);
+        output.setWrapStyleWord(true);
+        jScrollPane2.setViewportView(output);
 
         jLabel6.setForeground(new java.awt.Color(0, 111, 36));
         jLabel6.setText("Connect to master");
@@ -199,14 +186,9 @@ public class MainPage extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(protocol, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(extCommandLine))
+                                .addComponent(extCommandLine, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(ProtocolRunner)
-                                    .addComponent(ExternalProgramRun, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                .addComponent(ExternalProgramRun))
                             .addComponent(jLabel5)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(ExecutablePath)
@@ -233,49 +215,38 @@ public class MainPage extends javax.swing.JFrame {
                     .addComponent(nProcesses))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(16, 16, 16)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(viewLog)
-                                    .addComponent(viewOutput)
-                                    .addComponent(terminate)
-                                    .addComponent(terminateAll))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(MasterIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(MasterPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(MasterConnect))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(ExecutablePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Browse))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(extCommandLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ExternalProgramRun))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(protocol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ProtocolRunner))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
+                        .addGap(16, 16, 16)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(viewLog)
+                            .addComponent(viewOutput)
+                            .addComponent(terminate)
+                            .addComponent(terminateAll))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(MasterIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MasterPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MasterConnect))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ExecutablePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Browse))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(extCommandLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ExternalProgramRun))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -293,6 +264,24 @@ public class MainPage extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void MasterConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MasterConnectActionPerformed
+        fireupModel.connectToMaster(MasterIP.getText(), Integer.parseInt(MasterPort.getText()));
+    }//GEN-LAST:event_MasterConnectActionPerformed
+
+    private void ExternalProgramRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExternalProgramRunActionPerformed
+        fireupModel.createProcess(ExecutablePath.getText(), extCommandLine.getText());
+    }//GEN-LAST:event_ExternalProgramRunActionPerformed
+
+    private void BrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BrowseActionPerformed
+        JFileChooser fileChooser = new JFileChooser(".");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setMultiSelectionEnabled(false);
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            ExecutablePath.setText(file.getAbsolutePath());
+        }
+    }//GEN-LAST:event_BrowseActionPerformed
 
     private void terminateAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminateAllActionPerformed
         for (int i = 0; i < listModel.size(); i++) {
@@ -323,48 +312,15 @@ public class MainPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_viewLogActionPerformed
 
-    private void BrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BrowseActionPerformed
-        JFileChooser fileChooser = new JFileChooser(".");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setMultiSelectionEnabled(false);
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            ExecutablePath.setText(file.getAbsolutePath());
-        }
-    }//GEN-LAST:event_BrowseActionPerformed
-
-    private void ExternalProgramRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExternalProgramRunActionPerformed
-        fireupModel.createProcess(ExecutablePath.getText(), extCommandLine.getText());
-    }//GEN-LAST:event_ExternalProgramRunActionPerformed
-
-    private void ProtocolRunnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProtocolRunnerActionPerformed
-        try {
-            Socket sock = new Socket(fireupModel.getInetAddress(), fireupModel.getrunningPort());
-            OutputStream os = sock.getOutputStream();
-            os.write(protocol.getText().getBytes());
-            os.write(-1);
-            InputStreamReader isr = new InputStreamReader(sock.getInputStream());
-            protocolOutput.append("$: " + protocol.getText() + "\n");
-            char buffer[] = new char[1024];
-            isr.read(buffer);
-            protocolOutput.append("> " + new String(buffer) + "\n");
-        } catch (IOException ex) {
-            System.err.println(ex);
-        }
-    }//GEN-LAST:event_ProtocolRunnerActionPerformed
-
-    private void MasterConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MasterConnectActionPerformed
-        fireupModel.connectToMaster(MasterIP.getText(), Integer.parseInt(MasterPort.getText()));
-    }//GEN-LAST:event_MasterConnectActionPerformed
-
     private void openEditor(String file) {
+        Desktop dt = Desktop.getDesktop();
         try {
-            Runtime.getRuntime().exec(new String[]{"gedit", file});
-        } catch (IOException ex) {
-            System.err.println(ex);
+            dt.open(new File(file));
+        } catch (Exception e) {
+            System.out.println("Couldn't open the file");
         }
     }
-    
+
     private void showOutput(int index) {
         openEditor(fireupModel.processes.get(index).getOutputFileName());
     }
@@ -379,7 +335,7 @@ public class MainPage extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        
+
         try {
             fireupModel = new Fireup();
         } catch (IOException ex) {
@@ -394,7 +350,7 @@ public class MainPage extends javax.swing.JFrame {
         });
 
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Browse;
     private javax.swing.JTextField ExecutablePath;
@@ -402,27 +358,28 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JButton MasterConnect;
     private javax.swing.JTextField MasterIP;
     private javax.swing.JTextField MasterPort;
-    private javax.swing.JButton ProtocolRunner;
     private javax.swing.JTextField extCommandLine;
     private javax.swing.JLabel hostInfo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel nProcesses;
+    private javax.swing.JTextArea output;
     private javax.swing.JList<String> procList;
-    private javax.swing.JTextField protocol;
-    private javax.swing.JTextArea protocolOutput;
     private javax.swing.JButton terminate;
     private javax.swing.JButton terminateAll;
     private javax.swing.JButton viewLog;
     private javax.swing.JButton viewOutput;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    void setStatus(String string) {
+        output.append(string + "\n");
+    }
 
 }

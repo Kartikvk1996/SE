@@ -1,6 +1,7 @@
 package se.dscore;
 
 import java.io.IOException;
+import jsonparser.JsonException;
 import se.ipc.ESocket;
 import se.ipc.pdu.PDU;
 
@@ -21,7 +22,7 @@ public class MasterProxy {
         return port;
     }
     
-    public void send(PDU pdu) throws IOException {
+    public void send(PDU pdu) throws IOException, JsonException {
         new ESocket(host, port).send(pdu);
     }
 }

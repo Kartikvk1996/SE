@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.HashMap;
 import se.ipc.ESocket;
+import se.util.Logger;
 
 public class HttpRequest {
 
@@ -31,6 +32,8 @@ public class HttpRequest {
             String firstLine = reader.readLine();
             String chunks[] = firstLine.split(" ", 2);
 
+            Logger.ilog(Logger.DEBUG, firstLine);
+            
             method = chunks[0];
             url = chunks[1].substring(0, chunks[1].lastIndexOf(" "));
             
@@ -75,9 +78,6 @@ public class HttpRequest {
     public String getData() {
         return data;
     }
-
-    void close() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    
+    
 }

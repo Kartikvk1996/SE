@@ -1,5 +1,6 @@
 package se.util.http;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,6 +38,10 @@ public class HttpServer implements RequestHandler {
     public int getPort() {
         return httpserver.getPort();
     }
+    
+    public String getDocumentRoot() {
+        return new File(docRoot).getAbsolutePath();
+    }
 
     /* Runs this http server in the current thread */
     public void run() throws IOException {
@@ -73,16 +78,18 @@ public class HttpServer implements RequestHandler {
         } else {
 
             FileInputStream fis;
-
+            File file = new File(docRoot + "/" + req.getUrl());
+            
             try {
-                fis = new FileInputStream(docRoot + "/" + req.getUrl());
+                fis = new FileInputStream(file);
             } catch (FileNotFoundException ex) {
                 fis = openFiles.get(docRoot + "/404.html");
             }
 
             OutputStream out = req.getOutputStream();
 
-            out.write("HTTP/2.0 200 OK\n\n".getBytes());
+            out.write("HTTP/1.0 200 OK\n".getBytes());
+            out.write(("Content-Length: " + file.length() + "\n\n").getBytes());
             byte[] buffer = new byte[256];
             int read;
             while ((read = fis.read(buffer)) != -1) {

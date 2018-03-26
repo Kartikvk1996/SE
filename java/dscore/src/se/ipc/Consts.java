@@ -9,7 +9,7 @@ public class Consts {
     public static final String ARGS = "ARGS";
     public static final String CONNECT_PORT = "CONNECT";
     public static final String PID = "PID";
-    public static final String DMGR_BIN = "dmgr";
+    public static final String DMGR_BIN = "dmgr.jar";
     
     public static String jPath(String ...chunks) {
         StringBuilder path = new StringBuilder();

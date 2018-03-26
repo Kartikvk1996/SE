@@ -6,18 +6,25 @@ import java.util.Date;
 
 public class Logger {
     
-    public static final int LOW = 0;
-    public static final int MEDIUM = 1;
-    public static final int HIGH = 2;
+    public static final int DEBUG   = 1;
+    public static final int LOW     = 2;
+    public static final int MEDIUM  = 3;
+    public static final int HIGH    = 4;
     
     private static final String INFO = "INFO";
     private static final String ERROR = "ERROR";
     
     static PrintStream pw = System.out;
+    static int loglevel;
+    static String[] levels = {"DEBUG", "LOW", "MEDIUM", "HIGH"};
+    
+    public static void setLoglevel(int level) {
+        System.err.println("Loglevel is " + levels[loglevel]);
+    }
     
     private static void log(int level, String type, String logent) {
-        if(level != LOW)
-            pw.println(new Date().toString() + "\t" + type + "\t" + logent);
+        if(level >= loglevel)
+            pw.println(new Date().toString() + "\t" + type + "\t[" + Thread.currentThread().getName() + "]" + logent);
     }
     
     public static void ilog(int level, String message) {

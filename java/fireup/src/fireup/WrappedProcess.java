@@ -3,6 +3,7 @@ package fireup;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import se.util.Logger;
 
 /**
  *
@@ -19,8 +20,15 @@ public class WrappedProcess {
 
         WrappedProcess wp = new WrappedProcess();
         
-        File err = new File(((new Date()).toString() + "err.txt").replaceAll(" ", "_"));
-        File out = new File(((new Date()).toString() + "out.txt").replaceAll(" ", "_"));
+        File err = new File("./" + ((new Date()).toString() + "err.txt").replaceAll(" ", "_").replaceAll(":", "_"));
+        File out = new File("./" + ((new Date()).toString() + "out.txt").replaceAll(" ", "_").replaceAll(":", "_"));
+        
+        try {
+            err.createNewFile();
+            out.createNewFile();
+        } catch(IOException ex) {
+            Logger.elog(Logger.HIGH, "Output/Error file creation failed");
+        }
         
         wp.errorFile = err.getAbsolutePath();
         wp.outputFile = out.getAbsolutePath();
@@ -31,7 +39,7 @@ public class WrappedProcess {
         
         wp.procName = command[0];
         wp.startTime = (new Date()).toString();
-        
+                
         try {
             wp.process = pb.start();
         } catch (IOException ex) {

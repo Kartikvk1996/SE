@@ -3,6 +3,7 @@ package se.dscore;
 import java.io.IOException;
 import se.ipc.pdu.PDU;
 import se.ipc.ESocket;
+import se.ipc.pdu.PDUConsts;
 import se.ipc.pdu.StatusPDU;
 
 public class Probable extends Node {
@@ -18,7 +19,7 @@ public class Probable extends Node {
     @Override
     public void def_handler(ESocket sock, PDU pdu) throws IOException {
         switch (pdu.getMethod()) {
-            case PDU.METHOD_STATUS:
+            case PDUConsts.METHOD_STATUS:
                 handle_status(sock, pdu);
         }
     }

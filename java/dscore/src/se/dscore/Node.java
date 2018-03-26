@@ -7,6 +7,7 @@ import se.ipc.ESocket;
 import se.ipc.pdu.AckPDU;
 import se.ipc.pdu.ConnectPDU;
 import se.ipc.pdu.GetPDU;
+import se.ipc.pdu.PDUConsts;
 import se.ipc.pdu.StatusPDU;
 
 public class Node implements RequestHandler {
@@ -57,7 +58,7 @@ public class Node implements RequestHandler {
     
     void def_handler(ESocket socket, PDU pdu) throws IOException {
         switch(pdu.getMethod()) {
-            case PDU.METHOD_INTRO:
+            case PDUConsts.METHOD_INTRO:
                 handle_intro(socket, (IntroPDU) pdu);
                 break;
         }

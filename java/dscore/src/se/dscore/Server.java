@@ -27,6 +27,7 @@ public class Server {
     }
     
     public void run() throws IOException {
+        int tid = 0;
         while(true) {
             ESocket sock = servSocket.accept();
             new Thread(() -> {
@@ -36,8 +37,8 @@ public class Server {
                 } catch (IOException ex) {
                     Logger.elog(Logger.HIGH, ex.getMessage());
                 }
-            }).start();
-            Logger.ilog(Logger.LOW, "Accepted a connection");
+            }, Thread.currentThread().getName() + "-" + (++tid)).start();
+            Logger.ilog(Logger.DEBUG, "Accepted a connection");
         }
     }
  

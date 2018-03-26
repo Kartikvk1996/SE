@@ -4,20 +4,30 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import jsonparser.JsonException;
+import se.ipc.EServerSocket;
+import se.ipc.ESocket;
+import se.ipc.pdu.AckPDU;
+import se.ipc.pdu.ConnectPDU;
+import se.ipc.pdu.CreatePDU;
+import se.ipc.pdu.ErrorPDU;
+import se.ipc.pdu.InvalidPDUException;
+import se.ipc.pdu.PDU;
+import se.ipc.pdu.PDUConsts;
+import se.util.Logger;
 
 /**
  *
@@ -27,23 +37,21 @@ public class Fireup implements Runnable {
 
     private static int fireupPort = 5678;
     ArrayList<WrappedProcess> processes;
-    private InetAddress hostAddress;
-    private ServerSocket servSock;
+    private final InetAddress hostAddress;
+    private final EServerSocket servSock;
     private MainPage mainPage;
-    private String secret;
+    private final String secret;
     Properties props;
+
+    String masterAddr;
+    int masterPort, masterHTTPPort;
 
     //This is where all the binaries must be located
     private static String SEHOME;
-
     private static final String PROPSFILE = "./fireupconfig.props";
-    private static final String METHOD = "METHOD";
-    private static final String CREATE = "CREATE";
-    private static final String SECRET = "SECRET";
-    private static final String STATUS = "STATUS";
-    private static final String ARGS = "DATA.ARGS";
-    private static final String CMD = "DATA.CMD";
     private static final String VSEHOME = "SEHOME";
+
+    private long serverJarVersion = 0;
 
     Fireup() throws UnknownHostException, IOException {
 
@@ -55,18 +63,22 @@ public class Fireup implements Runnable {
             if (SEHOME == null) {
                 createPropsFile();
             }
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             createPropsFile();
         }
 
         processes = new ArrayList<>();
         hostAddress = InetAddress.getLocalHost();
 
-        servSock = new ServerSocket(0);
-        fireupPort = servSock.getLocalPort();
+        servSock = new EServerSocket(0);
+        fireupPort = servSock.getPort();
 
         Random r = new Random();
         secret = Math.abs((((long) r.nextInt()) << 32) | r.nextInt()) + "";
+
+        PDU.setProcessRole(PDUConsts.PN_FIREUP);
+        se.util.Logger.setLoglevel(se.util.Logger.DEBUG);
+
     }
 
     public void setOberserver(MainPage mainPage) {
@@ -85,38 +97,30 @@ public class Fireup implements Runnable {
     @Override
     public void run() {
         while (true) {
-            try (Socket conn = servSock.accept()) {
+            try {
+                ESocket conn = servSock.accept();
+                CreatePDU pdu = (CreatePDU) conn.recvPDU();
+                PDU resp;
 
-                char buffer[] = new char[1024];
-                String cmdline[];
-                OutputStream os = conn.getOutputStream();
-                InputStreamReader isr = new InputStreamReader(conn.getInputStream());
-                int end = isr.read(buffer);
-                String data = new String(Arrays.copyOf(buffer, end - 1));
+                if (false && this.secret.equals(pdu.getSecret())) {
 
-                JsonWrapper jreq = new JsonWrapper(data);
-                JsonWrapper jres = new JsonWrapper();
-                if (false
-                        && //<--------------
-                        !this.secret.equals(jreq.get(SECRET))) {
-                    jres.set("status", "Auth Error");
                 } else {
-                    jres.set(SECRET, this.secret);
-                    switch (jreq.get(METHOD).toUpperCase()) {
-                        case CREATE:
-                            cmdline = getCommandLine(jreq);
-                            System.err.println("Process " + Arrays.toString(cmdline) + " created.");
-                            jres.set(STATUS, createProcess(cmdline));
+                    switch (pdu.getMethod()) {
+                        case PDUConsts.METHOD_CREATE:
+                            if(createProcess(getCommandLine(pdu))) {
+                                resp = new AckPDU();
+                                Logger.ilog(Logger.MEDIUM, "Process creation " + pdu.getExecutable() + Arrays.toString(pdu.getArguments()) + " was successful");
+                            } else {
+                                resp = new ErrorPDU("process creation failed");;
+                                Logger.ilog(Logger.MEDIUM, "Process creation " + pdu.getExecutable() + Arrays.toString(pdu.getArguments()) + " failed");
+                            }
+                            conn.send(resp);
                             break;
                         default:
                     }
                 }
-                jres.setFixedParams(getrunningPort());
-                os.write(jres.toString().getBytes());
-                os.write(-1);
-                os.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Fireup.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException | JsonException | InvalidPDUException ex) {
+                Logger.elog(Logger.MEDIUM, "Error whilecommunicating to master " + ex.getMessage());
             }
         }
     }
@@ -131,16 +135,16 @@ public class Fireup implements Runnable {
 
     void connectToMaster(String host, int port) {
         try {
-            Socket sock = new Socket(host, port);
-            JsonWrapper jreq = new JsonWrapper();
-            jreq.set("SECRET", secret);
-            jreq.set(METHOD, "CONNECT");
-            jreq.setFixedParams(getrunningPort());
-            sock.getOutputStream().write(jreq.toString().getBytes());
-            sock.getOutputStream().write(-1);
-            sock.getOutputStream().flush();
-        } catch (IOException ex) {
-            System.out.println(ex);
+            ESocket sock = new ESocket(host, port);
+            sock.send(new ConnectPDU(fireupPort));
+
+            AckPDU ack = (AckPDU) sock.recvPDU();
+            masterAddr = host;
+            masterPort = port;
+            serverJarVersion = Long.parseLong(ack.getJarVersion());
+            masterHTTPPort = ack.getHttpPort();
+        } catch (IOException | JsonException | InvalidPDUException ex) {
+            Logger.elog(Logger.HIGH, "Error connecting to master " + ex.getMessage());
         }
     }
 
@@ -151,31 +155,82 @@ public class Fireup implements Runnable {
             pw.append(VSEHOME + "=.");
             pw.flush();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Fireup.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.elog(Logger.HIGH, "Couldn't create properties file");
         } finally {
             pw.close();
         }
     }
 
-    private String[] getCommandLine(JsonWrapper jreq) {
-        String args[] = jreq.get(ARGS).split("[ \t]");
-        String cmd = jreq.get(CMD);
+    private String[] getCommandLine(CreatePDU pdu) {
+        String args[] = pdu.getArguments();
+        String cmd = pdu.getExecutable();
         String cmdchunks[];
-        
-        if(!cmd.contains(".jar")) {
-            cmd = "java";
-            cmdchunks = new String[2 + args.length];
-            args[0] = SEHOME + "/" + args[0];
+
+        if (cmd.contains(".jar")) {
+            File execFile = new File(cmd);
+            if (!execFile.exists() || execFile.lastModified() < serverJarVersion) {
+                requestExecutable(cmd);
+                mainPage.setStatus("Downloading " + cmd);
+            }
+
+            /* check whether the JAVA_HOME is defined */
+            String jhome = System.getenv("JAVA_HOME");
+
+            if(jhome == null) {
+                Logger.elog(Logger.HIGH, "JAVA_HOME environment variable not set");
+            }
+            
+            cmdchunks = new String[3 + args.length];
+            cmdchunks[0] = "\"" + Paths.get(jhome, "bin",  "java.exe").toString() + "\"";
+            cmdchunks[1] = "-jar";
+            cmdchunks[2] = cmd;
+            System.arraycopy(args, 0, cmdchunks, 3, args.length);
+            return cmdchunks;
         } else {
             cmd = SEHOME + cmd;
             cmdchunks = new String[1 + args.length];
         }
-        
+
         cmdchunks[0] = cmd;
         for (int i = 0; i < args.length; i++) {
             cmdchunks[i + 1] = args[i];
         }
         return cmdchunks;
+    }
+
+    private void downloadExecutables() {
+        /* check the jar version (modified date) */
+        File folder = new File(SEHOME);
+
+        if (!folder.exists()) {
+            folder.mkdir();
+            return;
+        }
+
+        File[] jars = folder.listFiles();
+
+        for (File jar : jars) {
+            if (!jar.getName().contains(".jar")) {
+                continue;
+            }
+            if (serverJarVersion > jar.lastModified()) {
+                requestExecutable(jar.getName());
+            }
+        }
+    }
+
+    private void requestExecutable(String cmd) {
+        try {
+            Logger.ilog(Logger.MEDIUM, "Downloading " + cmd);
+            URL website = new URL("http", masterAddr, masterHTTPPort, "/" + cmd);
+            try (InputStream in = website.openStream()) {
+                Files.copy(in, Paths.get(SEHOME, cmd), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ex) {
+                Logger.elog(Logger.HIGH, "Couldn't download " + cmd + " " + ex.getMessage());
+            }
+        } catch (MalformedURLException ex) {
+
+        }
     }
 
 }

@@ -1,27 +1,30 @@
 package se.ipc.pdu;
 
-
-import java.util.Arrays;
-import se.ipc.Consts;
-import se.util.Logger;
+import java.lang.reflect.Field;
+import jsonparser.DictObject;
 
 public class ConnectPDU extends PDU {
-    
-    public static final String CONNECT_PORT = "CONNECT_PORT";
-    
-    public ConnectPDU(int port) {
-        super(PDU.METHOD_CONNECT);
-        try {
-            setValue(Consts.jPath(PDU.DATA, CONNECT_PORT), port + "");
-        } catch (JsonPathNotExistsException ex) {
-            Logger.elog(Logger.HIGH, Arrays.toString(ex.getStackTrace()));
+
+    public int port;
+
+    public ConnectPDU(DictObject jObject) throws InvalidPDUException {
+        super(jObject);
+        for (Field field : getClass().getDeclaredFields()) {
+            try {
+                field.set(this, jObject.get(field.getName()).getValue());
+            } catch (IllegalArgumentException | IllegalAccessException ex) {
+                throw new InvalidPDUException();
+            }
         }
     }
     
-    public int getConnectPort() {
-        return Integer.parseInt(
-                getValue(Consts.jPath(PDU.DATA, ConnectPDU.CONNECT_PORT))
-        );
+    public ConnectPDU(int port) {
+        super(PDUConsts.METHOD_CONNECT);
+        this.port = port;
     }
-    
+
+    public int getConnectPort() {
+        return port;
+    }
+
 }

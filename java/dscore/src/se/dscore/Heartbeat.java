@@ -1,6 +1,7 @@
 package se.dscore;
 
 import java.io.IOException;
+import jsonparser.JsonException;
 import se.util.Logger;
 
 public class Heartbeat implements Runnable {
@@ -19,7 +20,7 @@ public class Heartbeat implements Runnable {
         while(true) {
             try {
                 mproxy.send(node.getStatus());
-            } catch (IOException ex) {
+            } catch (IOException | JsonException ex) {
                 Logger.elog(Logger.HIGH, "Unable to send heartbeat");
             }
             try { Thread.sleep(millis); } catch (InterruptedException ex) { }
