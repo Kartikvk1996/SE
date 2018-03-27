@@ -1,7 +1,7 @@
 package se.dscore;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import jsonparser.JsonException;
 import se.ipc.Consts;
@@ -12,18 +12,20 @@ import se.ipc.pdu.IntroPDU;
 import se.ipc.pdu.InvalidPDUException;
 import se.ipc.pdu.PDU;
 import se.ipc.pdu.PDUConsts;
+import se.ipc.pdu.StatusPDU;
 import se.util.Logger;
 import se.util.http.HttpServer;
 
 public class Master extends Probable {
 
-    HashMap<String, SlaveProxy> slaves;
-    HttpServer hserver;
-    private Status status;
+    private final LinkedHashMap<String, SlaveProxy> slaves;
+    private final HttpServer hserver;
+    private final Status status;
 
     public Master(String configFile) throws IOException {
         super();
-        slaves = new HashMap<>();
+        slaves = new LinkedHashMap<>();
+        status = new Status(slaves);
         hserver = new HttpServer(".", this);
         AckPDU.httpPort = hserver.getPort();
     }
@@ -41,8 +43,6 @@ public class Master extends Probable {
     @Override
     public void handle_connect(ESocket sock, ConnectPDU pdu) throws IOException {
 
-        System.out.println(pdu);
-
         /* If he is a guest then just introduce it to everyone. */
         if (pdu.getWho().equals(PDUConsts.PN_GUEST)) {
             introduce(sock, pdu);
@@ -51,18 +51,24 @@ public class Master extends Probable {
 
         if (pdu.getWho().equals(PDUConsts.PN_FIREUP)) {
 
-            slaves.put(sock.getHost(),
-                    new SlaveProxy(this, sock.getHost(), pdu.getConnectPort()));
+            slaves.put(sock.getHost(), new SlaveProxy(
+                            this, sock.getHost(),
+                            pdu.getConnectPort(), pdu.getSysInfo()));
             AckPDU apdu = new AckPDU();
             sock.send(apdu);
             schedule(sock.getHost());
             return;
         }
 
+        /*************** THIS CODE IS FOR TESTING **************/
+        Logger.elog(Logger.HIGH, "Testing code is being run. system intrusion can be done");
         String host = sock.getHost();
         if (!slaves.containsKey(host)) {
-            slaves.put(host, new SlaveProxy(this, host, 100));
+            slaves.put(host, new SlaveProxy(
+                            this, sock.getHost(),
+                            pdu.getConnectPort(), pdu.getSysInfo()));
         }
+        /*******************************************************/
 
         slaves.get(sock.getHost()).addProcessEntry(
                 new Process(
@@ -137,13 +143,16 @@ public class Master extends Probable {
             case PDUConsts.METHOD_CONNECT:
                 handle_connect(socket, (ConnectPDU) pdu);
                 break;
+            case PDUConsts.METHOD_STATUS:
+                handle_status(socket, (StatusPDU)pdu);
+                break;
             default:
                 super.def_handler(socket, pdu);
         }
     }
 
-    public PDU getStatus() {
-        return new AckPDU();
+    public Status getDomainStatus() {
+        return status;
     }
 
     @Override
@@ -161,6 +170,12 @@ public class Master extends Probable {
 
     public HttpServer getHttpServer() {
         return hserver;
+    }
+
+    private void handle_status(ESocket socket, StatusPDU pdu) {
+        try {
+            slaves.get(socket.getHost()).rcvHeartBeat(pdu);
+        } catch(Exception ex) {}
     }
 
 }

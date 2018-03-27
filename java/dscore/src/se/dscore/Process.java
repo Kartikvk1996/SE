@@ -6,9 +6,9 @@ import se.ipc.pdu.PDU;
 
 public class Process {
 
-    String type;
-    String host;
-    int port;
+    public String type;
+    public String host;
+    public int port;
 
     Process(String host, int port, String type) {
         this.host = host;

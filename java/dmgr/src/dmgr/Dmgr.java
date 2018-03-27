@@ -14,7 +14,7 @@ public class Dmgr extends Slave {
     public static void main(String[] args) throws IOException {
         PDU.setProcessRole("dmgr");
         //Integer.parseInt(args[1])
-        new Dmgr(new MasterProxy(args[0], 62721)).run();
+        new Dmgr(new MasterProxy(args[0], Integer.parseInt(args[1]))).run();
     }
     
 }

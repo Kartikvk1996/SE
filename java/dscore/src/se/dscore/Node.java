@@ -33,7 +33,7 @@ public class Node implements RequestHandler {
 
     public void run() throws IOException {
         /* Create a heartbeat sending thread */
-        //new Thread(new Heartbeat(mproxy, this, HEARTBEAT_INTERVAL), "Heartbeat").start();
+        new Thread(new Heartbeat(mproxy, this, HEARTBEAT_INTERVAL), "Heartbeat").start();
         running = true;
         server.run();
     }

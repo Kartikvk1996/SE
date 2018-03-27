@@ -2,27 +2,33 @@ package se.dscore;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import se.ipc.Consts;
+import java.util.Date;
 import se.ipc.ESocket;
 import se.ipc.pdu.CreatePDU;
 import se.ipc.pdu.PDU;
+import se.ipc.pdu.StatusPDU;
+import se.ipc.pdu.SysInfo;
 
-class SlaveProxy {
+public class SlaveProxy {
+
+    public String host;
+    public int agentPort;
+    public SysInfo sysInfo;
+    public ArrayList<Process> processes;
+    public long heartBeat;
 
     Master master;
-    String host;
-    int agentPort;
-    ArrayList<Process> processes;
 
     ArrayList<Process> getProcesses() {
         return processes;
     }
 
-    SlaveProxy(Master master, String host, int agentPort) {
+    SlaveProxy(Master master, String host, int agentPort, SysInfo sysInfo) {
         this.host = host;
         this.agentPort = agentPort;
         this.master = master;
         this.processes = new ArrayList<>();
+        this.sysInfo = sysInfo;
     }
 
     @Override
@@ -34,7 +40,7 @@ class SlaveProxy {
         PDU pdu = new CreatePDU(
                 type,
                 master.getHost() + " " + master.getPort()
-            );
+        );
         sendPDU(pdu, false);
     }
 
@@ -61,5 +67,9 @@ class SlaveProxy {
             return sock.readData();
         }
         return "";
+    }
+
+    void rcvHeartBeat(StatusPDU pdu) {
+        this.heartBeat = new Date().getTime();
     }
 }

@@ -24,7 +24,7 @@ public class Logger {
     
     private static void log(int level, String type, String logent) {
         if(level >= loglevel)
-            pw.println(new Date().toString() + "\t" + type + "\t[" + Thread.currentThread().getName() + "]" + logent);
+            pw.println(new Date().toString() + "\t" + type + "\t[" + Thread.currentThread().getName() + "]\t" + logent);
     }
     
     public static void ilog(int level, String message) {

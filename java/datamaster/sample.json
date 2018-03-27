@@ -1,0 +1,1 @@
+{"slaves":[{"127.0.0.1":{"host":"127.0.0.1","agentPort":51710,"sysInfo":{"cores":4,"availableMemory":257425408,"freeMemory":254741016,"startTime":1522122351072},"processes":[{"type":"dmgr","host":"127.0.0.1","port":51710}],"heartBeat":1522122947165}}]}

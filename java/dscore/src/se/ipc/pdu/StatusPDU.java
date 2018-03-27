@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import jsonparser.DictObject;
 
 public class StatusPDU extends PDU {
-
+    
     public StatusPDU(DictObject jObject) throws InvalidPDUException {
         super(jObject);
         for (Field field : getClass().getDeclaredFields()) {

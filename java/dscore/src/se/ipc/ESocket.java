@@ -32,8 +32,8 @@ public class ESocket {
     public void send(PDU iPDU) throws IOException {
         try {
             String str = Json.dump(iPDU);
-            Logger.ilog(Logger.DEBUG, Json.dump(iPDU));
-            socket.getOutputStream().write(Json.dump(iPDU).getBytes());
+            Logger.ilog(Logger.DEBUG, str);
+            socket.getOutputStream().write(str.getBytes());
         } catch (JsonException ex) {
             Logger.elog(Logger.HIGH, "Unable to send data. Json Exception");
         }
@@ -66,6 +66,7 @@ public class ESocket {
 
     public PDU recvPDU() throws IOException, JsonException, InvalidPDUException {
         DictObject jObj = (DictObject) Json.parse(getInputStream());
+        Logger.ilog(Logger.DEBUG, jObj.toString());
         PDU tmp = new PDU(jObj);
         switch (tmp.getMethod()) {
             case PDUConsts.METHOD_ACK:
