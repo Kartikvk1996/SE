@@ -57,8 +57,8 @@ public class Master extends Probable {
 
         for (String slaveHost : slaves.keySet()) {
             SlaveProxy slave = slaves.get(slaveHost);
-            HashMap<Integer, Process> map = slave.getProcesses();
-            for (Integer key : map.keySet()) {
+            HashMap<String, Process> map = slave.getProcesses();
+            for (String key : map.keySet()) {
                 map.get(key).sendPDU(new IntroPDU(sock.getHost(), sock.getPort()), false);
             }
         }
@@ -108,13 +108,14 @@ public class Master extends Probable {
             return;
         }
         
-        int pid = pdu.getPid();
-        slaves.get(sock.getHost()).addProcessEntry(
+        String pid = pdu.getPid();
+        slaves.get(ticket).addProcessEntry(
                 pid,
                 new Process(
                     sender,
                     pdu.getConnectPort(),
-                    pdu.getWho()
+                    pdu.getWho(),
+                    pid
                 )
         );
 

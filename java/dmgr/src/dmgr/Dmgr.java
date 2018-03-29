@@ -7,7 +7,7 @@ import se.ipc.pdu.PDU;
 
 public class Dmgr extends Slave {
 
-    Dmgr(MasterProxy mproxy, String ticket, int pid) throws IOException {
+    Dmgr(MasterProxy mproxy, String ticket, String pid) throws IOException {
         super(mproxy, ticket, pid);
     }
     
@@ -16,11 +16,11 @@ public class Dmgr extends Slave {
         //Integer.parseInt(args[1])
         new Dmgr(
                 new MasterProxy(
-                        args[1],
-                        Integer.parseInt(args[2])
+                        args[2],
+                        Integer.parseInt(args[3])
                 ),
                 args[0],
-                Integer.parseInt(args[1])
+                args[1]
         ).run();
     }
     

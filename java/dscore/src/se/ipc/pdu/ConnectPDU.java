@@ -9,7 +9,7 @@ public class ConnectPDU extends PDU {
     @JsonExposed public int port;
     
     /* process id attached to this process. can be 0xbaba for the fireup */
-    @JsonExposed public int pid;
+    @JsonExposed public String pid;
     
     /* System's resources */
     @JsonExposed public SysInfo sysInfo;
@@ -26,7 +26,7 @@ public class ConnectPDU extends PDU {
         return sysInfo;
     }
 
-    public ConnectPDU(String ticket, int port, int pid) {
+    public ConnectPDU(String ticket, int port, String pid) {
         super(PDUConsts.METHOD_CONNECT);
         this.sysInfo = new SysInfo(true);
         this.port = port;
@@ -38,7 +38,7 @@ public class ConnectPDU extends PDU {
         return port;
     }
 
-    public int getPid() {
+    public String getPid() {
         return pid;
     }
     

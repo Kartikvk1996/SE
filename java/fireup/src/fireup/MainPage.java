@@ -28,8 +28,8 @@ public class MainPage extends javax.swing.JFrame {
     }
 
     
-    HashMap<Integer, Integer> pidmapper = new HashMap<>();
-    public void processAdded(int pid) {
+    HashMap<Integer, String> pidmapper = new HashMap<>();
+    public void processAdded(String pid) {
         WrappedProcess wp = fireupModel.processes.get(pid);
         pidmapper.put(listModel.size(), pid);
         String str = wp.procName + "       <" + wp.startTime + ">";

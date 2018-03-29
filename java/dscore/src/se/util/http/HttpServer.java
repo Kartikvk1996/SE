@@ -134,7 +134,7 @@ public class HttpServer implements RequestHandler {
     private void executeProcedure(String url, String data, OutputStream out) throws IOException {
         String dump;
         try {
-            dump = mview.execute(url, Json.parse(docRoot));
+            dump = mview.execute(url, Json.parse(data));
         } catch (JsonException ex) {
             dump = "{\"error\": \"Couldn't parse the data sent as JSON\"}";
             Logger.elog(Logger.MEDIUM, "Couldn't parse the data sent as JSON");

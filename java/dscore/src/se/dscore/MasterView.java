@@ -60,7 +60,7 @@ public class MasterView {
 
         Field field = obj.getClass().getField(chunks[index]);
         
-        if( field.getAnnotation(RestExposedValue.class) == null)
+        if( field.getAnnotation(JsonExposed.class) == null)
             throw new APIAccessException("Value not exposed");
         
         if (HashMap.class.isAssignableFrom(field.getType()) && (index + 1) < chunks.length) {
@@ -84,7 +84,7 @@ public class MasterView {
         String chunks[] = url.split("/");
         try {
             Object endObj = getObject(this, chunks, 1, chunks.length - 1);
-            Method meth = endObj.getClass().getMethod(url, JsonObject.class);
+            Method meth = endObj.getClass().getMethod(chunks[chunks.length - 1], JsonObject.class);
             if(meth.getAnnotation(RESTExposedMethod.class) != null)
                 return (String) meth.invoke(endObj, obj);
             else

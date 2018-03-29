@@ -5,18 +5,18 @@ import jsonparser.JsonExposed;
 
 public class KillPDU extends PDU {
     
-    @JsonExposed public int pid;
+    @JsonExposed public String pid;
     
     public KillPDU(DictObject jObject) throws InvalidPDUException {
         super(jObject);
     }
     
-    public KillPDU(int pid) {
+    public KillPDU(String pid) {
         super(PDUConsts.METHOD_KILL);
         this.pid = pid;
     }
     
-    public int getPid() {
+    public String getPid() {
         return pid;
     }
 }

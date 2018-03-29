@@ -35,6 +35,7 @@ public class Node implements RequestHandler {
     
     public Node(MasterProxy mproxy, String ticket) throws IOException {
         this.mproxy = mproxy;
+        this.ticket = ticket;
         commonInit();
     }
 

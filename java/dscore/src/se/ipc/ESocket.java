@@ -17,6 +17,7 @@ import se.ipc.pdu.ConnectPDU;
 import se.ipc.pdu.CreatePDU;
 import se.ipc.pdu.GetPDU;
 import se.ipc.pdu.InvalidPDUException;
+import se.ipc.pdu.KillPDU;
 import se.ipc.pdu.PDUConsts;
 import se.ipc.pdu.StatusPDU;
 import se.util.Logger;
@@ -89,6 +90,8 @@ public class ESocket {
                 return new StatusPDU(jObj);
             case PDUConsts.METHOD_UPDATE:
                 break;
+            case PDUConsts.METHOD_KILL:
+                return new KillPDU(jObj);
         }
         return tmp;
     }

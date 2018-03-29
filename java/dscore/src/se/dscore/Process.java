@@ -8,15 +8,16 @@ import se.ipc.pdu.PDU;
 
 public class Process {
 
-    @JsonExposed public int pid;
+    @JsonExposed public String pid;
     @JsonExposed public String type;
     @JsonExposed public String host;
     @JsonExposed public int port;
 
-    Process(String host, int port, String type) {
+    Process(String host, int port, String type, String pid) {
         this.host = host;
         this.port = port;
         this.type = type;
+        this.pid = pid;
     }
 
     public void kill() throws IOException {

@@ -40,7 +40,7 @@ public class Fireup implements Runnable {
 
     private static int fireupPort = 5678;
     private int lastPid = 1;
-    HashMap<Integer, WrappedProcess> processes;
+    HashMap<String, WrappedProcess> processes;
     private final InetAddress hostAddress;
     private final EServerSocket servSock;
     private MainPage mainPage;
@@ -93,8 +93,9 @@ public class Fireup implements Runnable {
     public boolean createProcess(String command[]) {
         WrappedProcess proc = WrappedProcess.createProcess(command);
         if (proc != null) {
-            processes.put(lastPid, proc);
-            mainPage.processAdded(lastPid);
+            String newpid = createPid(lastPid);
+            processes.put(newpid, proc);
+            mainPage.processAdded(newpid);
         }
         return (proc != null);
     }
@@ -113,7 +114,7 @@ public class Fireup implements Runnable {
                     switch (pdu.getMethod()) {
                         case PDUConsts.METHOD_CREATE:
                             cpdu = (CreatePDU)pdu;
-                            if(createProcess(getCommandLine(cpdu, lastPid))) {
+                            if(createProcess(getCommandLine(cpdu, createPid(lastPid)))) {
                                 resp = new AckPDU(ticket);
                                 DictObject dict = new DictObject();
                                 dict.set(PDUConsts.PID, lastPid);
@@ -127,7 +128,9 @@ public class Fireup implements Runnable {
                             conn.send(resp);
                             break;
                         case PDUConsts.METHOD_KILL:
-                            processes.get(((KillPDU)pdu).getPid()).kill();
+                            String pid = ((KillPDU)pdu).getPid();
+                            Logger.ilog(Logger.HIGH, "Killing the process " + pid);
+                            processes.get(pid).kill();
                             break;
                         default:
                     }
@@ -149,7 +152,7 @@ public class Fireup implements Runnable {
     void connectToMaster(String host, int port) {
         try {
             ESocket sock = new ESocket(host, port);
-            sock.send(new ConnectPDU("", fireupPort, 0xbaba));
+            sock.send(new ConnectPDU("", fireupPort, "PID-fireup"));
 
             AckPDU ack = (AckPDU) sock.recvPDU();
             masterAddr = host;
@@ -179,7 +182,7 @@ public class Fireup implements Runnable {
      *  We will send a PID generated here to process. The process must report this
      * PID to master while connecting to it.
      */
-    private String[] getCommandLine(CreatePDU pdu, int pid) {
+    private String[] getCommandLine(CreatePDU pdu, String pid) {
         String args[] = pdu.getArguments();
         String cmd = pdu.getExecutable();
         String cmdchunks[];
@@ -251,6 +254,10 @@ public class Fireup implements Runnable {
         } catch (MalformedURLException ex) {
 
         }
+    }
+
+    private String createPid(int lastPid) {
+        return "PID-" + lastPid;
     }
 
 }

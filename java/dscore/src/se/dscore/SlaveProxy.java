@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import jsonparser.DictObject;
 import jsonparser.JsonExposed;
+import jsonparser.JsonObject;
 import se.ipc.ESocket;
 import se.ipc.pdu.CreatePDU;
 import se.ipc.pdu.KillPDU;
@@ -17,12 +21,12 @@ public class SlaveProxy {
     @JsonExposed public String host;
     @JsonExposed public int agentPort;
     @JsonExposed public SysInfo sysInfo;
-    @JsonExposed public HashMap<Integer, Process> processes;
+    @JsonExposed public HashMap<String, Process> processes;
     @JsonExposed public long heartBeat;
 
     Master master;
 
-    HashMap<Integer, Process> getProcesses() {
+    HashMap<String, Process> getProcesses() {
         return processes;
     }
 
@@ -39,9 +43,9 @@ public class SlaveProxy {
         return "{\"host\": \"" + host + "}";
     }
 
-    @RESTExposedMethod
-    public void kill(int pid) throws IOException {
-        sendPDU(new KillPDU(pid), true);
+    public void kill(String pid) throws IOException {
+        sendPDU(new KillPDU(pid), false);
+        processes.remove(pid);
     }
     
     void createProcess(String type) throws IOException {
@@ -64,7 +68,7 @@ public class SlaveProxy {
         return processes.size();
     }
 
-    void addProcessEntry(int pid, Process proc) {
+    void addProcessEntry(String pid, Process proc) {
         processes.put(pid, proc);
     }
 
@@ -79,5 +83,15 @@ public class SlaveProxy {
 
     void rcvHeartBeat(StatusPDU pdu) {
         this.heartBeat = new Date().getTime();
+    }
+    
+    @RESTExposedMethod
+    public String kill(JsonObject data) {
+        try {
+            kill((String) ((DictObject)data).get("pid").getValue());
+        } catch (IOException ex) {
+            return "failed";
+        }
+        return "success";
     }
 }

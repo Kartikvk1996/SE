@@ -6,9 +6,9 @@ import se.ipc.pdu.ConnectPDU;
 
 public class Slave extends Probable {
 
-    private int pid;
+    private String pid;
     
-    public Slave(MasterProxy mproxy, String ticket, int pid) throws IOException {
+    public Slave(MasterProxy mproxy, String ticket, String pid) throws IOException {
         super(mproxy, ticket);
         this.pid = pid;
     }
