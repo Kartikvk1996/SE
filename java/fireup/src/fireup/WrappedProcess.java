@@ -16,7 +16,7 @@ public class WrappedProcess {
     Process process;
     String errorFile, outputFile;
 
-    public static WrappedProcess createProcess(String ...command) {
+    public static WrappedProcess createProcess(String command[]) {
 
         WrappedProcess wp = new WrappedProcess();
         

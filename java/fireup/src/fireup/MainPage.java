@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.JFileChooser;
 
@@ -26,8 +27,11 @@ public class MainPage extends javax.swing.JFrame {
         hostInfo.setText("Host Info : { IP : " + fireupModel.getInetAddress() + ", port : " + fireupModel.getrunningPort() + "}");
     }
 
-    public void processAdded() {
-        WrappedProcess wp = fireupModel.processes.get(fireupModel.processes.size() - 1);
+    
+    HashMap<Integer, Integer> pidmapper = new HashMap<>();
+    public void processAdded(int pid) {
+        WrappedProcess wp = fireupModel.processes.get(pid);
+        pidmapper.put(listModel.size(), pid);
         String str = wp.procName + "       <" + wp.startTime + ">";
         listModel.add(str);
         procList.updateUI();
@@ -270,7 +274,7 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_MasterConnectActionPerformed
 
     private void ExternalProgramRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExternalProgramRunActionPerformed
-        fireupModel.createProcess(ExecutablePath.getText(), extCommandLine.getText());
+        //fireupModel.createProcess(ExecutablePath.getText(), extCommandLine.getText());
     }//GEN-LAST:event_ExternalProgramRunActionPerformed
 
     private void BrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BrowseActionPerformed
@@ -293,7 +297,7 @@ public class MainPage extends javax.swing.JFrame {
     private void terminateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminateActionPerformed
         int index = procList.getSelectedIndex();
         if (index > -1) {
-            fireupModel.processes.get(index).kill();
+            fireupModel.processes.get(pidmapper.get(index)).kill();
             listModel.remove(index);
         }
     }//GEN-LAST:event_terminateActionPerformed
@@ -322,11 +326,11 @@ public class MainPage extends javax.swing.JFrame {
     }
 
     private void showOutput(int index) {
-        openEditor(fireupModel.processes.get(index).getOutputFileName());
+        openEditor(fireupModel.processes.get(pidmapper.get(index)).getOutputFileName());
     }
 
     private void showError(int index) {
-        openEditor(fireupModel.processes.get(index).getErrorFileName());
+        openEditor(fireupModel.processes.get(pidmapper.get(index)).getErrorFileName());
     }
 
     public static void main(String args[]) {

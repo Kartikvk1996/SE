@@ -15,8 +15,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
+import jsonparser.DictObject;
 import jsonparser.JsonException;
 import se.ipc.EServerSocket;
 import se.ipc.ESocket;
@@ -25,6 +27,7 @@ import se.ipc.pdu.ConnectPDU;
 import se.ipc.pdu.CreatePDU;
 import se.ipc.pdu.ErrorPDU;
 import se.ipc.pdu.InvalidPDUException;
+import se.ipc.pdu.KillPDU;
 import se.ipc.pdu.PDU;
 import se.ipc.pdu.PDUConsts;
 import se.util.Logger;
@@ -36,12 +39,14 @@ import se.util.Logger;
 public class Fireup implements Runnable {
 
     private static int fireupPort = 5678;
-    ArrayList<WrappedProcess> processes;
+    private int lastPid = 1;
+    HashMap<Integer, WrappedProcess> processes;
     private final InetAddress hostAddress;
     private final EServerSocket servSock;
     private MainPage mainPage;
     private final String secret;
     Properties props;
+    String ticket;
 
     String masterAddr;
     int masterPort, masterHTTPPort;
@@ -67,7 +72,7 @@ public class Fireup implements Runnable {
             createPropsFile();
         }
 
-        processes = new ArrayList<>();
+        processes = new HashMap<>();
         hostAddress = InetAddress.getLocalHost();
 
         servSock = new EServerSocket(0);
@@ -85,11 +90,11 @@ public class Fireup implements Runnable {
         this.mainPage = mainPage;
     }
 
-    public boolean createProcess(String... command) {
+    public boolean createProcess(String command[]) {
         WrappedProcess proc = WrappedProcess.createProcess(command);
         if (proc != null) {
-            processes.add(proc);
-            mainPage.processAdded();
+            processes.put(lastPid, proc);
+            mainPage.processAdded(lastPid);
         }
         return (proc != null);
     }
@@ -99,22 +104,30 @@ public class Fireup implements Runnable {
         while (true) {
             try {
                 ESocket conn = servSock.accept();
-                CreatePDU pdu = (CreatePDU) conn.recvPDU();
-                PDU resp;
+                PDU pdu = conn.recvPDU(), resp;
+                CreatePDU cpdu;
 
                 if (false && this.secret.equals(pdu.getSecret())) {
 
                 } else {
                     switch (pdu.getMethod()) {
                         case PDUConsts.METHOD_CREATE:
-                            if(createProcess(getCommandLine(pdu))) {
-                                resp = new AckPDU();
-                                Logger.ilog(Logger.MEDIUM, "Process creation " + pdu.getExecutable() + Arrays.toString(pdu.getArguments()) + " was successful");
+                            cpdu = (CreatePDU)pdu;
+                            if(createProcess(getCommandLine(cpdu, lastPid))) {
+                                resp = new AckPDU(ticket);
+                                DictObject dict = new DictObject();
+                                dict.set(PDUConsts.PID, lastPid);
+                                resp.setData(dict);
+                                lastPid++;
+                                Logger.ilog(Logger.MEDIUM, "Process creation " + cpdu.getExecutable() + Arrays.toString(cpdu.getArguments()) + " was successful");
                             } else {
                                 resp = new ErrorPDU("process creation failed");;
-                                Logger.ilog(Logger.MEDIUM, "Process creation " + pdu.getExecutable() + Arrays.toString(pdu.getArguments()) + " failed");
+                                Logger.ilog(Logger.MEDIUM, "Process creation " + cpdu.getExecutable() + Arrays.toString(cpdu.getArguments()) + " failed");
                             }
                             conn.send(resp);
+                            break;
+                        case PDUConsts.METHOD_KILL:
+                            processes.get(((KillPDU)pdu).getPid()).kill();
                             break;
                         default:
                     }
@@ -136,11 +149,12 @@ public class Fireup implements Runnable {
     void connectToMaster(String host, int port) {
         try {
             ESocket sock = new ESocket(host, port);
-            sock.send(new ConnectPDU(fireupPort));
+            sock.send(new ConnectPDU("", fireupPort, 0xbaba));
 
             AckPDU ack = (AckPDU) sock.recvPDU();
             masterAddr = host;
             masterPort = port;
+            ticket = ack.getTicket();
             serverJarVersion = Long.parseLong(ack.getJarVersion());
             masterHTTPPort = ack.getHttpPort();
         } catch (IOException | JsonException | InvalidPDUException ex) {
@@ -161,7 +175,11 @@ public class Fireup implements Runnable {
         }
     }
 
-    private String[] getCommandLine(CreatePDU pdu) {
+    /**
+     *  We will send a PID generated here to process. The process must report this
+     * PID to master while connecting to it.
+     */
+    private String[] getCommandLine(CreatePDU pdu, int pid) {
         String args[] = pdu.getArguments();
         String cmd = pdu.getExecutable();
         String cmdchunks[];
@@ -180,11 +198,13 @@ public class Fireup implements Runnable {
                 Logger.elog(Logger.HIGH, "JAVA_HOME environment variable not set");
             }
             
-            cmdchunks = new String[3 + args.length];
+            cmdchunks = new String[5 + args.length];
             cmdchunks[0] = "\"" + Paths.get(jhome, "bin",  "java.exe").toString() + "\"";
             cmdchunks[1] = "-jar";
             cmdchunks[2] = cmd;
-            System.arraycopy(args, 0, cmdchunks, 3, args.length);
+            cmdchunks[3] = ticket;
+            cmdchunks[4] = String.valueOf(pid);
+            System.arraycopy(args, 0, cmdchunks, 5, args.length);
             return cmdchunks;
         } else {
             cmd = SEHOME + cmd;
