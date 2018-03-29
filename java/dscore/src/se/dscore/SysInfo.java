@@ -1,4 +1,4 @@
-package se.ipc.pdu;
+package se.dscore;
 
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -10,10 +10,17 @@ import se.util.Logger;
 
 public class SysInfo extends JsonAssignable {
 
-    @JsonExposed public int cores;
-    @JsonExposed public long availableMemory;
-    @JsonExposed public long freeMemory;
-    @JsonExposed public long startTime;
+    @JsonExposed(comment = "Number of cores in the slave machine")
+    public int cores;
+    
+    @JsonExposed(comment = "Available memory in the slave machine")
+    public long availableMemory;
+    
+    @JsonExposed(comment = "Free memory from available JVM memory")
+    public long freeMemory;
+    
+    @JsonExposed(comment = "The startup time of the slave")
+    public long startTime;
     
     private static int s_cores;
     private static long s_availableMemory;

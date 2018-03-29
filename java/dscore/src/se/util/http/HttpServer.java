@@ -22,7 +22,7 @@ import se.util.Logger;
 
 public class HttpServer implements RequestHandler {
 
-    @JsonExposed MasterView mview;
+    MasterView mview;
     String docRoot = ".";
     Server httpserver;
     Master master;

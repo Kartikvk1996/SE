@@ -1,11 +1,7 @@
 package se.dscore;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jsonparser.DictObject;
 import jsonparser.JsonExposed;
 import jsonparser.JsonObject;
@@ -14,16 +10,21 @@ import se.ipc.pdu.CreatePDU;
 import se.ipc.pdu.KillPDU;
 import se.ipc.pdu.PDU;
 import se.ipc.pdu.StatusPDU;
-import se.ipc.pdu.SysInfo;
 
 public class SlaveProxy {
 
-    @JsonExposed public String host;
-    @JsonExposed public int agentPort;
-    @JsonExposed public SysInfo sysInfo;
-    @JsonExposed public HashMap<String, Process> processes;
-    @JsonExposed public long heartBeat;
-
+    @JsonExposed(comment = "The host name of the slave")
+    public String host;
+    
+    @JsonExposed(comment = "The port on which the agent is listening")
+    public int agentPort;
+    
+    @JsonExposed(comment = "The slave system's resources")
+    public SysInfo sysInfo;
+    
+    @JsonExposed(comment = "The processes running on this slave")
+    public HashMap<String, Process> processes;
+    
     Master master;
 
     HashMap<String, Process> getProcesses() {
@@ -82,7 +83,7 @@ public class SlaveProxy {
     }
 
     void rcvHeartBeat(StatusPDU pdu) {
-        this.heartBeat = new Date().getTime();
+        
     }
     
     @RESTExposedMethod

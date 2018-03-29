@@ -1,5 +1,6 @@
 package se.ipc.pdu;
 
+import se.dscore.SysInfo;
 import jsonparser.DictObject;
 import jsonparser.JsonExposed;
 
