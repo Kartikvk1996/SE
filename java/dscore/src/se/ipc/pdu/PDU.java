@@ -1,16 +1,20 @@
 package se.ipc.pdu;
 
 import java.lang.reflect.Field;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jsonparser.DictObject;
 import jsonparser.JsonAssignable;
+import jsonparser.JsonExposed;
 import jsonparser.JsonObject;
 
 public class PDU {
 
+    @JsonExposed
     public String who;
+    
+    @JsonExposed
     public int method;
+    
+    @JsonExposed
     public JsonObject data;
 
     private static String PROCESS_ROLE;
@@ -62,6 +66,10 @@ public class PDU {
         this.data = data;
     }
 
+    public JsonObject getData() {
+        return data;
+    }
+    
     public static void setProcessRole(String role) {
         PROCESS_ROLE = role;
     }

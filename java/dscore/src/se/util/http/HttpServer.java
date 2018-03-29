@@ -5,15 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 import jsonparser.Json;
 import jsonparser.JsonException;
+import jsonparser.JsonExposed;
 import se.dscore.Master;
 import se.dscore.RequestHandler;
 import se.dscore.Server;
-import se.dscore.Status;
+import se.dscore.MasterView;
 import se.ipc.ESocket;
 import se.ipc.pdu.AckPDU;
 import se.ipc.pdu.ConnectPDU;
@@ -23,6 +22,7 @@ import se.util.Logger;
 
 public class HttpServer implements RequestHandler {
 
+    @JsonExposed MasterView mview;
     String docRoot = ".";
     Server httpserver;
     Master master;
@@ -30,6 +30,7 @@ public class HttpServer implements RequestHandler {
 
     public HttpServer(String docRoot, Master master) throws IOException {
         this.master = master;
+        mview = master.getDomainStatus();
         this.docRoot = docRoot;
         httpserver = new Server(this);
         openFiles = new HashMap<>();
@@ -54,36 +55,21 @@ public class HttpServer implements RequestHandler {
 
     private void serve(HttpRequest req) throws IOException {
 
-        if (req.getUrl().split("/")[0].equals("status")) {
-            Status stat = master.getDomainStatus();
-            String dump = stat.getObject(req.getUrl());
-            OutputStream out = req.getOutputStream();
-            out.write("HTTP/1.0 200 OK\n".getBytes());
-            out.write(("Content-Length: " + dump.length() + "\n\n").getBytes());
-            out.write(dump.getBytes());
-        } else {
+        String url = req.getUrl();
+        String service = url;
+        if (url.contains("/")) {
+            service = url.substring(0, url.indexOf('/'));
+        }
 
-            FileInputStream fis;
-            File file = new File(docRoot + "/" + req.getUrl());
-
-            try {
-                fis = new FileInputStream(file);
-            } catch (FileNotFoundException ex) {
-                fis = openFiles.get(docRoot + "/404.html");
-            }
-
-            OutputStream out = req.getOutputStream();
-
-            out.write("HTTP/1.0 200 OK\n".getBytes());
-            out.write(("Content-Length: " + file.length() + "\n\n").getBytes());
-            byte[] buffer = new byte[256];
-            int read;
-            while ((read = fis.read(buffer)) != -1) {
-                out.write(buffer, 0, read);
-                if (read < buffer.length) {
-                    break;
-                }
-            }
+        switch (service) {
+            case "status":
+                sendStatus(url, req.getOutputStream());
+                break;
+            case "exec":
+                executeProcedure(url, req.getData(), req.getOutputStream());
+                break;
+            default:
+                sendFile(url, req.getOutputStream());
         }
     }
 
@@ -113,6 +99,49 @@ public class HttpServer implements RequestHandler {
 
     @Override
     public void handle_ack(ESocket sock, AckPDU apdu) throws IOException {
+    }
+
+    private void sendStatus(String url, OutputStream out) throws IOException {
+        String dump = mview.getObjectAsJson(url);
+        out.write("HTTP/1.0 200 OK\n".getBytes());
+        out.write(("Content-Length: " + dump.length() + "\n\n").getBytes());
+        out.write(dump.getBytes());
+    }
+
+    private void sendFile(String url, OutputStream out) throws IOException {
+        FileInputStream fis;
+        File file = new File(docRoot + "/" + url);
+
+        try {
+            fis = new FileInputStream(file);
+        } catch (FileNotFoundException ex) {
+            out.write("HTTP/1.0 404 Not Found\n\n".getBytes());
+            return;
+        }
+
+        out.write("HTTP/1.0 200 OK\n".getBytes());
+        out.write(("Content-Length: " + file.length() + "\n\n").getBytes());
+        byte[] buffer = new byte[256];
+        int read;
+        while ((read = fis.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+            if (read < buffer.length) {
+                break;
+            }
+        }
+    }
+
+    private void executeProcedure(String url, String data, OutputStream out) throws IOException {
+        String dump;
+        try {
+            dump = mview.execute(url, Json.parse(docRoot));
+        } catch (JsonException ex) {
+            dump = "{\"error\": \"Couldn't parse the data sent as JSON\"}";
+            Logger.elog(Logger.MEDIUM, "Couldn't parse the data sent as JSON");
+        }
+        out.write("HTTP/1.0 200 OK\n".getBytes());
+        out.write(("Content-Length: " + dump.length() + "\n\n").getBytes());
+        out.write(dump.getBytes());
     }
 
 }

@@ -1,7 +1,10 @@
 package se.ipc;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.UnknownHostException;
+import se.util.Logger;
 
 public class EServerSocket {
 
@@ -16,7 +19,12 @@ public class EServerSocket {
     }
 
     public String getHost() {
-        return socket.getInetAddress().getHostName();
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException ex) {
+            Logger.elog(Logger.HIGH, "unable to get the localhost ip");
+        }
+        return "localhost";
     }
 
     public int getPort() {

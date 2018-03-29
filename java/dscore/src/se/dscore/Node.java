@@ -1,5 +1,10 @@
 package se.dscore;
 
+/**
+ * Core of the domain. This implements the basic functionality of a
+ * component process. 
+ */
+
 import java.io.IOException;
 import se.ipc.pdu.IntroPDU;
 import se.ipc.pdu.PDU;
@@ -14,9 +19,11 @@ public class Node implements RequestHandler {
 
     private boolean running = false;
     private Server server;
-    private int HEARTBEAT_INTERVAL = 2000;
+    private final int HEARTBEAT_INTERVAL = 2000;
     protected MasterProxy mproxy;
+    protected String ticket;
     
+    /* just a hack to avoid mutiple assignement statements */
     final void commonInit() throws IOException {
          server = new Server(this);       
     }
@@ -26,7 +33,7 @@ public class Node implements RequestHandler {
         commonInit();
     }
     
-    public Node(MasterProxy mproxy) throws IOException {
+    public Node(MasterProxy mproxy, String ticket) throws IOException {
         this.mproxy = mproxy;
         commonInit();
     }
@@ -44,11 +51,6 @@ public class Node implements RequestHandler {
     
     public int getPort() {
         return server.getPort();
-    }
-    
-    @Override
-    public String toString() {
-        return "{\"host\": " + getHost() + ", \"port\": " + getPort() + "}";
     }
     
     @Override
@@ -71,7 +73,7 @@ public class Node implements RequestHandler {
 
     @Override
     public void handle_intro(ESocket sock, IntroPDU ipdu) throws IOException {
-       AckPDU apdu = new AckPDU();
+       AckPDU apdu = new AckPDU(ticket);
        ESocket gsock = new ESocket(ipdu.getGuestHost(), ipdu.getGuestPort());
        gsock.send(apdu);
     }

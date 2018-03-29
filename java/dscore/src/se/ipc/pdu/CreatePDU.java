@@ -2,11 +2,12 @@ package se.ipc.pdu;
 
 import java.lang.reflect.Field;
 import jsonparser.DictObject;
+import jsonparser.JsonExposed;
 
 public class CreatePDU extends PDU {
 
-    public String executable;
-    public String arguments;
+    @JsonExposed public String executable;
+    @JsonExposed public String arguments;
 
     public CreatePDU(DictObject jObject) throws InvalidPDUException {
         super(jObject);

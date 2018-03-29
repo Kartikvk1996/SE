@@ -3,23 +3,26 @@ package se.dscore;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import jsonparser.JsonExposed;
 import se.ipc.ESocket;
 import se.ipc.pdu.CreatePDU;
+import se.ipc.pdu.KillPDU;
 import se.ipc.pdu.PDU;
 import se.ipc.pdu.StatusPDU;
 import se.ipc.pdu.SysInfo;
 
 public class SlaveProxy {
 
-    public String host;
-    public int agentPort;
-    public SysInfo sysInfo;
-    public ArrayList<Process> processes;
-    public long heartBeat;
+    @JsonExposed public String host;
+    @JsonExposed public int agentPort;
+    @JsonExposed public SysInfo sysInfo;
+    @JsonExposed public HashMap<Integer, Process> processes;
+    @JsonExposed public long heartBeat;
 
     Master master;
 
-    ArrayList<Process> getProcesses() {
+    HashMap<Integer, Process> getProcesses() {
         return processes;
     }
 
@@ -27,7 +30,7 @@ public class SlaveProxy {
         this.host = host;
         this.agentPort = agentPort;
         this.master = master;
-        this.processes = new ArrayList<>();
+        this.processes = new HashMap<>();
         this.sysInfo = sysInfo;
     }
 
@@ -36,6 +39,11 @@ public class SlaveProxy {
         return "{\"host\": \"" + host + "}";
     }
 
+    @RESTExposedMethod
+    public void kill(int pid) throws IOException {
+        sendPDU(new KillPDU(pid), true);
+    }
+    
     void createProcess(String type) throws IOException {
         PDU pdu = new CreatePDU(
                 type,
@@ -56,8 +64,8 @@ public class SlaveProxy {
         return processes.size();
     }
 
-    void addProcessEntry(Process proc) {
-        processes.add(proc);
+    void addProcessEntry(int pid, Process proc) {
+        processes.put(pid, proc);
     }
 
     String sendPDU(PDU pdu, boolean recvBack) throws IOException {

@@ -1,17 +1,19 @@
 package se.ipc.pdu;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import jsonparser.DictObject;
+import jsonparser.JsonExposed;
 
 public class AckPDU extends PDU {
 
     /* this will serve as a check for assignement */
-    public static Integer httpPort = null;
-    public static String jarRevision;
+    @JsonExposed public static Integer httpPort = null;
+    @JsonExposed public static String jarRevision;
+    @JsonExposed public String ticket;
     
-    public AckPDU() {
+    public AckPDU(String ticket) {
         super(PDUConsts.METHOD_ACK);
+        this.ticket = ticket;
     }
 
     public String getJarVersion() {
@@ -20,13 +22,6 @@ public class AckPDU extends PDU {
     
     public AckPDU(DictObject jObject) throws InvalidPDUException {
         super(jObject);
-        for (Field field : getClass().getDeclaredFields()) {
-            try {
-                field.set(this, jObject.get(field.getName()).getValue());
-            } catch (IllegalArgumentException | IllegalAccessException ex) {
-                throw new InvalidPDUException();
-            }
-        }
     }
 
     static {
@@ -48,6 +43,10 @@ public class AckPDU extends PDU {
 
     public int getHttpPort() {
         return httpPort;
+    }
+
+    public String getTicket() {
+        return ticket;
     }
 
 }

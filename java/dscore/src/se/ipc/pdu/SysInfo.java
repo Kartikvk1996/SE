@@ -4,15 +4,16 @@ import java.lang.reflect.Field;
 import java.util.Date;
 import jsonparser.DictObject;
 import jsonparser.JsonAssignable;
+import jsonparser.JsonExposed;
 import jsonparser.JsonObject;
 import se.util.Logger;
 
 public class SysInfo extends JsonAssignable {
 
-    public int cores;
-    public long availableMemory;
-    public long freeMemory;
-    public long startTime;
+    @JsonExposed public int cores;
+    @JsonExposed public long availableMemory;
+    @JsonExposed public long freeMemory;
+    @JsonExposed public long startTime;
     
     private static int s_cores;
     private static long s_availableMemory;

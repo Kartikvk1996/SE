@@ -2,11 +2,12 @@ package se.ipc.pdu;
 
 import java.lang.reflect.Field;
 import jsonparser.DictObject;
+import jsonparser.JsonExposed;
 
 public class IntroPDU extends PDU {
 
-    public String host;
-    public int port;
+    @JsonExposed public String host;
+    @JsonExposed public int port;
     
     public IntroPDU(DictObject jObject) throws InvalidPDUException {
         super(jObject);

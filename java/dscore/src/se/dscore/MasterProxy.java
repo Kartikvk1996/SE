@@ -1,5 +1,9 @@
 package se.dscore;
 
+/**
+ * A proxy object for the Master where you can send and recv PDU's
+ */
+
 import java.io.IOException;
 import jsonparser.JsonException;
 import se.ipc.ESocket;

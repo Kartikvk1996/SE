@@ -4,7 +4,11 @@ import se.ipc.pdu.PDU;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.logging.Level;
 import jsonparser.DictObject;
 import jsonparser.Json;
 import jsonparser.JsonException;
@@ -41,7 +45,7 @@ public class ESocket {
     }
 
     public String getHost() {
-        return socket.getInetAddress().getHostName();
+        return socket.getInetAddress().getHostAddress();
     }
 
     public OutputStream getOutputStream() throws IOException {

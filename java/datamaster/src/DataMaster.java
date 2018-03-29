@@ -1,6 +1,7 @@
 import com.sun.media.jfxmedia.logging.Logger;
 import se.dscore.Master;
 import java.io.IOException;
+import se.dscore.Scheduler;
 import se.ipc.pdu.PDU;
 
 public class DataMaster {
@@ -10,7 +11,7 @@ public class DataMaster {
         PDU.setProcessRole("master");
         Logger.setLevel(Logger.DEBUG);
         
-        Master master = new Master("configFile");
+        Master master = new Master("configFile", new Scheduler());
 	System.out.printf("master running on port  [%d]\n", master.getPort());
         System.out.printf("Http server running on port [%d]\n", master.getHttpServer().getPort());
         System.out.printf("Http server document root : [%s]\n", master.getHttpServer().getDocumentRoot());

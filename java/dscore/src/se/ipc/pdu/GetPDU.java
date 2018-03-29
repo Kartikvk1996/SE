@@ -1,14 +1,12 @@
 package se.ipc.pdu;
 
 import java.lang.reflect.Field;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jsonparser.DictObject;
-import se.ipc.Consts;
+import jsonparser.JsonExposed;
 
 public class GetPDU extends PDU {
     
-    public String resource;
+    @JsonExposed public String resource;
     
     public GetPDU(String resource) {
         super(PDUConsts.METHOD_GET);

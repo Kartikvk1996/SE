@@ -1,13 +1,12 @@
 package se.ipc.pdu;
 
 import java.lang.reflect.Field;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jsonparser.DictObject;
+import jsonparser.JsonExposed;
 
 public class ErrorPDU extends PDU {
 
-    public String errMessage;
+    @JsonExposed public String errMessage;
 
     public ErrorPDU(DictObject jObject) throws InvalidPDUException {
         super(jObject);

@@ -1,14 +1,17 @@
 package se.dscore;
 
 import java.io.IOException;
+import jsonparser.JsonExposed;
 import se.ipc.ESocket;
+import se.ipc.pdu.KillPDU;
 import se.ipc.pdu.PDU;
 
 public class Process {
 
-    public String type;
-    public String host;
-    public int port;
+    @JsonExposed public int pid;
+    @JsonExposed public String type;
+    @JsonExposed public String host;
+    @JsonExposed public int port;
 
     Process(String host, int port, String type) {
         this.host = host;
@@ -16,6 +19,10 @@ public class Process {
         this.type = type;
     }
 
+    public void kill() throws IOException {
+        sendPDU(new KillPDU(pid), false);
+    }
+    
     String getHost() {
         return host;
     }

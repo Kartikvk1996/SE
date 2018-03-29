@@ -45,6 +45,16 @@ public class HttpRequest {
             if(url.charAt(0) == '/')
                 url = url.substring(1);
             
+            StringBuilder urlDec = new StringBuilder();
+            for (int i = 0; i < url.length(); i++) {
+                char ch = url.charAt(i);
+                if(ch == '%' && (i+=2) < url.length())  // note the short circuit done.
+                    ch = (char) (((url.charAt(i + 1) - '0') << 8) | ((url.charAt(i + 2) - '0')));
+                urlDec.append(ch);
+            }
+            
+            url = urlDec.toString();
+            
             String line;
             StringBuilder sb = new StringBuilder();
             while ((line = reader.readLine()) != null) {
