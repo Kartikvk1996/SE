@@ -14,7 +14,7 @@ import jsonparser.JsonObject;
 
 public class MasterView {
 
-    @JsonExposed(comment = "This is a list of slaves. Access this using the key")
+    @JsonExposed(comment = "This is a list of slaves. Access the elements using the key")
     public LinkedHashMap<String, SlaveProxy> slaves;
 
     public MasterView(LinkedHashMap<String, SlaveProxy> slaves) {

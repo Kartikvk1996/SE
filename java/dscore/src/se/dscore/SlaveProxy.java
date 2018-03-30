@@ -86,7 +86,7 @@ public class SlaveProxy {
         
     }
     
-    @RESTExposedMethod
+    @RESTExposedMethod(comment = "Kills a process on this slave whose PID is sent")
     public String kill(JsonObject data) {
         try {
             kill((String) ((DictObject)data).get("pid").getValue());
