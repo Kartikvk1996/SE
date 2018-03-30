@@ -8,7 +8,11 @@ import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jsonparser.DictObject;
+import jsonparser.JsonArray;
 import jsonparser.JsonExposed;
+import jsonparser.JsonObject;
+import jsonparser.StringObject;
 import se.dscore.MasterView;
 import se.dscore.RESTExposedMethod;
 
@@ -18,6 +22,8 @@ import se.dscore.RESTExposedMethod;
 public class Apidoccer {
 
     static PrintStream xout;
+    JsonArray proplist = new JsonArray();
+    JsonArray methList = new JsonArray();
 
     private static void sop(String string) {
         xout.print(string);
@@ -32,7 +38,7 @@ public class Apidoccer {
         for (Method meth : meths) {
             RESTExposedMethod annmeth = meth.getAnnotation(RESTExposedMethod.class);
             if (annmeth != null) {
-                putAPI(annmeth.comment(), uptoNow + "/" + meth.getName());
+                methList.add(putAPI(meth, uptoNow + "/" + meth.getName()));
             }
         }
 
@@ -69,7 +75,7 @@ public class Apidoccer {
                 continue;
             }
 
-            putAPI(jexp.comment(), uptoNow + "/" + field.getName());
+            proplist.add(putAPI(field, uptoNow + "/" + field.getName()));
 
             if ((isPrimitive(type) || type == String.class)) {
 
@@ -92,22 +98,23 @@ public class Apidoccer {
     }
 
     public Apidoccer() {
-        putHeader();
-
-        sop("<h3>Properties</h3>");
+        
         plist("/status", MasterView.class);
-
-        sop("<h3>Methods</h3>");
         mlist("/exec", MasterView.class);
-
-        putTrailer();
-
+        
+        DictObject apilist = new DictObject();
+        apilist.set("properties", proplist);
+        apilist.set("methods", methList);
+        
+        sop("var apilist = ");
+        sop(apilist.toString());
+        
     }
 
     public static void main(String[] args) {
         try {
             //xout = System.out;
-            xout = new PrintStream("api.html");
+            xout = new PrintStream("apilist.js");
             new Apidoccer();
             sop("\n");
         } catch (FileNotFoundException ex) {
@@ -115,23 +122,25 @@ public class Apidoccer {
         }
     }
 
-    private void putcomment(String comment) {
-        sop("<div class='comment'>" + comment + "</div>");
+    private JsonObject putAPI(Field f, String url) {
+        DictObject dObj = new DictObject();
+        dObj.set("type", f.getType().toString());
+        dObj.set("url", url);
+        dObj.set("comment", (f.getAnnotation(JsonExposed.class)).comment());
+        return dObj;
     }
-
-    private void putAPI(String comment, String url) {
-        sop("<div class='border-div'>");
-        putcomment(comment);
-        sop("<div class='url'>" + url + "</div>");
-        sop("</div>");
-    }
-
-    private void putTrailer() {
-        sop("</body></html>");
-    }
-
-    private void putHeader() {
-        sop("<html><head><link rel=\"stylesheet\" href=\"styles.css\" /></head><body>");
+    
+    private JsonObject putAPI(Method meth, String url) {
+        DictObject dObj = new DictObject();
+        dObj.set("returntype", meth.getReturnType().getName());
+        dObj.set("url", url);
+        dObj.set("comment", (meth.getAnnotation(RESTExposedMethod.class)).comment());
+        JsonArray jarr = new JsonArray();
+        for (Class<?> param : meth.getParameterTypes()) {
+            jarr.add(new StringObject(param.getName()));
+        }
+        dObj.set("inputTypes", jarr);
+        return dObj;
     }
 
 }

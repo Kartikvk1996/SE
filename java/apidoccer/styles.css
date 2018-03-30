@@ -17,3 +17,9 @@
 	padding: 10px 5px 10px 5px;
 	font-family: consolas;
 }
+
+.datatype {
+	color: red;
+	padding: 5px;
+	background-color: lavender;
+}
