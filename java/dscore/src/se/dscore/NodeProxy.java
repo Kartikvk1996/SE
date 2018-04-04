@@ -1,6 +1,7 @@
 package se.dscore;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import jsonparser.DictObject;
 import jsonparser.JsonExposed;
@@ -11,7 +12,7 @@ import se.ipc.pdu.KillPDU;
 import se.ipc.pdu.PDU;
 import se.ipc.pdu.StatusPDU;
 
-public class SlaveProxy {
+public class NodeProxy {
 
     @JsonExposed(comment = "The host name of the slave")
     public String host;
@@ -19,8 +20,14 @@ public class SlaveProxy {
     @JsonExposed(comment = "The port on which the agent is listening")
     public int agentPort;
     
+    @JsonExposed(comment = "This is the port on which logs are served")
+    public int logPort;
+    
     @JsonExposed(comment = "The slave system's resources")
     public SysInfo sysInfo;
+    
+    @JsonExposed(comment = "This is the last heartbeat time")
+    public long lastHeartbeat;
     
     @JsonExposed(comment = "The processes running on this slave")
     public HashMap<String, Process> processes;
@@ -31,11 +38,12 @@ public class SlaveProxy {
         return processes;
     }
 
-    SlaveProxy(Master master, String host, int agentPort, SysInfo sysInfo) {
+    NodeProxy(Master master, String host, int agentPort, int logPort, SysInfo sysInfo) {
         this.host = host;
         this.agentPort = agentPort;
         this.master = master;
         this.processes = new HashMap<>();
+        this.logPort = logPort;
         this.sysInfo = sysInfo;
     }
 
@@ -83,7 +91,7 @@ public class SlaveProxy {
     }
 
     void rcvHeartBeat(StatusPDU pdu) {
-        
+        this.lastHeartbeat = (new Date()).getTime();
     }
     
     @RESTExposedMethod(comment = "Kills a process on this slave whose PID is sent")

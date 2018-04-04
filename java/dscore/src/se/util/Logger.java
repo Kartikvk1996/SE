@@ -16,9 +16,10 @@ public class Logger {
     
     static PrintStream pw = System.out;
     static int loglevel;
-    static String[] levels = {"DEBUG", "LOW", "MEDIUM", "HIGH"};
+    static String[] levels = {"", "DEBUG", "LOW", "MEDIUM", "HIGH"};
     
     public static void setLoglevel(int level) {
+        loglevel = level;
         System.err.println("Loglevel is " + levels[loglevel]);
     }
     

@@ -1,10 +1,12 @@
 package se.dscore;
 
 import java.io.IOException;
+import java.util.Date;
 import jsonparser.JsonExposed;
 import se.ipc.ESocket;
 import se.ipc.pdu.KillPDU;
 import se.ipc.pdu.PDU;
+import se.ipc.pdu.StatusPDU;
 
 public class Process {
     
@@ -20,11 +22,22 @@ public class Process {
     @JsonExposed(comment = "Port on which this slave may be listening")
     public int port;
 
-    Process(String host, int port, String type, String pid) {
+    @JsonExposed(comment = "Last heartbeat interval of the slave")
+    public long lastHeartbeatTime;
+    
+    @JsonExposed(comment = "The error stream of the process")
+    public String errFile;
+    
+    @JsonExposed(comment = "The output stream of the process")
+    public String outFile;
+    
+    Process(String host, int port, String type, String pid, String errFile, String outFile) {
         this.host = host;
         this.port = port;
         this.type = type;
         this.pid = pid;
+        this.errFile = errFile;
+        this.outFile = outFile;
     }
 
     public void kill() throws IOException {
@@ -46,6 +59,14 @@ public class Process {
             return sock.readData();
         }
         return "";
+    }
+
+    public long getLastHBTime() {
+        return lastHeartbeatTime;
+    }
+
+    void rcvHeartbeat(StatusPDU pdu) {
+        lastHeartbeatTime = (new Date()).getTime();
     }
 
 }

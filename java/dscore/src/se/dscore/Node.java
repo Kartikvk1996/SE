@@ -17,15 +17,17 @@ import se.ipc.pdu.StatusPDU;
 
 public class Node implements RequestHandler {
 
+    public String pid = "*****";
     private boolean running = false;
     private Server server;
-    private final int HEARTBEAT_INTERVAL = 2000;
+    public static final int HEARTBEAT_INTERVAL = 2000;
     protected MasterProxy mproxy;
-    protected String ticket;
+    protected String ticket = "*****";
     
     /* just a hack to avoid mutiple assignement statements */
     final void commonInit() throws IOException {
-         server = new Server(this);       
+         server = new Server(this);     
+         StatusPDU.setProcessDetails(ticket, pid);
     }
     
     /* this is just for master port unavailibility issue */
@@ -33,15 +35,14 @@ public class Node implements RequestHandler {
         commonInit();
     }
     
-    public Node(MasterProxy mproxy, String ticket) throws IOException {
+    public Node(MasterProxy mproxy, String ticket, String pid) throws IOException {
         this.mproxy = mproxy;
         this.ticket = ticket;
+        this.pid = pid;
         commonInit();
     }
 
     public void run() throws IOException {
-        /* Create a heartbeat sending thread */
-        new Thread(new Heartbeat(mproxy, this, HEARTBEAT_INTERVAL), "Heartbeat").start();
         running = true;
         server.run();
     }

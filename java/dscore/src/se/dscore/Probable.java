@@ -8,8 +8,8 @@ import se.ipc.pdu.StatusPDU;
 
 public class Probable extends Node {
 
-    public Probable(MasterProxy mproxy, String ticket) throws IOException {
-        super(mproxy, ticket);
+    public Probable(MasterProxy mproxy, String ticket, String pid) throws IOException {
+        super(mproxy, ticket, pid);
     }
 
     protected Probable() throws IOException {

@@ -20,6 +20,19 @@ public class HttpRequest {
         return out;
     }
 
+    /* dirtiest code */
+    private int toHex(char c) {
+
+        c = Character.toLowerCase(c);
+
+        if (c >= 'a' && c <= 'z') {
+            c = (char) (c - 'a' + 10);
+        } else {
+            c = (char) (c - '0');
+        }
+        return c;
+    }
+
     HttpRequest(ESocket socket) throws HttpException, IOException {
 
         headers = new HashMap<>();
@@ -49,7 +62,11 @@ public class HttpRequest {
             for (int i = 0; i < url.length(); i++) {
                 char ch = url.charAt(i);
                 if (ch == '%' && (i + 2) < url.length()) {
-                    ch = (char) (((url.charAt(i + 1) - '0') << 4) | ((url.charAt(i + 2) - '0')));
+
+                    int n1 = toHex(url.charAt(i + 1));
+                    int n2 = toHex(url.charAt(i + 2));
+                    
+                    ch = (char) ((n1 << 4) | (n2));
                     i += 2;
                 }
                 urlDec.append(ch);

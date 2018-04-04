@@ -16,7 +16,8 @@ public class PDU {
     
     @JsonExposed
     public JsonObject data;
-
+    
+    
     private static String PROCESS_ROLE;
 
     public PDU(DictObject jObject) throws InvalidPDUException {

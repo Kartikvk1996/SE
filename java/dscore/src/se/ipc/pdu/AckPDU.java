@@ -41,6 +41,10 @@ public class AckPDU extends PDU {
         jarRevision = curdate + "";
     }
 
+    public static void setHttpPort(int httpPort) {
+        AckPDU.httpPort = httpPort;
+    } 
+    
     public int getHttpPort() {
         return httpPort;
     }

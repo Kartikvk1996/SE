@@ -1,22 +1,34 @@
 package se.ipc.pdu;
 
-import java.lang.reflect.Field;
 import jsonparser.DictObject;
+import jsonparser.JsonExposed;
 
 public class StatusPDU extends PDU {
-    
+
+    @JsonExposed
+    public static String ticket = "";
+
+    @JsonExposed
+    public static String pid = "";
+
     public StatusPDU(DictObject jObject) throws InvalidPDUException {
         super(jObject);
-        for (Field field : getClass().getDeclaredFields()) {
-            try {
-                field.set(this, jObject.get(field.getName()).getValue());
-            } catch (IllegalArgumentException | IllegalAccessException ex) {
-                throw new InvalidPDUException();
-            }
-        }
+    }
+    
+    public String getTicket() {
+        return ticket;
+    }
+    
+    public String getPid() {
+        return pid;
     }
 
     public StatusPDU() {
         super(PDUConsts.METHOD_STATUS);
+    }
+    
+    public static void setProcessDetails(String ticket, String pid) {
+        StatusPDU.ticket = ticket;
+        StatusPDU.pid = pid;
     }
 }

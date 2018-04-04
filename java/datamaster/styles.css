@@ -1,0 +1,25 @@
+* {
+	font-family: Calibri;
+}
+.border-div {
+	border: solid 1px lightgray;
+	padding: 0px;
+	margin: 5px;
+}
+
+.comment {
+	background-color: lightgray;
+	padding: 5px;
+	font-weight: bold;
+}
+
+.url {
+	padding: 10px 5px 10px 5px;
+	font-family: consolas;
+}
+
+.datatype {
+	color: red;
+	padding: 5px;
+	background-color: lavender;
+}

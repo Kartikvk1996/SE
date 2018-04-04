@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <style>
+        h3 {
+            padding: 10px;
+            background: orangered;
+            color: white;
+            width: 100%;
+        }
+
+        span {
+            font-size: 1.1em;
+        }
+
+        * {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+        }
+
+        .container {}
+
+        .host {
+            color: red;
+            font-size: 24;
+        }
+
+        .process {
+            margin: 1px;
+            padding: 10px;
+            border: solid 1px lightgray;
+            background: lightgrey;
+            width: inherit;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .std {
+            border-radius: 2px;
+            padding: 2px 4px;
+            color: white;
+            font-weight: 200;
+        }
+
+        .errf {
+            background: red;
+        }
+
+        .outf {
+            background: green;
+        }
+    </style>
+
+    <title></title>
+    <script type="text/javascript">
+
+        var nodename, processname;
+        var logPort, logHost;
+        function prolog() {
+
+            container = g("container");
+            var params = (new URL(document.location)).searchParams;
+            nodename = params.get("node");
+            processname = params.get("process");
+            logPort = params.get("logport");
+            logHost = params.get("loghost");
+            setAPIEndPoint("/status/slaves/" + nodename + "/processes/" + processname);
+        }
+
+
+        var endpoint = "http://192.168.24.25:55782/exec/slaves/Node-0/kill";
+        function kill() {
+            var jdata;
+            var obj = encodeURI('{"pid":"PID-2"}');
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200)
+                    alert(this.responseText);
+            }
+            xhttp.open("GET", endpoint + '?' + obj, false);
+            xhttp.send();
+            return jdata;
+        }
+        function g(id) { return document.getElementById(id); }
+
+        function display(processname) {
+            
+            var logloc = `http://${logHost}:${logPort}`;
+            container.innerHTML = "";
+
+            container.innerHTML +=
+                `
+                    <a href='process.html' style='text-decoration: none; color: black;'>
+                        <div class='process'>
+                            <span>PID: </span><span>${processname.pid}</span>&nbsp;&nbsp;
+                            <span>Type: </span><span>${processname.type}</span>&nbsp;&nbsp;
+                            <span>Port: </span><span>${processname.port}</span>&nbsp;&nbsp;
+                            <span>Last heartbeat: </span><span>${dtos(processname.lastHeartbeatTime)}</span>&nbsp;&nbsp;
+                            <a href='${logloc}/${processname.errFile}' target='_blank'><span class='std errf'>stderr</span></a>&nbsp;&nbsp;
+                            <a href='${logloc}/${processname.outFile}' target='_blank'><span class='std outf'>stdout</span></a>&nbsp;&nbsp;
+                        </div>
+                    </a>
+                    `;
+        }
+
+
+
+
+    </script>
+    <script src="query.js"></script>
+</head>
+
+
+
+<body>
+    <div id="container">
+
+    </div>
+
+    <button onclick="kill()">kill</button>
+
+</body>
+
+</html>

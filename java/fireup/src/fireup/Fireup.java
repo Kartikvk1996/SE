@@ -2,14 +2,10 @@ package fireup;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -17,247 +13,227 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.Random;
 import jsonparser.DictObject;
 import jsonparser.JsonException;
-import se.ipc.EServerSocket;
+import se.dscore.MasterProxy;
+import se.dscore.RequestHandler;
+import se.dscore.Server;
 import se.ipc.ESocket;
-import se.ipc.pdu.AckPDU;
-import se.ipc.pdu.ConnectPDU;
-import se.ipc.pdu.CreatePDU;
-import se.ipc.pdu.ErrorPDU;
-import se.ipc.pdu.InvalidPDUException;
-import se.ipc.pdu.KillPDU;
-import se.ipc.pdu.PDU;
-import se.ipc.pdu.PDUConsts;
+import se.ipc.pdu.*;
 import se.util.Logger;
+import se.util.http.HttpServer;
 
-/**
- *
- * @author Madhusoodan Pataki
- */
-public class Fireup implements Runnable {
+public class Fireup implements RequestHandler {
 
-    private static int fireupPort = 5678;
-    private int lastPid = 1;
+    private int lastPID = 1;
     HashMap<String, WrappedProcess> processes;
-    private final InetAddress hostAddress;
-    private final EServerSocket servSock;
+    Server fireupServer;
+    HttpServer httpServer;
     private MainPage mainPage;
-    private final String secret;
-    Properties props;
+    Properties properties;
     String ticket;
+    MasterProxy mproxy;
 
-    String masterAddr;
-    int masterPort, masterHTTPPort;
+    private static final String PROPS_FILE = "fireupconfig.props";
+    private static final String PROP_SEHOME = "SEHOME";
+    private static final String PROP_LOGSFOLDER = "LOGS_DIR";
 
-    //This is where all the binaries must be located
-    private static String SEHOME;
-    private static final String PROPSFILE = "./fireupconfig.props";
-    private static final String VSEHOME = "SEHOME";
+    public Fireup(String args[]) throws IOException {
 
-    private long serverJarVersion = 0;
-
-    Fireup() throws UnknownHostException, IOException {
-
-        //Initialise properties 
         try {
-            props = new Properties();
-            props.load(new FileInputStream(PROPSFILE));
-            SEHOME = props.getProperty(VSEHOME);
-            if (SEHOME == null) {
-                createPropsFile();
+            properties = new Properties();
+            this.properties.load(new FileInputStream(PROPS_FILE));
+            if (properties.getProperty(PROP_SEHOME) == null
+                    || properties.getProperty(PROP_LOGSFOLDER) == null) {
+                createPropertiesFile();
             }
         } catch (IOException ex) {
-            createPropsFile();
+            createPropertiesFile();
         }
 
         processes = new HashMap<>();
-        hostAddress = InetAddress.getLocalHost();
+        fireupServer = new Server(this);
+        httpServer = new HttpServer(properties.getProperty(PROP_LOGSFOLDER));
 
-        servSock = new EServerSocket(0);
-        fireupPort = servSock.getPort();
-
-        Random r = new Random();
-        secret = Math.abs((((long) r.nextInt()) << 32) | r.nextInt()) + "";
-
+        /* Setup PDU constants */
         PDU.setProcessRole(PDUConsts.PN_FIREUP);
-        se.util.Logger.setLoglevel(se.util.Logger.DEBUG);
+
+        /* Setlog level */
+        Logger.setLoglevel(Logger.DEBUG);
+
+        if (args.length > 1) {
+            connectToMaster(args[0], Integer.parseInt(args[1]));
+        }
 
     }
 
-    public void setOberserver(MainPage mainPage) {
+    void setObserver(MainPage mainPage) {
         this.mainPage = mainPage;
     }
 
-    public boolean createProcess(String command[]) {
-        WrappedProcess proc = WrappedProcess.createProcess(command);
-        if (proc != null) {
-            String newpid = createPid(lastPid);
-            processes.put(newpid, proc);
-            mainPage.processAdded(newpid);
+    void run() {
+
+        /* Start the Fireup server */
+        new Thread(() -> {
+            try {
+                fireupServer.run();
+            } catch (IOException ex) {
+                Logger.elog(Logger.HIGH, "Error starting the fireup server. " + ex.getMessage());
+            }
+        }).start();
+
+        /* Start the Http Log Server */
+        new Thread(() -> {
+            try {
+                httpServer.run();
+            } catch (IOException ex) {
+                Logger.elog(Logger.HIGH, "Error starting the log server. " + ex.getMessage());
+            }
+        }).start();
+    }
+
+    private PDU createProcess(CreatePDU cpdu) {
+
+        PDU resp;
+        String newPID = generatePID();
+        String executableName = cpdu.getExecutable();
+        
+        /* Check whether you have latest version of JARs */
+        File ef = new File(executableName);
+        if (!ef.exists() || ef.lastModified() < mproxy.getJarVersion()) {
+            downloadExecutable(executableName);
+            mainPage.setStatus("Downloading " + executableName);
         }
-        return (proc != null);
+
+        WrappedProcess proc = WrappedProcess.createProcess(ticket, newPID, executableName, cpdu.getArguments());
+
+        if (proc != null) {
+            processes.put(newPID, proc);
+            mainPage.processAdded(newPID);
+
+            resp = new AckPDU(ticket);
+            DictObject dict = new DictObject();
+            dict.set(PDUConsts.PID, newPID);
+            resp.setData(dict);
+        } else {
+            resp = new ErrorPDU("process creation failed");
+        }
+        return resp;
     }
 
     @Override
-    public void run() {
-        while (true) {
-            try {
-                ESocket conn = servSock.accept();
-                PDU pdu = conn.recvPDU(), resp;
-                CreatePDU cpdu;
-
-                if (false && this.secret.equals(pdu.getSecret())) {
-
-                } else {
-                    switch (pdu.getMethod()) {
-                        case PDUConsts.METHOD_CREATE:
-                            cpdu = (CreatePDU)pdu;
-                            if(createProcess(getCommandLine(cpdu, createPid(lastPid)))) {
-                                resp = new AckPDU(ticket);
-                                DictObject dict = new DictObject();
-                                dict.set(PDUConsts.PID, lastPid);
-                                resp.setData(dict);
-                                lastPid++;
-                                Logger.ilog(Logger.MEDIUM, "Process creation " + cpdu.getExecutable() + Arrays.toString(cpdu.getArguments()) + " was successful");
-                            } else {
-                                resp = new ErrorPDU("process creation failed");;
-                                Logger.ilog(Logger.MEDIUM, "Process creation " + cpdu.getExecutable() + Arrays.toString(cpdu.getArguments()) + " failed");
-                            }
-                            conn.send(resp);
-                            break;
-                        case PDUConsts.METHOD_KILL:
-                            String pid = ((KillPDU)pdu).getPid();
-                            Logger.ilog(Logger.HIGH, "Killing the process " + pid);
-                            processes.get(pid).kill();
-                            break;
-                        default:
-                    }
-                }
-            } catch (IOException | JsonException | InvalidPDUException ex) {
-                Logger.elog(Logger.MEDIUM, "Error whilecommunicating to master " + ex.getMessage());
+    public void handle(ESocket sock) throws IOException {
+        PDU pdu;
+        PDU resp = null;
+        try {
+            pdu = sock.recvPDU();
+            switch (pdu.getMethod()) {
+                case PDUConsts.METHOD_CREATE:
+                    resp = createProcess((CreatePDU) pdu);
+                    break;
+                case PDUConsts.METHOD_KILL:
+                    resp = killProcess((KillPDU) pdu);
             }
+            sock.send(resp);
+        } catch (JsonException | InvalidPDUException ex) {
+            Logger.elog(Logger.HIGH, "Error while accepting a PDU. " + ex.getMessage());
         }
     }
 
-    public String getInetAddress() {
-        return hostAddress.getHostAddress();
+    public HashMap getProcesses() {
+        return processes;
     }
 
-    public int getrunningPort() {
-        return fireupPort;
+    public String getHost() {
+        return fireupServer.getHost();
+    }
+
+    public int getHttpPort() {
+        return httpServer.getPort();
+    }
+    
+    public int getFireupPort() {
+        return fireupServer.getPort();
+    }
+
+    @Override
+    public void handle_get(ESocket sock, GetPDU gpdu) throws IOException {
+    }
+
+    @Override
+    public void handle_intro(ESocket sock, IntroPDU ipdu) throws IOException {
+    }
+
+    @Override
+    public void handle_connect(ESocket sock, ConnectPDU cpdu) throws IOException {
+    }
+
+    @Override
+    public void handle_ack(ESocket sock, AckPDU apdu) throws IOException {
+    }
+
+    private void createPropertiesFile() {
+        try {
+            properties.put(PROP_SEHOME, ".");
+            properties.put(PROP_LOGSFOLDER, ".");
+            properties.store(new PrintWriter(PROPS_FILE), "");
+        } catch (IOException ex) {
+            Logger.elog(Logger.MEDIUM, "Error saving properties file");
+        }
     }
 
     void connectToMaster(String host, int port) {
         try {
-            ESocket sock = new ESocket(host, port);
-            sock.send(new ConnectPDU("", fireupPort, "PID-fireup"));
-
-            AckPDU ack = (AckPDU) sock.recvPDU();
-            masterAddr = host;
-            masterPort = port;
-            ticket = ack.getTicket();
-            serverJarVersion = Long.parseLong(ack.getJarVersion());
-            masterHTTPPort = ack.getHttpPort();
+            mproxy = new MasterProxy(host, port);
+            ConnectPDU cpdu = new ConnectPDU(
+                    "", "***",
+                    getFireupPort()
+            );
+            cpdu.setLogPort(httpServer.getPort());
+            
+            AckPDU pdu = (AckPDU) mproxy.send(cpdu, true);
+            mproxy.setJarVersion(Long.parseLong(pdu.getJarVersion()));
+            mproxy.setHttpPort(pdu.getHttpPort());
+            ticket = pdu.getTicket();
         } catch (IOException | JsonException | InvalidPDUException ex) {
             Logger.elog(Logger.HIGH, "Error connecting to master " + ex.getMessage());
         }
     }
 
-    private void createPropsFile() {
-        PrintWriter pw = null;
+    private String generatePID() {
+        return "PID-" + (lastPID++);
+    }
+
+    private PDU killProcess(KillPDU pdu) throws InvalidPDUException {
+        String pid = pdu.getPid();
+        Logger.ilog(Logger.HIGH, "Killing the process " + pid);
+        processes.get(pid).kill();
+        DictObject dobj = new DictObject();
+        dobj.set("status", "success");
+        return new AckPDU(dobj);
+    }
+
+    private void downloadExecutable(String fileName) {
         try {
-            pw = new PrintWriter(PROPSFILE);
-            pw.append(VSEHOME + "=.");
-            pw.flush();
-        } catch (FileNotFoundException ex) {
-            Logger.elog(Logger.HIGH, "Couldn't create properties file");
-        } finally {
-            pw.close();
+            Logger.ilog(Logger.MEDIUM, "Downloading " + fileName);
+            URL website = new URL(
+                    "http",
+                    mproxy.getHost(),
+                    mproxy.getHttpPort(),
+                    "/" + fileName
+            );
+            InputStream in = website.openStream();
+            Files.copy(
+                    in,
+                    Paths.get(
+                            properties.getProperty(PROP_SEHOME),
+                            fileName
+                    ),
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+        } catch (IOException ex) {
+            Logger.elog(Logger.HIGH, "Couldn't download " + fileName + " " + ex.getMessage());
         }
-    }
-
-    /**
-     *  We will send a PID generated here to process. The process must report this
-     * PID to master while connecting to it.
-     */
-    private String[] getCommandLine(CreatePDU pdu, String pid) {
-        String args[] = pdu.getArguments();
-        String cmd = pdu.getExecutable();
-        String cmdchunks[];
-
-        if (cmd.contains(".jar")) {
-            File execFile = new File(cmd);
-            if (!execFile.exists() || execFile.lastModified() < serverJarVersion) {
-                requestExecutable(cmd);
-                mainPage.setStatus("Downloading " + cmd);
-            }
-
-            /* check whether the JAVA_HOME is defined */
-            String jhome = System.getenv("JAVA_HOME");
-
-            if(jhome == null) {
-                Logger.elog(Logger.HIGH, "JAVA_HOME environment variable not set");
-            }
-            
-            cmdchunks = new String[5 + args.length];
-            cmdchunks[0] = "\"" + Paths.get(jhome, "bin",  "java.exe").toString() + "\"";
-            cmdchunks[1] = "-jar";
-            cmdchunks[2] = cmd;
-            cmdchunks[3] = ticket;
-            cmdchunks[4] = String.valueOf(pid);
-            System.arraycopy(args, 0, cmdchunks, 5, args.length);
-            return cmdchunks;
-        } else {
-            cmd = SEHOME + cmd;
-            cmdchunks = new String[1 + args.length];
-        }
-
-        cmdchunks[0] = cmd;
-        for (int i = 0; i < args.length; i++) {
-            cmdchunks[i + 1] = args[i];
-        }
-        return cmdchunks;
-    }
-
-    private void downloadExecutables() {
-        /* check the jar version (modified date) */
-        File folder = new File(SEHOME);
-
-        if (!folder.exists()) {
-            folder.mkdir();
-            return;
-        }
-
-        File[] jars = folder.listFiles();
-
-        for (File jar : jars) {
-            if (!jar.getName().contains(".jar")) {
-                continue;
-            }
-            if (serverJarVersion > jar.lastModified()) {
-                requestExecutable(jar.getName());
-            }
-        }
-    }
-
-    private void requestExecutable(String cmd) {
-        try {
-            Logger.ilog(Logger.MEDIUM, "Downloading " + cmd);
-            URL website = new URL("http", masterAddr, masterHTTPPort, "/" + cmd);
-            try (InputStream in = website.openStream()) {
-                Files.copy(in, Paths.get(SEHOME, cmd), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException ex) {
-                Logger.elog(Logger.HIGH, "Couldn't download " + cmd + " " + ex.getMessage());
-            }
-        } catch (MalformedURLException ex) {
-
-        }
-    }
-
-    private String createPid(int lastPid) {
-        return "PID-" + lastPid;
     }
 
 }

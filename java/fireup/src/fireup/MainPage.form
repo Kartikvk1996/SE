@@ -134,9 +134,9 @@
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="ExecutablePath" alignment="1" min="-2" max="-2" attributes="0"/>
-                              <Component id="Browse" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="Browse" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>

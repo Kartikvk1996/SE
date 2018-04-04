@@ -115,7 +115,7 @@ public class Apidoccer {
         try {
             //xout = System.out;
             xout = new PrintStream("apilist.js");
-            new Apidoccer();
+            Apidoccer api = new Apidoccer();
             sop("\n");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Apidoccer.class.getName()).log(Level.SEVERE, null, ex);

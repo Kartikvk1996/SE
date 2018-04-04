@@ -6,7 +6,7 @@ public class HttpServerTest {
 
     public static void main(String[] args) throws IOException {
         
-        HttpServer server = new HttpServer("/home/mmp/", null);
+        HttpServer server = new HttpServer("/home/mmp/");
         
         System.out.println("http://localhost:" + server.getPort() + "/t.c");
         

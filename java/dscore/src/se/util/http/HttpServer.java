@@ -6,13 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
-import jsonparser.Json;
-import jsonparser.JsonException;
-import jsonparser.JsonExposed;
-import se.dscore.Master;
 import se.dscore.RequestHandler;
 import se.dscore.Server;
-import se.dscore.MasterView;
 import se.ipc.ESocket;
 import se.ipc.pdu.AckPDU;
 import se.ipc.pdu.ConnectPDU;
@@ -22,15 +17,11 @@ import se.util.Logger;
 
 public class HttpServer implements RequestHandler {
 
-    MasterView mview;
     String docRoot = ".";
     Server httpserver;
-    Master master;
     HashMap<String, FileInputStream> openFiles;
 
-    public HttpServer(String docRoot, Master master) throws IOException {
-        this.master = master;
-        mview = master.getDomainStatus();
+    public HttpServer(String docRoot) throws IOException {
         this.docRoot = docRoot;
         httpserver = new Server(this);
         openFiles = new HashMap<>();
@@ -53,24 +44,8 @@ public class HttpServer implements RequestHandler {
         httpserver.run();
     }
 
-    private void serve(HttpRequest req) throws IOException {
-
-        String url = req.getUrl();
-        String service = url;
-        if (url.contains("/")) {
-            service = url.substring(0, url.indexOf('/'));
-        }
-
-        switch (service) {
-            case "status":
-                sendStatus(url, req.getOutputStream());
-                break;
-            case "exec":
-                executeProcedure(url, req.getData(), req.getOutputStream());
-                break;
-            default:
-                sendFile(url, req.getOutputStream());
-        }
+    protected void serve(HttpRequest req) throws IOException {
+        sendFile(req.getUrl(), req.getOutputStream());
     }
 
     @Override
@@ -101,13 +76,6 @@ public class HttpServer implements RequestHandler {
     public void handle_ack(ESocket sock, AckPDU apdu) throws IOException {
     }
 
-    private void sendStatus(String url, OutputStream out) throws IOException {
-        String dump = mview.getObjectAsJson(url);
-        out.write("HTTP/1.0 200 OK\n".getBytes());
-        out.write(("Content-Length: " + dump.length() + "\n\n").getBytes());
-        out.write(dump.getBytes());
-    }
-
     private void sendFile(String url, OutputStream out) throws IOException {
         FileInputStream fis;
         File file = new File(docRoot + "/" + url);
@@ -129,19 +97,6 @@ public class HttpServer implements RequestHandler {
                 break;
             }
         }
-    }
-
-    private void executeProcedure(String url, String data, OutputStream out) throws IOException {
-        String dump;
-        try {
-            dump = mview.execute(url, Json.parse(data));
-        } catch (JsonException ex) {
-            dump = "{\"error\": \"Couldn't parse the data sent as JSON\"}";
-            Logger.elog(Logger.MEDIUM, "Couldn't parse the data sent as JSON");
-        }
-        out.write("HTTP/1.0 200 OK\n".getBytes());
-        out.write(("Content-Length: " + dump.length() + "\n\n").getBytes());
-        out.write(dump.getBytes());
     }
 
 }

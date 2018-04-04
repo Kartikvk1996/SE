@@ -7,11 +7,15 @@ package se.dscore;
 import java.io.IOException;
 import jsonparser.JsonException;
 import se.ipc.ESocket;
+import se.ipc.pdu.InvalidPDUException;
 import se.ipc.pdu.PDU;
 
 public class MasterProxy {
     private final String host;
     private final int port;
+    
+    private int httpPort;
+    private long jarVersion;
 
     public MasterProxy(String host, int port) {
         this.host = host;
@@ -26,7 +30,27 @@ public class MasterProxy {
         return port;
     }
     
-    public void send(PDU pdu) throws IOException, JsonException {
-        new ESocket(host, port).send(pdu);
+    public PDU send(PDU pdu, boolean rcvBack) throws IOException, JsonException, InvalidPDUException {
+        ESocket sock = new ESocket(host, port);
+        sock.send(pdu);
+        if(rcvBack)
+            return sock.recvPDU();
+        return null;
+    }
+    
+    public void setHttpPort(int port) {
+        this.httpPort = port;
+    }
+    
+    public void setJarVersion(long jarVersion) {
+        this.jarVersion = jarVersion;
+    }
+    
+    public long getJarVersion() {
+        return jarVersion;
+    }
+    
+    public int getHttpPort() {
+        return httpPort;
     }
 }

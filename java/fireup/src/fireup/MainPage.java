@@ -3,9 +3,6 @@ package fireup;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.JFileChooser;
@@ -24,7 +21,11 @@ public class MainPage extends javax.swing.JFrame {
         listModel = new Vector<>();
         procList.setListData(listModel);
         setTitle("Fire up");
-        hostInfo.setText("Host Info : { IP : " + fireupModel.getInetAddress() + ", port : " + fireupModel.getrunningPort() + "}");
+        hostInfo.setText(
+                " IP : " + fireupModel.getHost() + 
+                " fireup-port : " + fireupModel.getFireupPort() + 
+                " http-port : " + fireupModel.getHttpPort()
+        );
     }
 
     
@@ -32,7 +33,7 @@ public class MainPage extends javax.swing.JFrame {
     public void processAdded(String pid) {
         WrappedProcess wp = fireupModel.processes.get(pid);
         pidmapper.put(listModel.size(), pid);
-        String str = wp.procName + "       <" + wp.startTime + ">";
+        String str = wp.procName + " <" + wp.startTime + ">";
         listModel.add(str);
         procList.updateUI();
     }
@@ -240,8 +241,8 @@ public class MainPage extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ExecutablePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ExecutablePath, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Browse))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5)
@@ -340,15 +341,17 @@ public class MainPage extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
+        
         try {
-            fireupModel = new Fireup();
+            fireupModel = new Fireup(args);
         } catch (IOException ex) {
             System.err.println(ex);
         }
+        
         MainPage mainPage = new MainPage();
-        fireupModel.setOberserver(mainPage);
-        new Thread(fireupModel).start();
-
+        fireupModel.setObserver(mainPage);
+        fireupModel.run();
+        
         java.awt.EventQueue.invokeLater(() -> {
             mainPage.setVisible(true);
         });

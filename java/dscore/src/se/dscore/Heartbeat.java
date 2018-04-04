@@ -8,7 +8,9 @@ package se.dscore;
 
 
 import java.io.IOException;
+import java.util.logging.Level;
 import jsonparser.JsonException;
+import se.ipc.pdu.InvalidPDUException;
 import se.util.Logger;
 
 public class Heartbeat implements Runnable {
@@ -25,11 +27,11 @@ public class Heartbeat implements Runnable {
     @Override
     public void run() {
         while(true) {
-//            try {
-//                mproxy.send(node.getStatus());
-//            } catch (IOException | JsonException ex) {
-//                Logger.elog(Logger.HIGH, "Unable to send heartbeat");
-//            }
+            try {
+                mproxy.send(node.getStatus(), false);
+            } catch (IOException | JsonException | InvalidPDUException ex) {
+                Logger.elog(Logger.HIGH, "Unable to send heartbeat");
+            }
             try { Thread.sleep(millis); } catch (InterruptedException ex) { }
         }
     }

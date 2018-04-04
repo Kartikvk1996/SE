@@ -16,4 +16,5 @@ public class PDUConsts {
     public final static int METHOD_ACK = 7;
     public final static int METHOD_ERROR = 8;
     public final static int METHOD_KILL = 9;
+    public final static int METHOD_COMMAND = 10;
 }
