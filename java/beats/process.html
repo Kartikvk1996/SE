@@ -1,0 +1,207 @@
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+
+    <style>
+    * {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+    }
+
+    body {
+        margin: 0% 25%;
+        border-left: solid 1px #fafafa;
+        border-right: solid 1px #fafaf0;
+        height: 100%;
+    }
+
+  
+
+    td {
+        padding: 5px;
+    }
+
+    .lab { color: gray; }
+
+    
+      
+       
+
+
+    a {
+        text-decoration: none;
+    }
+
+   
+
+    .kill{
+        background: black;
+    }
+    
+    .stderr{}
+    .std {
+        border-radius: 2px;
+        padding: 2px 4px;
+        color: white;
+        font-weight: 200;
+    }
+
+    .errf {
+        background: red;
+    }
+
+    .outf {
+        background: green;
+    }
+</style>
+
+<script type="text/javascript">
+
+    var nodename, processname;
+    var logPort, logHost;
+    var pid,port,type,host,lastHeartbeatTime,stderr,stdout,kill;
+
+    var elements = [
+           
+            ['type', 'Type'],
+            ['port', 'Port'],
+            ['host', 'Host'],
+            ['lastHeartbeatTime', 'Heartbeat'],
+            
+        ];
+   
+    function prolog() {
+
+       
+        processarea=g("process");
+        actionsarea=g("actions");
+        
+
+        var params = (new URL(document.location)).searchParams;
+        nodename = params.get("node");
+        processname = params.get("process");
+        logPort = params.get("logport");
+        logHost = params.get("loghost");
+        setAPIEndPoint("/status/slaves/" + nodename + "/processes/" + processname);
+
+        for(var i=0;i<elements.length;i++)
+        {   
+            processarea.innerHTML +=
+            `
+                <tr>
+                    <td align='right' class="lab"><span>${elements[i][1]}</span></td>
+                    <td><span id='${elements[i][0]}'>&lt;fetching data&gt;</span>
+                </tr>
+            `;
+        }
+        
+        stderr=g("stderr");
+        stdout=g("stdout");
+        kill=g("kill");
+
+
+        port=g("port");
+        pid=g("pid");
+        type=g("type");
+        host=g("host");
+        lastHeartbeatTime=g("lastHeartbeatTime");
+
+        
+
+    }
+
+   
+    var endpoint = "exec/slaves/Node-0/kill";
+    function kill() {
+        var jdata;
+        var obj = encodeURI('{"pid":"PID-2"}');
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200)
+                alert(this.responseText);
+        }
+        xhttp.open("GET", endpoint + '?' + obj, false);
+        xhttp.send();
+        return jdata;
+    }
+    function g(id) { return document.getElementById(id); }
+
+    function set(x,v) { x.innerHTML = v; }
+
+    
+    function display(processname) {
+
+        var logloc = `http://${logHost}:${logPort}`;
+        
+
+      
+
+        set(pid,processname.pid);
+        set(type,processname.type);
+        set(port,processname.port);
+        set(host,processname.host);
+        set(lastHeartbeatTime,tdiff(processname.lastHeartbeatTime));
+
+        
+        stderr.href=`http://${logHost}:${logPort}/${processname.errFile}`;
+        stdout.href=`http://${logHost}:${logPort}/${processname.outFile}`;
+
+        kill.href=`/exec/slaves/${nodename}/kill?{{"pid":"${processname.pid}"}}`;
+
+
+
+
+    }
+
+
+
+
+</script>
+<script src="query.js"></script>
+<link rel="stylesheet" href="commonstyle.css" />
+
+</head>
+
+<body>
+
+    <div class="appwindow">
+
+        <div class="header">
+            <a href='index.html'>
+                <span class='beats-label'>Beats</span>
+            </a>
+            <div style="float: right">
+                <a class="navbarlink" href='help.html'>Help</a>
+            </div>
+            <div style="float: right">
+                <a class="navbarlink" href='api.html'>API</a>
+            </div>
+        </div>
+
+         <table style="width: 100%">
+            <tr>
+                <td width="70%">
+                    <center>
+                        <h3 id="pid"></h3>
+                    <table id='process'>
+                    </table>
+                    </center>
+                </td>    
+                <td width="30%">
+                    <center>
+                    <a class="stderr std" id="stderr" target="_blank"> stderr </a></br></br>   
+                    <a class="stdout std" id="stdout" target="_blank"> stdout </a></br></br> 
+                    <a class="kill std" id="kill"> Kill </a></br> 
+                </center>
+                </td>
+            </tr>
+            <tr>
+            </tr>       
+                        
+         </table>
+                   
+                </body>
+
+        </html>
+
+
