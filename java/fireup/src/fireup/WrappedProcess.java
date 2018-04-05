@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import se.dscore.MasterProxy;
 import se.util.Logger;
 
 /**
@@ -21,13 +22,14 @@ public class WrappedProcess {
 
     public static WrappedProcess createProcess(
             String ticket, String newPID,
-            String executableName, String[] arguments) {
+            String executableName, MasterProxy mproxy,
+            String[] arguments) {
 
         String command[] = null;
         WrappedProcess wp = new WrappedProcess();
         ArrayList<String> cmdchunks = new ArrayList<>();
-        File err = new File("./" + ((new Date()).toString() + "err.txt").replaceAll(" ", "_").replaceAll(":", "_"));
-        File out = new File("./" + ((new Date()).toString() + "out.txt").replaceAll(" ", "_").replaceAll(":", "_"));
+        File err = new File("./" + newPID + ((new Date()).getTime() + "err.txt"));
+        File out = new File("./" + newPID + ((new Date()).getTime() + "out.txt"));
 
         if (executableName.contains(".jar")) {
 
@@ -45,9 +47,11 @@ public class WrappedProcess {
             cmdchunks.add(newPID);
             cmdchunks.add(err.getName());
             cmdchunks.add(out.getName());
+            cmdchunks.add(mproxy.getHost());
+            cmdchunks.add(mproxy.getPort() + "");
             cmdchunks.addAll(Arrays.asList(arguments));
 
-            command = new String[7 + arguments.length];
+            command = new String[9 + arguments.length];
 
         } else {
             cmdchunks.add(executableName);

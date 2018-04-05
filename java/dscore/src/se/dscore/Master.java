@@ -180,6 +180,7 @@ public class Master extends Probable {
 
     /**
      * Provides a global level status object which can be queried
+     *
      * @return The status of this domain
      */
     public MasterView getDomainStatus() {
@@ -218,20 +219,24 @@ public class Master extends Probable {
     private void runSlaveMonitorThread() {
         while (true) {
             removeDeadSlaves();
-            try { Thread.sleep(HEARTBEAT_INTERVAL); } 
-            catch (InterruptedException ex) { }
+            try {
+                Thread.sleep(HEARTBEAT_INTERVAL);
+            } catch (InterruptedException ex) {
+            }
         }
     }
 
     private void removeDeadSlaves() {
-        for (String node : nodes.keySet()) {
-            NodeProxy np = nodes.get(node);
-            for (String pid : np.processes.keySet()) {
-                Process proc = np.processes.get(pid);
-                long timeNow = (new Date()).getTime();
-                if (proc.getLastHBTime() + SLAVE_HB_WAIT_INTERVAL < timeNow) {
-                    np.processes.remove(pid);
-                    Logger.ilog(Logger.MEDIUM, "Killed the process [" + pid + "] on node [" + node + "]");
+        synchronized (nodes) {
+            for (String node : nodes.keySet()) {
+                NodeProxy np = nodes.get(node);
+                for (String pid : np.processes.keySet()) {
+                    Process proc = np.processes.get(pid);
+                    long timeNow = (new Date()).getTime();
+                    if (proc.getLastHBTime() + SLAVE_HB_WAIT_INTERVAL < timeNow) {
+                        np.processes.remove(pid);
+                        Logger.ilog(Logger.MEDIUM, "Killed the process [" + pid + "] on node [" + node + "]");
+                    }
                 }
             }
         }

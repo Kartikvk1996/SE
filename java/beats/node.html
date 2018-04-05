@@ -23,7 +23,9 @@
             padding: 5px;
         }
 
-        .lab { color: gray; }
+        .lab {
+            color: gray;
+        }
 
         #host {
             padding: 10px;
@@ -31,8 +33,7 @@
 
         #container {
             padding: 20px;
-            width: auto;
-            float: left;
+            display: block;
         }
 
         .process {
@@ -116,7 +117,10 @@
 
             var params = (new URL(document.location)).searchParams;
             nodename = params.get("node");
-            setAPIEndPoint("/status/slaves/" + nodename);
+            setAPIEndPoint("/status/nodes/" + nodename);
+
+            g('disassociate').href = `/exec/shutDownNode?{'node':'${nodename}'}`;
+
         }
 
         function set(x, v) { x.innerHTML = v; }
@@ -130,7 +134,7 @@
             set(availmem, btom(json.sysInfo.availableMemory));
             set(freemem, btom(json.sysInfo.freeMemory));
             set(starttime, dtos(json.sysInfo.startTime));
-            set(heartbeat, dtos(json.lastHeartbeat));
+            set(heartbeat, tdiff(json.lastHeartbeat));
             set(ostype, json.sysInfo.osType);
             set(javaversion, json.sysInfo.javaVersion);
 
@@ -182,10 +186,50 @@
         </div>
 
         <center>
-            <h3 id='host'></h3>
-            <table id='staticdata'></table>
-            <h4>Processes</h4>
-            <div id='container'></div>
+            <style>
+                .actions {
+                    float: right;
+                }
+
+                .disasoc {
+                    background-color: black;
+                }
+
+                /*
+                tr, td, table {
+                    border: 1px solid black;
+                }
+                */
+            </style>
+
+            <table style="width: 100%;">
+                <tr>
+                    <td width="70%">
+                        <center>
+                            <h3 id='host'></h3>
+                            <table id='staticdata'></table>
+                        </center>
+                    </td>
+                    <td><div style="border-right: solid 1px black; height: 150px;"></div></td>
+                    <td>
+                        <center>
+                            <a class="std disasoc" id='disassociate'>Kill</a>
+                            <br/>
+                            <br/>
+                            <a class="std disasoc">Foo Bar</a>
+                        </center>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <center>
+                            <h4>Processes</h4>
+                            <div id='container'></div>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+
         </center>
     </div>
 </body>

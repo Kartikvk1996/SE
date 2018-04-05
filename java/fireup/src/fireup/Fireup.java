@@ -9,8 +9,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 import jsonparser.DictObject;
@@ -105,7 +103,7 @@ public class Fireup implements RequestHandler {
             mainPage.setStatus("Downloading " + executableName);
         }
 
-        WrappedProcess proc = WrappedProcess.createProcess(ticket, newPID, executableName, cpdu.getArguments());
+        WrappedProcess proc = WrappedProcess.createProcess(ticket, newPID, executableName, mproxy, cpdu.getArguments());
 
         if (proc != null) {
             processes.put(newPID, proc);

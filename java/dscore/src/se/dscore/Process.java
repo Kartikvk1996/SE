@@ -39,10 +39,6 @@ public class Process {
         this.errFile = errFile;
         this.outFile = outFile;
     }
-
-    public void kill() throws IOException {
-        sendPDU(new KillPDU(pid), false);
-    }
     
     String getHost() {
         return host;

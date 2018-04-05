@@ -22,16 +22,26 @@ public class SysInfo extends JsonAssignable {
     @JsonExposed(comment = "The startup time of the slave")
     public long startTime;
     
+    @JsonExposed(comment = "Operating system of the Node")
+    public String osType;
+    
+    @JsonExposed(comment = "Java version installed on the node")
+    public String javaVersion;
+    
     private static int s_cores;
     private static long s_availableMemory;
     private static long s_freeMemory;
     private static long s_startTime;
+    private static String s_osType;
+    private static String s_javaVersion;
     
     static {
         s_cores = Runtime.getRuntime().availableProcessors();
         s_freeMemory = Runtime.getRuntime().freeMemory();
         s_availableMemory = Runtime.getRuntime().totalMemory();
         s_startTime = new Date().getTime();
+        s_osType = System.getProperty("os.name");
+        s_javaVersion = System.getProperty("java.version");
     }
     
     public SysInfo(boolean neverUsed) {
@@ -39,6 +49,8 @@ public class SysInfo extends JsonAssignable {
         this.availableMemory = s_availableMemory;
         this.freeMemory = s_freeMemory;
         this.startTime = s_startTime;
+        this.javaVersion = s_javaVersion;
+        this.osType = s_osType;
     }
     
     public SysInfo() {
@@ -49,6 +61,8 @@ public class SysInfo extends JsonAssignable {
     public long getAvailableMem() { return availableMemory; }
     public long getfreeMemory() { return freeMemory; }
     public long getStartTime() { return startTime; }
+    public String getOsType() { return osType; }
+    public String getJavaVersion() { return javaVersion; }
     
     @Override
     public Object initialize(JsonObject jObject) {

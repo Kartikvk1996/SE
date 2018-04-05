@@ -1,73 +1,94 @@
 <html>
 
-<style>
-	* {
-		font-family: Calibri;
-	}
-	.node {
-		border: 1px solid green;
-		float: left;
-		padding: 10px;
-		margin: 10px;
-	}
-	.nodename {
-		color: forestgreen;
-		font-weight: bold;
-	}
-</style>
-
 <head>
-	<script>
-
-		window.onload = function() {
-
-			var xhttp = new XMLHttpRequest();
-
-			xhttp.onreadystatechange = function() {
-				if(this.readyState == 4 && this.status == 200)
-					presentData(JSON.parse(this.responseText));
-			}
-			xhttp.open("GET", "/status/slaves", true);
-			xhttp.send();
-
-			var container = document.getElementById("container");
+	<style>
+		a {
+			text-decoration: none;
+			color: black;
 		}
+		h3 { padding: 10px; }
+		.node {
+			float: left;
+			padding: 10px;
+			background-color: #e5e5e5;
+			margin: 10px;
+		}
+		.lab { color: gray; }
+		.nodename {
+			color: forestgreen;
+			font-weight: bold;
+		}
+	</style>
+	<link rel="stylesheet" href="commonstyle.css" />
+	<script src="query.js"></script>
+	<script>
+		function prolog() {
+			container = document.getElementById("container");
+		}
+		function display(json) {
+			nodes = json.nodes;
 
-		function presentData(json) {
-		
-			slaves = json.slaves;
-		
-			for(var i=0; i<slaves.length; i++) {
-			
-				slave = slaves[i];
-				Object.keys(slave).forEach(function(key) {
-					json = slave[key];
-					var d = new Date(json.sysInfo.startTime);
-					var h = new Date(json.heartBeat);
-					container.innerHTML += 
-						`<div class='node'>
-							<span class='nodename'>Node&lt;${json.host}&gt;</span><br/><hr/>
-							<span>Host: </span> <span>${json.host}</span>&nbsp;&nbsp;<span>Agent Port: </span><span>${json.agentPort}</span><br/>
-							<span>CPU Cores: </span><span>${json.sysInfo.cores}</span><br/>
-							<span>Available Memory: </span><span>${tof2(json.sysInfo.availableMemory / 1024 / 1024)}MB</span><br/>
-							<span>Free Memory: </span><span>${tof2(json.sysInfo.freeMemory / 1024 / 1024)}MB</span><br/>
-							<span>Starttime:</span><span>${d.toLocaleString()}</span><br/>
-							<span>Starttime:</span><span>${h.toLocaleString()}</span><br/>
-							<span>Processes:</span><span>${json.processes.length}</span><br/>
-						</div>`;
+			container.innerHTML = "";
+
+			for (var i = 0; i < nodes.length; i++) {
+
+				node = nodes[i];
+				Object.keys(node).forEach(function (key) {
+					json = node[key];
+					container.innerHTML +=
+						`
+						<a href='node.html?node=${key}'>
+							<div class='node'>
+								<span class='nodename'>${key}</span><br/><hr/>
+								<table>
+									<tr>
+										<td><span class='lab'>Host: </span></td>
+										<td><span>${json.host}</span></td>
+									</tr>
+									<tr>
+										<td><span class='lab'>Agent Port: </span></td>
+										<td><span>${json.agentPort}</span></td>
+									</tr>
+									<tr>
+										<td><span class='lab'>Starttime: </span></td>
+										<td><span>${dtos(json.sysInfo.startTime)}</span></td>
+									</tr>
+									<tr>
+										<td><span class='lab'>Last Heartbeat: </span></td>
+										<td><span>${tdiff(json.lastHeartbeat)}</span></td>
+									</tr>
+									<tr>
+										<td><span class='lab'>Processes: </span></td>
+										<td><span>${json.processes.length}</span></td>
+									</tr>
+								</table>
+							</div>
+						</a>`;
 				});
 			}
 		}
-		
-		function tof2(x){ return parseFloat(Math.round(x * 100) / 100).toFixed(2);}
-
 	</script>
-</head>	
+</head>
 
 <body>
-	<div id="container">
-		
-	</div>
+
+	<div class='appwindow'>
+
+		<div class="header">
+			<a href='index.html'>
+				<span class='beats-label'>Beats</span>
+			</a>
+			<div style="float: right">
+				<a class="navbarlink" href='api.html'>API</a>
+			</div>
+		</div>
+
+		<h3>Nodes</h3>
+
+		<div id='container'>
+			<center>Crunching data</center>
+		</div>
+
 </body>
 
 </html>

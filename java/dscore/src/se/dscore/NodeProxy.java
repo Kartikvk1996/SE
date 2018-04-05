@@ -54,7 +54,6 @@ public class NodeProxy {
 
     public void kill(String pid) throws IOException {
         sendPDU(new KillPDU(pid), false);
-        processes.remove(pid);
     }
     
     void createProcess(String type) throws IOException {

@@ -10,6 +10,11 @@ function dtos(x) {
     return new Date(x).toLocaleString();
 }
 
+function tdiff(x) {
+    x = new Date().getTime() - x;
+    return Math.round(x / 1000) + "s ago";
+}
+
 function tof2(x) { return parseFloat(Math.round(x * 100) / 100).toFixed(2); }
 
 function btom(x) {
@@ -18,6 +23,7 @@ function btom(x) {
 
 window.onload = function schedule() {
     prolog();
+    refresh(API_END_POINT);
     var timerId = setInterval(
         refresh,
         refreshInterval,

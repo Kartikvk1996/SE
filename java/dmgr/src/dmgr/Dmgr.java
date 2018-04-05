@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import se.dscore.Slave;
 import se.ipc.pdu.PDU;
+import se.util.Logger;
 
 public class Dmgr extends Slave {
 
@@ -14,7 +15,7 @@ public class Dmgr extends Slave {
     public static void main(String[] args) throws IOException {
 
         System.out.println(Arrays.toString(args));
-
+        Logger.setLoglevel(Logger.LOW);
         PDU.setProcessRole("dmgr");
         new Dmgr(args).run();
     }
