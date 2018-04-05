@@ -1,7 +1,6 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="styles.css" />
     <script src="apilist.js"></script>
     <script>
 
@@ -25,7 +24,7 @@
                             ${prop.comment}
                         </div>
                         <div class='datatype'>
-                            Type: ${prop.type}
+                            Datatype: ${prop.type}
                         </div>
                         <div class='url'>
                             ${prop.url}
@@ -57,17 +56,69 @@
         }
 
     </script>
+    <style>
+        a {
+            text-decoration: none;
+        }
+
+        h2,
+        h3 {
+            padding: 10px;
+        }
+
+        #proppane {
+            padding: 5px 20px;
+        }
+
+        #methpane {
+            padding: 5px 20px;
+        }
+
+        .border-div {
+            border: solid 1px lightgray;
+            padding: 0px;
+            margin: 5px;
+        }
+
+        .comment {
+            background-color: lightgray;
+            padding: 5px;
+            font-weight: 200;
+        }
+
+        .url {
+            padding: 10px 5px 10px 5px;
+            font-family: consolas;
+        }
+
+        .datatype {
+            color: blue;
+            padding: 5px;
+            background-color: lightgray;
+        }
+    </style>
+    <link rel="stylesheet" href="commonstyle.css" />    
 </head>
 
 <body>
 
-    
+    <div class='appwindow'>
 
-    <h3>Properties</h3>
-    <div id="proppane"></div>
+        <div class="header">
+            <a href='index.html'><span class='beats-label'>Beats</span></a>
+            <div style="float: right">
+                <a class="navbarlink" href='api.html'>API</a>
+            </div>
+        </div>
 
-    <h3>Methods</h3>
-    <div id="methpane"></div>
+        <h2>API reference</h2>
+
+        <h3>Properties</h3>
+        <div id="proppane"></div>
+
+        <h3>Methods</h3>
+        <div id="methpane"></div>
+
 </body>
 
 </html>

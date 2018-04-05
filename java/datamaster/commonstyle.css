@@ -1,0 +1,16 @@
+.header { background: purple; padding: 10px;  }
+.navbarlink { color: white; text-decoration: none; margin-left: 10px;}
+.beats-label { color: white; font-weight: bold; font-size: 1.2em;}
+body {
+    margin: 0% 25%;
+    border-left: solid 1px #fafafa;
+    border-right: solid 1px #fafaf0;
+    height: 100%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.appwindow {
+    width: 100%;
+    height: 100%;
+    background: #f0f0f0;
+    overflow-y: auto;
+}
