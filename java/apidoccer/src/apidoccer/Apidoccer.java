@@ -114,7 +114,7 @@ public class Apidoccer {
     public static void main(String[] args) {
         try {
             //xout = System.out;
-            xout = new PrintStream("apilist.js");
+            xout = new PrintStream("C:\\Users\\mpataki\\Documents\\se\\java\\beats\\apilist.js");
             Apidoccer api = new Apidoccer();
             sop("\n");
         } catch (FileNotFoundException ex) {

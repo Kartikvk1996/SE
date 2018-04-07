@@ -6,7 +6,7 @@ import se.ipc.pdu.ConnectPDU;
 import se.ipc.pdu.InvalidPDUException;
 import se.util.Logger;
 
-public class Slave extends Probable {
+public class Slave extends Node {
 
     private final String err;
     private final String out;

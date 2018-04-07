@@ -13,6 +13,7 @@ import jsonparser.DictObject;
 import jsonparser.Json;
 import jsonparser.JsonException;
 import se.ipc.pdu.AckPDU;
+import se.ipc.pdu.CommandPDU;
 import se.ipc.pdu.ConnectPDU;
 import se.ipc.pdu.CreatePDU;
 import se.ipc.pdu.GetPDU;
@@ -92,6 +93,8 @@ public class ESocket {
                 break;
             case PDUConsts.METHOD_KILL:
                 return new KillPDU(jObj);
+            case PDUConsts.METHOD_COMMAND:
+                return new CommandPDU(jObj);
         }
         return tmp;
     }

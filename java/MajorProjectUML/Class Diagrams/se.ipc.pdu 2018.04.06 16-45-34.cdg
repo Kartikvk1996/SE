@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="se.ipc.pdu">
+  <ClassDiagramComponents>
+    <Class name="AckPDU" package="se.ipc.pdu" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="httpPort" type="Integer" visibility="public" isStatic="true"/>
+        <Field name="jarRevision" type="String" visibility="public" isStatic="true"/>
+        <Field name="ticket" type="String" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="ticket"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="DictObject" name="jObject"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getJarVersion" returnType="String" visibility="public"/>
+        <Method name="setHttpPort" returnType="void" visibility="public" isStatic="true">
+          <Argument type="int" name="httpPort"/>
+        </Method>
+        <Method name="getHttpPort" returnType="int" visibility="public"/>
+        <Method name="getTicket" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="CommandPDU" package="se.ipc.pdu" visibility="public" xPosition="264.0" yPosition="20.0">
+      <Fields>
+        <Field name="function" type="String" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="DictObject" name="jObject"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="String" name="function"/>
+          <Argument type="JsonObject" name="data"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="ConnectPDU" package="se.ipc.pdu" visibility="public" xPosition="620.0" yPosition="20.0">
+      <Fields>
+        <Field name="ATTR_HTTP_PORT" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="ATTR_ERR_FILE" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="ATTR_OUT_FILE" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="port" type="int" visibility="public"/>
+        <Field name="pid" type="String" visibility="public"/>
+        <Field name="sysInfo" type="SysInfo" visibility="public"/>
+        <Field name="ticket" type="String" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="DictObject" name="jObject"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="String" name="ticket"/>
+          <Argument type="String" name="pid"/>
+          <Argument type="int" name="port"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getSysInfo" returnType="SysInfo" visibility="public"/>
+        <Method name="init" returnType="void" visibility="private">
+          <Argument type="String" name="ticket"/>
+          <Argument type="String" name="pid"/>
+          <Argument type="int" name="port"/>
+        </Method>
+        <Method name="getLogPort" returnType="int" visibility="public"/>
+        <Method name="setLogPort" returnType="void" visibility="public">
+          <Argument type="int" name="port"/>
+        </Method>
+        <Method name="setEOFiles" returnType="void" visibility="public">
+          <Argument type="String" name="errFile"/>
+          <Argument type="String" name="outFile"/>
+        </Method>
+        <Method name="getOutFile" returnType="String" visibility="public"/>
+        <Method name="getErrFile" returnType="String" visibility="public"/>
+        <Method name="getConnectPort" returnType="int" visibility="public"/>
+        <Method name="getPid" returnType="String" visibility="public"/>
+        <Method name="getTicket" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="CreatePDU" package="se.ipc.pdu" visibility="public" xPosition="920.0" yPosition="20.0">
+      <Fields>
+        <Field name="executable" type="String" visibility="public"/>
+        <Field name="arguments" type="String" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="DictObject" name="jObject"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="String" name="executable"/>
+          <Argument type="String" name="arguments"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getExecutable" returnType="String" visibility="public"/>
+        <Method name="getArguments" returnType="String[]" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ErrorPDU" package="se.ipc.pdu" visibility="public" xPosition="1220.0" yPosition="20.0">
+      <Fields>
+        <Field name="errMessage" type="String" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="DictObject" name="jObject"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="String" name="msg"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="GetPDU" package="se.ipc.pdu" visibility="public" xPosition="1520.0" yPosition="20.0">
+      <Fields>
+        <Field name="resource" type="String" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="resource"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="DictObject" name="jObject"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getResourceName" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="IntroPDU" package="se.ipc.pdu" visibility="public" xPosition="1820.0" yPosition="20.0">
+      <Fields>
+        <Field name="host" type="String" visibility="public"/>
+        <Field name="port" type="int" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="DictObject" name="jObject"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="String" name="host"/>
+          <Argument type="int" name="port"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getGuestHost" returnType="String" visibility="public"/>
+        <Method name="getGuestPort" returnType="int" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="KillPDU" package="se.ipc.pdu" visibility="public" xPosition="20.0" yPosition="420.0">
+      <Fields>
+        <Field name="pid" type="String" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="DictObject" name="jObject"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="String" name="pid"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getPid" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="PDU" package="se.ipc.pdu" visibility="public" xPosition="1023.0" yPosition="371.0">
+      <Fields>
+        <Field name="who" type="String" visibility="public"/>
+        <Field name="method" type="int" visibility="public"/>
+        <Field name="data" type="JsonObject" visibility="public"/>
+        <Field name="PROCESS_ROLE" type="String" visibility="private" isStatic="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="DictObject" name="jObject"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="int" name="method"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getWho" returnType="String" visibility="public"/>
+        <Method name="getMethod" returnType="int" visibility="public"/>
+        <Method name="getSecret" returnType="String" visibility="public"/>
+        <Method name="setData" returnType="void" visibility="public">
+          <Argument type="JsonObject" name="data"/>
+        </Method>
+        <Method name="getData" returnType="JsonObject" visibility="public"/>
+        <Method name="setProcessRole" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String" name="role"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="StatusPDU" package="se.ipc.pdu" visibility="public" xPosition="823.0" yPosition="599.0">
+      <Fields>
+        <Field name="ticket" type="String" visibility="public" isStatic="true"/>
+        <Field name="pid" type="String" visibility="public" isStatic="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="DictObject" name="jObject"/>
+        </Constructor>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="getTicket" returnType="String" visibility="public"/>
+        <Method name="getPid" returnType="String" visibility="public"/>
+        <Method name="setProcessDetails" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String" name="ticket"/>
+          <Argument type="String" name="pid"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <IsRelation name="is" source="se.ipc.pdu.StatusPDU" target="se.ipc.pdu.PDU"/>
+    <IsRelation name="is" source="se.ipc.pdu.CreatePDU" target="se.ipc.pdu.PDU"/>
+    <IsRelation name="is" source="se.ipc.pdu.GetPDU" target="se.ipc.pdu.PDU"/>
+    <IsRelation name="is" source="se.ipc.pdu.KillPDU" target="se.ipc.pdu.PDU"/>
+    <IsRelation name="is" source="se.ipc.pdu.CommandPDU" target="se.ipc.pdu.PDU"/>
+    <IsRelation name="is" source="se.ipc.pdu.IntroPDU" target="se.ipc.pdu.PDU"/>
+    <IsRelation name="is" source="se.ipc.pdu.AckPDU" target="se.ipc.pdu.PDU"/>
+    <IsRelation name="is" source="se.ipc.pdu.ErrorPDU" target="se.ipc.pdu.PDU"/>
+    <IsRelation name="is" source="se.ipc.pdu.ConnectPDU" target="se.ipc.pdu.PDU"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

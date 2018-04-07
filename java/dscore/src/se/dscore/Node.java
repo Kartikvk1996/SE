@@ -6,12 +6,13 @@ package se.dscore;
  */
 
 import java.io.IOException;
+import java.util.logging.Level;
+import jsonparser.JsonException;
 import se.ipc.pdu.IntroPDU;
 import se.ipc.pdu.PDU;
 import se.ipc.ESocket;
 import se.ipc.pdu.AckPDU;
-import se.ipc.pdu.ConnectPDU;
-import se.ipc.pdu.GetPDU;
+import se.ipc.pdu.InvalidPDUException;
 import se.ipc.pdu.PDUConsts;
 import se.ipc.pdu.StatusPDU;
 
@@ -57,10 +58,20 @@ public class Node implements RequestHandler {
     
     @Override
     public void handle(ESocket socket) throws IOException {
-        
+        PDU pdu = null;
+        try {
+            pdu = socket.recvPDU();
+        } catch (JsonException | InvalidPDUException ex) {
+            java.util.logging.Logger.getLogger(Master.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (pdu == null) {
+            return;
+        }
+        handler(socket, pdu);
     }
     
-    void def_handler(ESocket socket, PDU pdu) throws IOException {
+    @Override
+    public void handler(ESocket socket, PDU pdu) throws IOException {
         switch(pdu.getMethod()) {
             case PDUConsts.METHOD_INTRO:
                 handle_intro(socket, (IntroPDU) pdu);
@@ -68,26 +79,10 @@ public class Node implements RequestHandler {
         }
     }
 
-    @Override
-    public void handle_get(ESocket sock, GetPDU gpdu) throws IOException {
-        
-    }
-
-    @Override
     public void handle_intro(ESocket sock, IntroPDU ipdu) throws IOException {
        AckPDU apdu = new AckPDU(ticket);
        ESocket gsock = new ESocket(ipdu.getGuestHost(), ipdu.getGuestPort());
        gsock.send(apdu);
-    }
-
-    @Override
-    public void handle_connect(ESocket sock, ConnectPDU cpdu) throws IOException{
-        
-    }
-
-    @Override
-    public void handle_ack(ESocket sock, AckPDU apdu) throws IOException {
-        /* ignore it */
     }
 
     public PDU getStatus() {
@@ -97,5 +92,5 @@ public class Node implements RequestHandler {
     public void setProxy(MasterProxy mproxy) {
         this.mproxy = mproxy;
     }
-    
+
 }

@@ -9,10 +9,7 @@ import java.util.HashMap;
 import se.dscore.RequestHandler;
 import se.dscore.Server;
 import se.ipc.ESocket;
-import se.ipc.pdu.AckPDU;
-import se.ipc.pdu.ConnectPDU;
-import se.ipc.pdu.GetPDU;
-import se.ipc.pdu.IntroPDU;
+import se.ipc.pdu.PDU;
 import se.util.Logger;
 
 public class HttpServer implements RequestHandler {
@@ -59,23 +56,6 @@ public class HttpServer implements RequestHandler {
         }
     }
 
-    /* never going to call them */
-    @Override
-    public void handle_get(ESocket sock, GetPDU gpdu) throws IOException {
-    }
-
-    @Override
-    public void handle_intro(ESocket sock, IntroPDU ipdu) throws IOException {
-    }
-
-    @Override
-    public void handle_connect(ESocket sock, ConnectPDU cpdu) throws IOException {
-    }
-
-    @Override
-    public void handle_ack(ESocket sock, AckPDU apdu) throws IOException {
-    }
-
     private void sendFile(String url, OutputStream out) throws IOException {
         FileInputStream fis;
         File file = new File(docRoot + "/" + url);
@@ -97,6 +77,10 @@ public class HttpServer implements RequestHandler {
                 break;
             }
         }
+    }
+
+    @Override
+    public void handler(ESocket sock, PDU pdu) throws IOException {
     }
 
 }

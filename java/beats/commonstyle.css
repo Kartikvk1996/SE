@@ -14,3 +14,21 @@ body {
     background: #f0f0f0;
     overflow-y: auto;
 }
+.std {
+    border-radius: 2px;
+    padding: 2px 4px;
+    color: white;
+    font-weight: 200;
+}
+
+.stderr {
+    background: red;
+}
+
+.stdout {
+    background: green;
+}
+
+.kill{
+    background: black;
+}

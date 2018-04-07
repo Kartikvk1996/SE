@@ -12,6 +12,7 @@ package se.dscore;
  * Scheduling the processes on the nodes. 3. Handling heartbeat signals sent by
  * the nodes/ 4. Managing the HTTP-server for providing the insights.
  */
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,25 +31,32 @@ import se.util.Logger;
 import se.util.http.HttpServer;
 import se.util.http.RESTServer;
 
-public class Master extends Probable {
+public class Master extends Node {
 
     private final MasterView status;
     private final LinkedHashMap<String, NodeProxy> nodes;
     private final HttpServer hserver;
-    private Scheduler scheduler;
+    private final Scheduler scheduler;
     private final long SLAVE_HB_WAIT_INTERVAL = 12000;
+    private final Configuration conf;
 
     /**
      * @param configFile : configuration file of the master may be used in
      * future.
      * @param scheduler
      * @throws IOException
+     * @throws java.io.FileNotFoundException
      */
-    public Master(String configFile, Scheduler scheduler) throws IOException {
+    public Master(String configFile, Scheduler scheduler)
+            throws IOException, FileNotFoundException {
         super();
+        conf = Configuration.readFromFile(configFile);
         nodes = new LinkedHashMap<>();
         status = new MasterView(nodes);
-        hserver = new RESTServer(".", this);
+
+        hserver = new RESTServer(conf.get(Configuration.HTTP_ROOT), this);
+        Logger.setLoglevel(Integer.parseInt(conf.get(Configuration.DEBUG_LEVEL)));
+
         AckPDU.setHttpPort(hserver.getPort());
         this.scheduler = scheduler;
     }
@@ -77,7 +85,6 @@ public class Master extends Probable {
      * @param pdu
      * @throws IOException
      */
-    @Override
     public void handle_connect(ESocket sock, ConnectPDU pdu) throws IOException {
 
         /* If he is a guest then just introduce it to everyone. */
@@ -153,19 +160,11 @@ public class Master extends Probable {
      * Handles the connect and status PDUs
      *
      * @param socket Socket on which PDUs are been sent.
+     * @param pdu
      * @throws IOException
      */
     @Override
-    public void handle(ESocket socket) throws IOException {
-        PDU pdu = null;
-        try {
-            pdu = socket.recvPDU();
-        } catch (JsonException | InvalidPDUException ex) {
-            java.util.logging.Logger.getLogger(Master.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (pdu == null) {
-            return;
-        }
+    public void handler(ESocket socket, PDU pdu) throws IOException {
         switch (pdu.getMethod()) {
             case PDUConsts.METHOD_CONNECT:
                 handle_connect(socket, (ConnectPDU) pdu);
@@ -173,9 +172,8 @@ public class Master extends Probable {
             case PDUConsts.METHOD_STATUS:
                 handle_status(socket, (StatusPDU) pdu);
                 break;
-            default:
-                super.def_handler(socket, pdu);
         }
+        super.handler(socket, pdu);
     }
 
     /**

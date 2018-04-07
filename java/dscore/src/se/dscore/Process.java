@@ -2,8 +2,13 @@ package se.dscore;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jsonparser.JsonExposed;
+import jsonparser.JsonObject;
 import se.ipc.ESocket;
+import se.ipc.pdu.CommandPDU;
+import se.ipc.pdu.InvalidPDUException;
 import se.ipc.pdu.KillPDU;
 import se.ipc.pdu.PDU;
 import se.ipc.pdu.StatusPDU;
@@ -65,4 +70,15 @@ public class Process {
         lastHeartbeatTime = (new Date()).getTime();
     }
 
+    @RESTExposedMethod(comment = "Runs a method in given process. Nothing is sent back")
+    public String runMethod(String method, JsonObject data) {
+        try {
+            sendPDU(new CommandPDU(method, data), false);
+        } catch (InvalidPDUException | IOException ex) {
+            return ex.toString();
+        }
+        return "success";
+    }
+    
+    
 }

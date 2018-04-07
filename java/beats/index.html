@@ -6,14 +6,22 @@
 			text-decoration: none;
 			color: black;
 		}
-		h3 { padding: 10px; }
+
+		h3 {
+			padding: 10px;
+		}
+
 		.node {
 			float: left;
 			padding: 10px;
 			background-color: #e5e5e5;
 			margin: 10px;
 		}
-		.lab { color: gray; }
+
+		.lab {
+			color: gray;
+		}
+
 		.nodename {
 			color: forestgreen;
 			font-weight: bold;
@@ -54,7 +62,7 @@
 										<td><span>${dtos(json.sysInfo.startTime)}</span></td>
 									</tr>
 									<tr>
-										<td><span class='lab'>Last Heartbeat: </span></td>
+										<td><span class='lab'>Heartbeat: </span></td>
 										<td><span>${tdiff(json.lastHeartbeat)}</span></td>
 									</tr>
 									<tr>
@@ -72,22 +80,52 @@
 
 <body>
 
+
 	<div class='appwindow'>
 
 		<div class="header">
-			<a href='index.html'>
-				<span class='beats-label'>Beats</span>
-			</a>
-			<div style="float: right">
-				<a class="navbarlink" href='api.html'>API</a>
-			</div>
-		</div>
+            <a href='index.html'>
+                <span class='beats-label'>Beats</span>
+            </a>
+            <div style="float: right">
+                <a class="navbarlink" href='help.html'>Help</a>
+            </div>
+            <div style="float: right">
+                <a class="navbarlink" href='api.html'>API</a>
+            </div>
+        </div>
 
-		<h3>Nodes</h3>
 
-		<div id='container'>
-			<center>Crunching data</center>
-		</div>
+		<center>
+			<table style="width: 100%;">
+				<tr>
+					<td width="70%">
+						<h3>Nodes</h3>
+						<center>
+							<div id='container'>
+								<center>Crunching data</center>
+							</div>
+						</center>
+					</td>
+					<td>
+						<div style="border-right: solid 1px black; height: 150px;"></div>
+					</td>
+					<td>
+						<center>
+							<a class="std kill" href='/exec/shutDownDomain?{}'>shutdown</a>
+							<br/>
+							<br/>
+							<a class="std stderr">stderr</a>
+							<br/>
+							<br/>
+							<a class="std stdout">stdout</a>
+							<br/>
+							<br/>
+						</center>
+					</td>
+				</tr>
+			</table>
+		</center>
 
 </body>
 

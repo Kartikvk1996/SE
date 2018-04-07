@@ -7,6 +7,14 @@
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
         }
 
+        .actions {
+            float: right;
+        }
+
+        .disasoc {
+            background-color: black;
+        }
+
         body {
             margin: 0% 25%;
             border-left: solid 1px #fafafa;
@@ -53,20 +61,6 @@
             text-decoration: none;
         }
 
-        .std {
-            border-radius: 2px;
-            padding: 2px 4px;
-            color: white;
-            font-weight: 200;
-        }
-
-        .errf {
-            background: red;
-        }
-
-        .outf {
-            background: green;
-        }
     </style>
 
     <script>
@@ -156,8 +150,8 @@
                             <span>PID: </span><span>${proc.pid}</span><br/>
                             <span>Type: </span><span>${proc.type}</span><br/>
                             <span>Port: </span><span>${proc.port}</span><br/><br/>
-                            <a href='${logloc}/${proc.errFile}' target='_blank'><span class='std errf'>stderr</span></a>
-                            <a href='${logloc}/${proc.outFile}' target='_blank'><span class='std outf'>stdout</span></a><br/>
+                            <a href='${logloc}/${proc.errFile}' target='_blank'><span class='std stderr'>stderr</span></a>
+                            <a href='${logloc}/${proc.outFile}' target='_blank'><span class='std stdout'>stdout</span></a><br/>
                         </div>
                     </a>
                     `;
@@ -186,22 +180,6 @@
         </div>
 
         <center>
-            <style>
-                .actions {
-                    float: right;
-                }
-
-                .disasoc {
-                    background-color: black;
-                }
-
-                /*
-                tr, td, table {
-                    border: 1px solid black;
-                }
-                */
-            </style>
-
             <table style="width: 100%;">
                 <tr>
                     <td width="70%">
@@ -210,7 +188,9 @@
                             <table id='staticdata'></table>
                         </center>
                     </td>
-                    <td><div style="border-right: solid 1px black; height: 150px;"></div></td>
+                    <td>
+                        <div style="border-right: solid 1px black; height: 150px;"></div>
+                    </td>
                     <td>
                         <center>
                             <a class="std disasoc" id='disassociate'>Kill</a>
