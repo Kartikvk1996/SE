@@ -1,0 +1,37 @@
+[ 11-04-2018 02:10:20 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 02:10:20 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 02:13:03 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 02:13:03 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 02:15:35 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 02:15:35 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 02:45:52 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 02:45:52 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 02:46:19 ]  [ INFO ]	[shutdown]	Shutting down CMS
+[ 11-04-2018 02:46:23 ]  [ INFO ]	[shutdown]	Shutting down CMS
+[ 11-04-2018 02:46:45 ]  [ INFO ]	[shutdown]	Shutdown message sent to all crawlers
+[ 11-04-2018 02:46:45 ]  [ INFO ]	[shutdown]	Waiting 10 seconds to get response from all crawlers
+[ 11-04-2018 02:47:01 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 02:47:01 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 02:47:04 ]  [ INFO ]	[shutdown]	Shutting down CMS
+[ 11-04-2018 02:47:04 ]  [ INFO ]	[shutdown]	Shutdown message sent to all crawlers
+[ 11-04-2018 02:47:04 ]  [ INFO ]	[shutdown]	Waiting 10 seconds to get response from all crawlers
+[ 11-04-2018 02:47:14 ]  [ INFO ]	[shutdown]	Saving queue current instance
+[ 11-04-2018 02:47:14 ]  [ INFO ]	[shutdown]	Queue current instance saved successfully 
+[ 11-04-2018 02:47:14 ]  [ INFO ]	[shutdown]	HTTP Server stopped successfully
+[ 11-04-2018 02:47:14 ]  [ INFO ]	[shutdown]	CMS stopped
+[ 11-04-2018 02:47:20 ]  [ WARNING ]	[serveRequest]	Exception : [json.exception.parse_error.101] parse error at 1: syntax error - invalid literal; last read: 'N'
+NULL
+[ 11-04-2018 03:19:24 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 03:19:24 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 03:20:33 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 03:20:33 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 09:16:01 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 09:16:01 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 09:16:57 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 09:16:57 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 09:19:49 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 09:19:49 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 09:20:40 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 09:20:40 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 11-04-2018 09:21:31 ]  [ INFO ]	[CMS]	Queue instance created
+[ 11-04-2018 09:21:31 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
