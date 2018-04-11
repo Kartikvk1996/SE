@@ -85,27 +85,7 @@
 /*------------------------------------------------------PLATFORM DEPENDENT LIBRARIES IMPORT--------------------------------------------*/
 
 
-#ifdef __unix__
-    #include<malloc.h>
-    #include<netinet/in.h>
-    #include<fcntl.h>
-    #include<sys/stat.h>
-    #include<sys/socket.h>
-    #include<sys/types.h>
-    #include<unistd.h>
-    #include<string.h>
-    #include<arpa/inet.h>
-    #include<netdb.h>
-#elif __WIN32
-    #include<windows.h>
-    #include<winsock2.h>
-    #include<ws2tcpip.h>
-    #include<bits/stdc++.h>
-#endif // __WIN32
 
-
-
-#define BUFFERSIZE 65535
 #define CSOCKET int
 
 using namespace std;
@@ -116,16 +96,10 @@ using namespace std;
 class ServerConnection
 {
 private:
-    #ifdef __unix__
-        int serverFileDescriptor;
-        struct sockaddr_in serverAddress,clientAddress;
-        socklen_t clientRequestLength;
-    #elif __WIN32
-        WSADATA wsa;
-        SOCKET serverFileDescriptor ;
-        struct sockaddr_in server , client;
-        int sockfdSize;
-    #endif // __unix__
+    int serverFileDescriptor;
+    struct sockaddr_in serverAddress,clientAddress;
+    socklen_t clientRequestLength;
+
 
 private:
     unsigned short int maxRequests;
@@ -134,40 +108,22 @@ private:
     char *msg=NULL;
     string message;
     bool serverAlive=false;
+    LOG *log;
 
 public:
-    /*  constructor */
-    ServerConnection()
-    {
-        msg=(char *)malloc(sizeof(char)*BUFFERSIZE);
-        this->maxRequests=100;
-        this->port=8080;
-        this->ipAddress="127.0.0.1";
-        if(!serverConnect())
-        {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to start server";
-            #endif // DEBUG
-            serverAlive=true;
-        }
-        else
-        {
-            serverAlive=true;
-        }
-    }
 
     ServerConnection(string ipAddr,unsigned short int pt,unsigned short int mReq=10)
     {
-        msg=(char *)malloc(sizeof(char)*BUFFERSIZE);
+        log=new LOG(CONFIG::SOCKET_LOGFILE,CONFIG::SOCKET_LOGDATEWISE,CONFIG::SOCKET_CNSLOGGING,CONFIG::SOCKET_CNSCOLOURING);
+        msg=(char *)malloc(sizeof(char)*CONFIG::LBUFFERSIZE);
+        assert(msg!=NULL);
         this->maxRequests=mReq;
         this->port=pt;
         this->ipAddress=ipAddr;
         if(!serverConnect())
         {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to start server";
-            #endif // DEBUG
-            serverAlive=true;
+            log->write(LOG::ERROR,"[%s]\tFailed to start server with IP %s:%d",__func__,this->ipAddress.c_str(),this->port);
+            serverAlive=false;
         }
         else
         {
@@ -177,7 +133,7 @@ public:
 
     ~ServerConnection()
     {
-        free(msg);
+        delete log;
         closeConnection();
         serverAlive=false;
     }
@@ -213,121 +169,52 @@ public:
 
 bool ServerConnection::serverConnect()
 {
-    #ifdef __unix__
+
+    /* Opens the socket connections */
+    this->serverFileDescriptor = socket(AF_INET,SOCK_STREAM,0);
+    if(this->serverFileDescriptor < 0)
     {
-        /* Opens the socket connections */
-        this->serverFileDescriptor = socket(AF_INET,SOCK_STREAM,0);
-        if(this->serverFileDescriptor < 0)
-        {
-            #ifdef DEBUG
-            {
-                cout<<"SERVER :Failed to create socket\n";
-            }
-            #endif // DEBUG
-
-            return false;
-        }
-
-        /* set all the content to zero  */
-        bzero((char *)&serverAddress,sizeof(serverAddress));
-
-        /* setup address family of internet */
-        serverAddress.sin_family=AF_INET;
-
-        /* Listen to any internal address */
-        serverAddress.sin_addr.s_addr = inet_addr(this->ipAddress.c_str());
-        serverAddress.sin_port=htons(this->port);
-
-        int bind_stat=bind(this->serverFileDescriptor,(struct sockaddr *) &serverAddress, sizeof(serverAddress));
-        if(bind_stat<0)
-        {
-            #ifdef DEBUG
-            {
-                cout<<"SERVER :Failed to bind socket\n";
-            }
-            #endif // DEBUG
-        }
-
-        listen(this->serverFileDescriptor,this->maxRequests);
-        return true;
+        log->write(LOG::ERROR,"[%s]\tFailed to create socket",__func__);
+        return false;
     }
-    #elif __WIN32
+    log->write(LOG::INFO,"[%s]\tNew socket created successfully",__func__);
+    /* set all the content to zero  */
+    bzero((char *)&serverAddress,sizeof(serverAddress));
+
+    /* setup address family of internet */
+    serverAddress.sin_family=AF_INET;
+
+    /* Listen to any internal address */
+    serverAddress.sin_addr.s_addr = inet_addr(this->ipAddress.c_str());
+    serverAddress.sin_port=htons(this->port);
+
+    int bind_stat=bind(this->serverFileDescriptor,(struct sockaddr *) &serverAddress, sizeof(serverAddress));
+    if(bind_stat<0)
     {
-        if (WSAStartup(MAKEWORD(2,2),&wsa) != 0)
-        {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed. Error Code : "<<WSAGetLastError()<<"\n";
-            return false;
-            #endif // DEBUG
-        }
-
-
-        if((this->serverFileDescriptor = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
-        {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to create socket : "<< WSAGetLastError()<<"\n";
-            return false;
-            #endif // DEBUG
-
-        }
-
-        server.sin_family = AF_INET;
-        server.sin_addr.s_addr = inet_addr(this->ipAddress.c_str());
-        server.sin_port = htons( this->port );
-
-        if( bind(this->serverFileDescriptor ,(struct sockaddr *)&server , sizeof(server)) == SOCKET_ERROR)
-        {
-            #ifdef DEBUG
-                cout<<"SERVER :Bind failed with error code : "<< WSAGetLastError()<<"\n";
-            return false;
-            #endif // DEBUG
-
-        }
-
-        listen(this->serverFileDescriptor , this->maxRequests);
-        return true;
+        log->write(LOG::ERROR,"[%s]\tFailed to bind socket with IP %s:%d",__func__,this->ipAddress.c_str(),this->port);
+        return false;
     }
-    #endif
-
+    log->write(LOG::INFO,"[%s]\tSocket binded with IP %s:%d successfully",__func__,this->ipAddress.c_str(),this->port);
+    listen(this->serverFileDescriptor,this->maxRequests);
+    return true;
 }
 
 CSOCKET ServerConnection::acceptConnection()
 {
-    #ifdef __unix__
+
+    /* accept the request   */
+    clientRequestLength=sizeof(clientAddress);
+
+    CSOCKET newsockfd;
+
+    newsockfd=accept(this->serverFileDescriptor, (struct sockaddr *) &clientAddress, &clientRequestLength);
+    if(newsockfd<0)
     {
-        /* accept the request   */
-        clientRequestLength=sizeof(clientAddress);
-
-        CSOCKET newsockfd;
-
-        newsockfd=accept(this->serverFileDescriptor, (struct sockaddr *) &clientAddress, &clientRequestLength);
-        if(newsockfd<0)
-        {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to accept connection\n";
-            #endif // DEBUG
-            return -1;
-        }
-        return newsockfd;
+        log->write(LOG::WARNING,"[%s]\tFailed to accept new connection request",__func__);
+        return -1;
     }
-    #elif __WIN32
-    {
-        this->sockfdSize = sizeof(struct sockaddr_in);
-        CSOCKET newsockfd;
+    return newsockfd;
 
-        if((newsockfd = accept(this->serverFileDescriptor , (struct sockaddr *)&this->client, &this->sockfdSize)) != INVALID_SOCKET )
-        {
-            return newsockfd;
-        }
-        else
-        {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to accept connection\n";
-            #endif // DEBUG
-            return -1;
-        }
-    }
-    #endif // __unix__
 }
 
 
@@ -341,33 +228,21 @@ CSOCKET ServerConnection::acceptConnection()
 
 bool ServerConnection::writeData(CSOCKET fd,string message)
 {
-    #ifdef __unix__
+    unsigned short int status=write(fd,message.c_str(),message.length());
+    if(status>0)
+        return true;
+    else
     {
-        if(write(fd,message.c_str(),message.length())>0)
-            return true;
+        if(status==0)
+        {
+            log->write(LOG::WARNING,"[%s]\tFailed to write , connection closed by peer",__func__);
+        }
         else
         {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to write to socket\n";
-            #endif // DEBUG
-            return false;
+            log->write(LOG::WARNING,"[%s]\tFailed to write to peer ERROR_CODE : [%s]",__func__,status);
         }
+        return false;
     }
-    #elif __WIN32
-    {
-        if((send(fd , message.c_str() , message.length() , 0))>0)
-            return true;
-        else
-        {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to write to socket\n";
-            #endif // DEBUG
-            return false;
-        }
-
-    }
-    #endif // __unix__
-
 }
 
 
@@ -378,39 +253,22 @@ bool ServerConnection::writeData(CSOCKET fd,string message)
 */
 string ServerConnection::readData(CSOCKET fd)
 {
-
-    #ifdef __unix__
+    message.clear();
+    unsigned short int status=read(fd,msg,CONFIG::LBUFFERSIZE);
+    if(status>0)
     {
-
-        if(read(fd,msg,BUFFERSIZE)>0)
-        {
-            message=msg;
-            return message;
-        }
-        else
-        {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to read from socket\n";
-            #endif // DEBUG
-            return NULL;
-        }
+        message=msg;
+        memset(msg, 0, CONFIG::LBUFFERSIZE);
+        return message;
     }
-    #elif __WIN32
+    else
     {
-        if((recv(fd,msg,BUFFERSIZE,0))<0)
-        {
-            #ifdef DEBUG
-                cout<<"SERVER :Failed to read data to socket\n";
-            #endif // DEBUG
-            return NULL;
-        }
+        if(status==0)
+            log->write(LOG::WARNING,"[%s]\tFailed to read , connection closed by peer",__func__);
         else
-        {
-            message=msg;
-            return message;
-        }
+            log->write(LOG::WARNING,"[%s]\tFailed to read, ERROR_CODE : [%s]",__func__,status);
+        return "NULL";
     }
-    #endif // __unix__
 }
 
 
@@ -435,17 +293,9 @@ string ServerConnection::getIpAddress()
 */
 void ServerConnection::closeConnection()
 {
+    free(msg);
     serverAlive=false;
-    #ifdef __unix__
-    {
-        close(this->serverFileDescriptor);
-    }
-    #elif __WIN32
-    {
-        closesocket(this->serverFileDescriptor);
-        WSACleanup();
-    }
-    #endif // __unix__
+    close(this->serverFileDescriptor);
 }
 
 /* Method isAlive() tells connected to server or not
@@ -470,14 +320,8 @@ bool ServerConnection::isAlive()
 class ClientConnection
 {
 private:
-    #ifdef __unix__
-        int clientFileDescriptor,connectfd;
-        struct sockaddr_in clientAddress;
-    #elif __WIN32
-        WSADATA wsda;
-        struct sockaddr_in server;
-        int serverfd;
-    #endif // __unix__
+    int clientFileDescriptor,connectfd;
+    struct sockaddr_in clientAddress;
 
 private:
     unsigned short int port;
@@ -485,34 +329,21 @@ private:
     char *msg=NULL;
     string message;
     bool clientAlive=false;
+    LOG *log;
 
 
 public:
     /*  Constructor */
-    ClientConnection()
-    {
-        msg=(char *)malloc(sizeof(char)*BUFFERSIZE);
-        this->port=8080;
-        this->ipAddress="127.0.0.1";
-        if(!clientConnect())
-        {
-            #ifdef DEBUG
-                cout<<"CLIENT :Failed to connect to Server";
-            #endif // DEBUG
-        }
-    }
-
 
     ClientConnection(string ipAddr,unsigned short int pt)
     {
-        msg=(char *)malloc(sizeof(char)*BUFFERSIZE);
+        log=new LOG(CONFIG::SOCKET_LOGFILE,CONFIG::SOCKET_LOGDATEWISE,CONFIG::SOCKET_CNSLOGGING,CONFIG::SOCKET_CNSCOLOURING);
+        msg=(char *)malloc(sizeof(char)*CONFIG::LBUFFERSIZE);
         this->port=pt;
         this->ipAddress=ipAddr;
         if(!clientConnect())
         {
-            #ifdef DEBUG
-                cout<<"CLIENT :Failed to connect to Server";
-            #endif // DEBUG
+            //log->write(LOG::ERROR,"[%s]\tFailed to start server with IP %s:%d",__func__,this->ipAddress.c_str(),this->port);
             clientAlive=false;
         }
         else
@@ -524,7 +355,6 @@ public:
 
     ~ClientConnection()
     {
-        free(msg);
         closeConnection();
         clientAlive=false;
     }
@@ -560,68 +390,29 @@ public:
 
 bool ClientConnection::clientConnect()
 {
-    #ifdef __unix__
-        this->clientFileDescriptor = socket(AF_INET,SOCK_STREAM,0);
-        if(this->clientFileDescriptor < 0)
-        {
-            #ifdef DEBUG
-            {
-                cout<<"CLIENT :Failed to create socket\n";
-            }
-            #endif // DEBUG
-
-            return false;
-        }
+    this->clientFileDescriptor = socket(AF_INET,SOCK_STREAM,0);
+    if(this->clientFileDescriptor < 0)
+    {
+        log->write(LOG::ERROR,"[%s]\tFailed to create socket",__func__);
+        return false;
+    }
 
 
-        /* setup address family of internet */
-        clientAddress.sin_family=AF_INET;
+    /* setup address family of internet */
+    clientAddress.sin_family=AF_INET;
 
-        /* Listen to any internal address */
-        clientAddress.sin_addr.s_addr = inet_addr(this->ipAddress.c_str());
-        clientAddress.sin_port=htons(this->port);
+    /* Listen to any internal address */
+    clientAddress.sin_addr.s_addr = inet_addr(this->ipAddress.c_str());
+    clientAddress.sin_port=htons(this->port);
 
-        connectfd=connect(this->clientFileDescriptor,(struct sockaddr *) &clientAddress, sizeof(clientAddress));
-        if(connectfd<0)
-        {
-            #ifdef DEBUG
-            {
-                cout<<"CLIENT :Failed to connect to server\n";
-            }
-            #endif // DEBUG
-            return false;
-        }
+    connectfd=connect(this->clientFileDescriptor,(struct sockaddr *) &clientAddress, sizeof(clientAddress));
+    if(connectfd<0)
+    {
+        log->write(LOG::ERROR,"[%s]\tFailed to connect to server IP: %s:%d",__func__,this->ipAddress.c_str(),this->port);
+        return false;
+    }
 
-        return true;
-    #elif __WIN32
-        WSAStartup(0x0101,&wsda);
-        if((serverfd=socket(AF_INET,SOCK_STREAM,0))==-1)
-        {
-            #ifdef DEBUG
-                cout<<"CLIENT :Failed to open to socket\n";
-            #endif // DEBUG
-            return false;
-
-        }
-
-
-        /* setup address family of internet */
-        server.sin_family=AF_INET;
-
-        /* Listen to any internal address */
-        server.sin_addr.s_addr = inet_addr(this->ipAddress.c_str());
-        server.sin_port=htons(this->port);
-
-
-        if(connect(serverfd,(struct sockaddr*)&server,sizeof(struct sockaddr))==-1)
-        {
-            #ifdef DEBUG
-                cout<<"CLIENT :Failed to connect to server\n";
-            #endif // DEBUG
-            return false;
-        }
-        return true;
-    #endif // __unix__
+    return true;
 
 }
 
@@ -632,29 +423,21 @@ bool ClientConnection::clientConnect()
 
 bool ClientConnection::writeData(string message)
 {
-    #ifdef __unix__
-        if(write(this->connectfd,message.c_str(),message.length())>0)
-            return true;
+    unsigned short int status=send(this->clientFileDescriptor,message.c_str(),message.length(),MSG_DONTWAIT);
+    if(status>0)
+        return true;
+    else
+    {
+        if(status==0)
+        {
+            log->write(LOG::WARNING,"[%s]\tFailed to write , connection closed by peer",__func__);
+        }
         else
         {
-            #ifdef DEBUG
-                cout<<"CLIENT :Failed to write to socket\n";
-            #endif // DEBUG
-            return false;
+            log->write(LOG::WARNING,"[%s]\tFailed to write to peer ERROR_CODE : [%s]",__func__,status);
         }
-    #elif __WIN32
-        if((send(serverfd,message.c_str(),message.length(),0))>0)
-            return true;
-        else
-        {
-            #ifdef DEBUG
-                cout<<"CLIENT :Failed to write to socket\n";
-            #endif // DEBUG
-            return false;
-        }
-
-    #endif // __unix__
-
+        return false;
+    }
 }
 
 
@@ -664,34 +447,22 @@ bool ClientConnection::writeData(string message)
 */
 string ClientConnection::readData()
 {
-    #ifdef __unix__
-        if((read(this->clientFileDescriptor,msg,BUFFERSIZE))>0)
-        {
-            message=msg;
-            return message;
-        }
+    message.clear();
+    unsigned short int status=read(this->clientFileDescriptor,msg,CONFIG::LBUFFERSIZE);
+    if(status>0)
+    {
+        message=msg;
+        memset(msg,0,CONFIG::LBUFFERSIZE);
+        return message;
+    }
+    else
+    {
+        if(status==0)
+            log->write(LOG::WARNING,"[%s]\tFailed to read, connection closed by peer",__func__);
         else
-        {
-            #ifdef DEBUG
-                cout<<"CLIENT :Failed to read from socket\n";
-            #endif // DEBUG
-            return NULL;
-        }
-    #elif __WIN32
-        if((recv(serverfd,msg,BUFFERSIZE,0))>0)
-        {
-            message=msg;
-            return message;
-        }
-        else
-        {
-            #ifdef DEBUG
-                cout<<"CLIENT :Failed to read from socket\n";
-            #endif // DEBUG
-            return NULL;
-        }
-    #endif // __unix__
-
+            log->write(LOG::WARNING,"[%s]\tFailed to read, ERROR_CODE : [%s]",__func__,status);
+        return "NULL";
+    }
 }
 
 /*  Method getPort() returns the port value on which socket
@@ -713,12 +484,10 @@ string ClientConnection::getIpAddress()
 */
 void ClientConnection::closeConnection()
 {
-    #ifdef __unix__
-        close(this->clientFileDescriptor);
-    #elif __WIN32
-        closesocket(this->serverfd);
-        WSACleanup();
-    #endif // __unix__
+    delete log;
+    free(msg);
+    close(this->clientFileDescriptor);
+    shutdown(this->clientFileDescriptor, SHUT_WR);
     clientAlive=false;
 
 }
