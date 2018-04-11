@@ -4,69 +4,35 @@
 
 
 /*------------------------------------------------------------Libraries----------------------------------------------------------------------*/
+#include"headers.hpp"
 
-#ifdef __unix__
-    #include<sys/types.h>
-    #include<pthread.h>
-    #include<signal.h>
-    #include<unistd.h>
-    #include<fcntl.h>
-#endif // __unix__
-    #pragma comment(std=c++11)
-    #pragma comment(-lpthread)
+void handler(int sig) {
+  void *array[100];
+  size_t size;
 
-#include<iostream>
-#include<bits/stdc++.h>
-#include<string>
-#include<string.h>
-#include<ctime>
-#include<stdlib.h>
-#include<stdbool.h>
-#include<thread>
+  // get void*'s for all entries on the stack
+  size = backtrace(array, 10);
 
-/*  Enable debug mode
-    0   -   off
-    1   -   on
-*/
-#define DEBUG 0
-
-
-#define CONFIG_FILE_PATH "config.txt"
-#define LOG_FILE_PATH "log.txt"
-
-
-using namespace std;
-
-/*----------------------------------------------------------FUNCTION PROTOTYPE-----------------------------------------------------------------*/
-
-void getTime(string &ctime);
-
-
-/*---------------------------------------------------FUNCTION DEFINITIONS--------------------------------------------------------------------------------*/
-
-void getTime(string &ctime)
-{
-    char buffer[100];
-    time_t currentTime;
-    struct tm *time_info;
-    time(&currentTime);
-    time_info=localtime(&currentTime);
-    strftime(buffer,100,"%d-%m-%Y %I:%M:%S",time_info);
-    ctime=buffer;
-    return ;
+  // print out all the frames to stderr
+  fprintf(stderr, "Error: signal %d:\n", sig);
+  backtrace_symbols_fd(array, size, STDERR_FILENO);
+  exit(EXIT_FAILURE);
 }
 
 
-#include"../lib/connection.hpp"
-#include"master.hpp"
-
-/*---------------------------------------------------END OF FUNCTION DEFINITIONS--------------------------------------------------------------------------------*/
-
 int main()
 {
-    Master *m=new Master();
+    signal(SIGSEGV, handler);
+    CMS *m=new CMS();
+    HttpServer *hs = new HttpServer(CONFIG::HTTPSERVER_IPADDRESS,CONFIG::HTTPSERVER_PORT,CONFIG::HTTPSERVER_THREADPOOLSIZE,m);
 
-    thread listen (&Master::listenToCrawlers,m);
-    thread display (&Master::display,m);
-    listen.join();
+    thread worker (&CMS::listenToCrawlers,m);  // listen to crawler
+    thread server (&HttpServer::runner,hs);
+
+    server.join();
+    worker.join();
+
+    delete m;
+    delete hs;
+    return 0;
 }
