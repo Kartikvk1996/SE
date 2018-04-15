@@ -72,14 +72,15 @@ public class MajorProjectSearchEngineConjecture  {
     }
     return sum;
     }
+    
     public void buildDictionary() {
         Root.setChar('*');
        String s = "";
        
-            String currentDirectory = "C:\\Users\\akjantal";
+            String currentDirectory = "";
  
                 
-                String path = currentDirectory+"\\ex.txt";
+                String path = currentDirectory+"ex.txt";
                 try {
                     BufferedReader br = new BufferedReader(new FileReader(path));
                     while ((s = br.readLine()) != null) {
@@ -128,7 +129,7 @@ public class MajorProjectSearchEngineConjecture  {
          String line=null;
          String []sentence=null;
         String[]words=null;
-         String filename="sample.txt";
+         String filename="wiki.txt";
          int index;
          int keeper;
         context.init();
@@ -141,43 +142,50 @@ public class MajorProjectSearchEngineConjecture  {
        try{
         br= new BufferedReader(new FileReader(filename));
        
-        //System.out.println(wordList.size());
-           //System.err.println(wordList.get("galactic"));
        do{//for the entire corpus
           
         line=br.readLine();
-          
+        
            
-           if(line!=null){//System.out.println("LINE:"+line);
+           if(line!=null){
+               line=line.replace("[_-]", " ");
+               System.err.println("LINE:"+line);
            sentence=line.split("[.,!?]");}
            
            for(int numOfsentencesinLIne=0;numOfsentencesinLIne<sentence.length;numOfsentencesinLIne++){
-               
-             //  System.out.println("SENTENCE:"+sentence[numOfsentencesinLIne]);
-           try{
+               sentence[numOfsentencesinLIne]=sentence[numOfsentencesinLIne].trim();
+               System.err.println("SENTENCE:"+sentence[numOfsentencesinLIne]);
+          
          words=sentence[numOfsentencesinLIne].split(" ");
+               
            for(short check=0; check<words.length;check++){
                      words[check]=words[check].toLowerCase();
                      words[check]=words[check].trim();
-                     words[check]=words[check].replaceAll("[.,!-_;']", "");
-                    // System.err.println("word is:"+words[check]);
-                    if(words[check].length()>=1)search(Root, words[check], words[check].length());
-                    if(!searchFlag&&words[check].length()>=1){addWord(words[check]);System.err.println("ADDED:"+words[check]);}
+                     words[check]=words[check].replaceAll("[^a-zA-Z]", "");
+                   // System.err.println("word is:"+words[check]);
+                    searchFlag=false;
+                    if(words[check].length()>=1)
+                    {
+                        search(Root, words[check], words[check].length());
+                    if(!searchFlag)
+                    {
+                        addWord(words[check],sentence[numOfsentencesinLIne]);//System.err.println("ADDED:"+words[check]);
+                    }
+                    }
            
            }
-           }catch(NullPointerException e){}
-           catch(Exception et){et.printStackTrace();}
+           
            
          
          for(int numOfwordsinSentence=0;numOfwordsinSentence<words.length&&words[numOfwordsinSentence].length()>=1;numOfwordsinSentence++){
      
-             //System.out.println("WORD:"+words[numOfwordsinSentence]);
+             System.out.println("WORD:"+words[numOfwordsinSentence]);
         words[numOfwordsinSentence]=words[numOfwordsinSentence].replaceAll("[.,!-]", ""); words[numOfwordsinSentence]=words[numOfwordsinSentence].toLowerCase();
         //sentences.add(words[numOfwordsinSentence]);// adding the words in the sentence
           for(short nearby=-1;nearby<2;nearby+=2)  {
              for(short multiplier=1;multiplier<=2;multiplier++){
                    if(numOfwordsinSentence+nearby*multiplier>=0&&words.length>numOfwordsinSentence+nearby*multiplier){sentences.add(words[numOfwordsinSentence+nearby*multiplier]);
-                  // System.err.println("added:"+words[numOfwordsinSentence+nearby*multiplier]);
+                   System.err.println("word:"+words[numOfwordsinSentence]+"\tadded:"+words[numOfwordsinSentence+nearby*multiplier]);
                    }
              }
           } 
@@ -191,16 +199,21 @@ public class MajorProjectSearchEngineConjecture  {
                  //word not found in dictionary 
                  
                  //do some wornumOfwordsinSentence here to find if word to be added or not
-                 
-                 addWord(words[numOfwordsinSentence]);
+                 //System.err.println("added:"+words[numOfwordsinSentence]);
+                 addWord(words[numOfwordsinSentence],sentence[numOfsentencesinLIne]);
              }
              
              if(searchFlag){
                  searchFlag=false;}
             float sum[]=new float[wordVec.dimension];
             main.init();
-             System.err.println("word is:"+words[numOfwordsinSentence]);
-            wordVec mainword=main.getVec(wordList.get(words[numOfwordsinSentence]));
+             //System.err.println("word is:"+words[numOfwordsinSentence]);
+             wordVec mainword=null;
+             
+              
+                
+                mainword=main.getVec(wordList.get(words[numOfwordsinSentence]));
+            
              //Extract the rest of context word vectors
           // System.err.println("====Mainword====:"+words[numOfwordsinSentence]);
              for(String str : sentences){
@@ -210,10 +223,16 @@ public class MajorProjectSearchEngineConjecture  {
                  if(!str.equals(words[numOfwordsinSentence])){
                   //  System.err.println("context word:"+str);
                     
-                     int i=wordList.get(str);
-                     nearbyWords.add(context.getVec(i));
+                    try{ int i=wordList.get(str);nearbyWords.add(context.getVec(i));
+                    }
+                    catch(NullPointerException e)
+                    {addWord(str, sentence[numOfsentencesinLIne]);
+                    int i=wordList.get(str);
+                    nearbyWords.add(context.getVec(i));
+                    }
+                     
                      for(wordVec contextword: nearbyWords){
-                        // System.err.println(":VECTOR");contextword.display();
+              //           System.err.println("contextword:");contextword.display();System.err.println("\tmainword:");mainword.display();
                      float dotProduct[]=contextword.product(mainword.get());
                      dotProduct=exp(dotProduct);
                      sum=add(sum,dotProduct);
@@ -229,7 +248,7 @@ public class MajorProjectSearchEngineConjecture  {
          
          
          }}
-         
+         words=null;
            
        }while(line!=null);
            
@@ -432,7 +451,8 @@ public class MajorProjectSearchEngineConjecture  {
 
         return 1;
     }
-  float [] exp(float [] arg){
+  
+    float [] exp(float [] arg){
   
   for(int i=0;i<wordVec.dimension;i++){
   arg[i]=(float) Math.exp(arg[i]);
@@ -440,15 +460,25 @@ public class MajorProjectSearchEngineConjecture  {
   }
   return arg;
   }
-    public boolean addWord(String word){
-    String path="C:\\Users\\akjantal\\ex.txt";
-    File file=new File("C:\\Users\\akjantal\\sil.txt");
+    
+    
+    public boolean addWord(String word,String sentence){
+    String path="";
+    File file=new File("newWords.txt");
     try{
     FileWriter fw=new FileWriter(file, true);
     //new added words output to a new 
     fw.write(word+"\n");
     fw.close();
-    wordList.put(word,wordList.size());
+      //  System.out.println("word:"+word+"\tsentence"+sentence);
+   try{
+       int index=wordList.get(word);
+   }catch(NullPointerException e){wordList.put(word, wordList.size());
+   
+   main.addWord();
+    context.addWord();
+    }
+    
         //System.err.println(wordList.get(word));
     }catch(Exception t){t.printStackTrace();return false;}
     
@@ -549,7 +579,7 @@ class node {
  class mainWord {
     
     private int noOfwords;
-    ArrayList<wordVec> words=new ArrayList<wordVec>();
+    private static ArrayList<wordVec> words=new ArrayList<wordVec>();
     //this matrix contains vectors of all words when they are mainword.
     //This is referenced by dictionary
     public void init()
@@ -575,13 +605,21 @@ class node {
     return words.get(index);
     
     }
+        public void addWord(){
+            wordVec word=new wordVec();
+            word.init();
+        
+        this.words.add(word);
+        }
+        
+      
     
 }
 
 
  class contextWord {
     private int noOfwords;
-    ArrayList<wordVec> words=new ArrayList<wordVec>();
+    private static ArrayList<wordVec> words=new ArrayList<wordVec>();
     //this matrix contains vectors of all words when they are contextword.
     //creation of 
     public void init()
@@ -604,10 +642,19 @@ class node {
      }
         
     }
+    
+    public void addWord(){
+            wordVec word=new wordVec();
+            word.init();
+        
+        this.words.add(word);
+        }
     public wordVec getVec(int index){
     return words.get(index);
     
     }
+    
+   
 
  }
 
