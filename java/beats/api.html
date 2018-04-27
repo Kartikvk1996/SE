@@ -1,12 +1,13 @@
 <html>
 
 <head>
+    <script src="query.js"></script> <!--Well let it fail-->    
     <script src="apilist.js"></script>
     <script>
 
         var proppane, methpane;
 
-        window.onload = function () {
+        function prolog() {
 
             proppane = document.getElementById("proppane");
             methpane = document.getElementById("methpane");
@@ -103,14 +104,6 @@
 <body>
 
     <div class='appwindow'>
-
-        <div class="header">
-            <a href='index.html'><span class='beats-label'>Beats</span></a>
-            <div style="float: right">
-                <a class="navbarlink" href='api.html'>API</a>
-            </div>
-        </div>
-
         <h2>API reference</h2>
 
         <h3>Properties</h3>

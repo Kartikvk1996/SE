@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <title>Search</title>
+
+    <style>
+        .result {
+            clear: both;
+            padding: 5px;
+        }
+    </style>
+
+    <script>
+
+        var results;
+
+        function g(id) { return document.getElementById(id); }
+
+        window.onload = function () {
+            results = g('results');
+        }
+
+        function getresults() {
+            queryData("/search?" + g('sbox').value, function (data) {
+
+                g('time').innerHTML = `${data.millis} ms.`;
+
+                data = data.set;
+
+                /* sort the results */
+                data.sort(function(b, a){return a.freq - b.freq});
+
+                results.innerHTML = "";
+                for (var i = 0; i < data.length; i++) {
+                    results.innerHTML +=
+                        `
+                        <div class='result'>
+                            <a href='textcontent/${data[i].docid}'>Result ${i}</a>
+                            <br/>
+                            <span>textcontent/${data[i].docid}</span>
+                        </div>
+                    `;
+                } 
+            });
+        }
+        function queryData(endpoint, func) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200)
+                    func(JSON.parse(this.responseText));
+            }
+            xhttp.open("GET", endpoint, false);
+            xhttp.send();
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Search here</h1>
+    <input type='text' id='sbox' />
+    <button onclick="getresults()">Go</button>
+
+    <h4>Results</h4>
+    <span id='time'></span>
+    <div id='results'>
+    </div>
+</body>
+
+</html>

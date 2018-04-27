@@ -32,6 +32,7 @@
 	<script>
 		function prolog() {
 			container = document.getElementById("container");
+			setAPIEndPoint("/status");
 		}
 		function display(json) {
 			nodes = json.nodes;
@@ -79,23 +80,7 @@
 </head>
 
 <body>
-
-
 	<div class='appwindow'>
-
-		<div class="header">
-            <a href='index.html'>
-                <span class='beats-label'>Beats</span>
-            </a>
-            <div style="float: right">
-                <a class="navbarlink" href='help.html'>Help</a>
-            </div>
-            <div style="float: right">
-                <a class="navbarlink" href='api.html'>API</a>
-            </div>
-        </div>
-
-
 		<center>
 			<table style="width: 100%;">
 				<tr>

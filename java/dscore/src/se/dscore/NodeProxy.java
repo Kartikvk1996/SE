@@ -16,29 +16,29 @@ public class NodeProxy {
 
     @JsonExposed(comment = "The host name of the slave")
     public String host;
-    
+
     @JsonExposed(comment = "The port on which the agent is listening")
     public int agentPort;
-    
+
     @JsonExposed(comment = "This is the port on which logs are served")
     public int logPort;
-    
+
     @JsonExposed(comment = "The slave system's resources")
     public SysInfo sysInfo;
-    
+
     @JsonExposed(comment = "This is the last heartbeat time")
     public long lastHeartbeat;
-    
-    @JsonExposed(comment = "The processes running on this slave")
-    public HashMap<String, Process> processes;
-    
-    Master master;
 
-    HashMap<String, Process> getProcesses() {
+    @JsonExposed(comment = "The processes running on this slave")
+    public HashMap<String, ProcessProxy> processes;
+
+    MasterProcess master;
+
+    public HashMap<String, ProcessProxy> getProcesses() {
         return processes;
     }
 
-    NodeProxy(Master master, String host, int agentPort, int logPort, SysInfo sysInfo) {
+    public NodeProxy(MasterProcess master, String host, int agentPort, int logPort, SysInfo sysInfo) {
         this.host = host;
         this.agentPort = agentPort;
         this.master = master;
@@ -55,32 +55,32 @@ public class NodeProxy {
     public void kill(String pid) throws IOException {
         sendPDU(new KillPDU(pid), false);
     }
-    
-    void createProcess(String type) throws IOException {
+
+    public void createProcess(String executableName, String argString) throws IOException {
         PDU pdu = new CreatePDU(
-                type,
-                master.getHost() + " " + master.getPort()
+            executableName,
+            argString
         );
         sendPDU(pdu, false);
     }
 
-    String getHost() {
+    public String getHost() {
         return host;
     }
 
-    int getAgentPort() {
+    public int getAgentPort() {
         return agentPort;
     }
 
-    int getProcessCount() {
+    public int getProcessCount() {
         return processes.size();
     }
 
-    void addProcessEntry(String pid, Process proc) {
+    public void addProcessEntry(String pid, ProcessProxy proc) {
         processes.put(pid, proc);
     }
 
-    String sendPDU(PDU pdu, boolean recvBack) throws IOException {
+    public String sendPDU(PDU pdu, boolean recvBack) throws IOException {
         ESocket sock = new ESocket(getHost(), getAgentPort());
         sock.send(pdu);
         if (recvBack) {
@@ -92,11 +92,11 @@ public class NodeProxy {
     void rcvHeartBeat(StatusPDU pdu) {
         this.lastHeartbeat = (new Date()).getTime();
     }
-    
+
     @RESTExposedMethod(comment = "Kills a process on this slave whose PID is sent")
     public String kill(JsonObject data) {
         try {
-            kill((String) ((DictObject)data).get("pid").getValue());
+            kill((String) ((DictObject) data).get("pid").getValue());
         } catch (IOException ex) {
             return "failed";
         }

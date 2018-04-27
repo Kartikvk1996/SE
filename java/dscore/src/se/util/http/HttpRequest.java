@@ -16,7 +16,7 @@ public class HttpRequest {
     private String method;
     private OutputStream out;
 
-    OutputStream getOutputStream() throws IOException {
+    public OutputStream getOutputStream() throws IOException {
         return out;
     }
 

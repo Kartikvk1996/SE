@@ -17,13 +17,10 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.logging.Level;
-import jsonparser.JsonException;
 import se.ipc.ESocket;
 import se.ipc.pdu.AckPDU;
 import se.ipc.pdu.ConnectPDU;
 import se.ipc.pdu.IntroPDU;
-import se.ipc.pdu.InvalidPDUException;
 import se.ipc.pdu.PDU;
 import se.ipc.pdu.PDUConsts;
 import se.ipc.pdu.StatusPDU;
@@ -31,33 +28,32 @@ import se.util.Logger;
 import se.util.http.HttpServer;
 import se.util.http.RESTServer;
 
-public class Master extends Node {
+public class MasterProcess extends Process {
 
     private final MasterView status;
     private final LinkedHashMap<String, NodeProxy> nodes;
     private final HttpServer hserver;
-    private final Scheduler scheduler;
+    private Scheduler scheduler;
     private final long SLAVE_HB_WAIT_INTERVAL = 12000;
-    private final Configuration conf;
 
     /**
-     * @param configFile : configuration file of the master may be used in
-     * future.
-     * @param scheduler
+     * @param config
      * @throws IOException
      * @throws java.io.FileNotFoundException
      */
-    public Master(String configFile, Scheduler scheduler)
+    public MasterProcess(MasterProcessConfiguration config)
             throws IOException, FileNotFoundException {
-        super();
-        conf = Configuration.readFromFile(configFile);
+
+        super(config);
         nodes = new LinkedHashMap<>();
         status = new MasterView(nodes);
 
-        hserver = new RESTServer(conf.get(Configuration.HTTP_ROOT), this);
-        Logger.setLoglevel(Integer.parseInt(conf.get(Configuration.DEBUG_LEVEL)));
+        hserver = new RESTServer((String) config.get(MasterProcessConfiguration.HTTP_ROOT), this);
 
         AckPDU.setHttpPort(hserver.getPort());
+    }
+
+    public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
     }
 
@@ -66,7 +62,7 @@ public class Master extends Node {
 
         for (String slaveHost : nodes.keySet()) {
             NodeProxy slave = nodes.get(slaveHost);
-            HashMap<String, Process> map = slave.getProcesses();
+            HashMap<String, ProcessProxy> map = slave.getProcesses();
             for (String key : map.keySet()) {
                 map.get(key).sendPDU(new IntroPDU(sock.getHost(), sock.getPort()), false);
             }
@@ -77,7 +73,7 @@ public class Master extends Node {
     /**
      * Registers the Node, Process in the domain.
      *
-     * 1. Fireup is treated as a slave agent and will be added as slave 2.
+     * 1. Fireup is treated as a Node agent and will be added as slave 2.
      * Processes on nodes get added to respective SlaveProxies. 3. Any guests
      * will be introduced to the processes.
      *
@@ -86,12 +82,6 @@ public class Master extends Node {
      * @throws IOException
      */
     public void handle_connect(ESocket sock, ConnectPDU pdu) throws IOException {
-
-        /* If he is a guest then just introduce it to everyone. */
-        if (pdu.getWho().equals(PDUConsts.PN_GUEST)) {
-            introduce(sock, pdu);
-            return;
-        }
 
         String sender = sock.getHost();
         String ticket = pdu.getTicket();
@@ -117,12 +107,13 @@ public class Master extends Node {
             AckPDU apdu = new AckPDU(ticket);
             sock.send(apdu);
             schedule(ticket);
+            return;
         }
 
         String pid = pdu.getPid();
         nodes.get(ticket).addProcessEntry(
                 pid,
-                new Process(
+                new ProcessProxy(
                         sender,
                         pdu.getConnectPort(),
                         pdu.getWho(),
@@ -187,12 +178,9 @@ public class Master extends Node {
 
     /**
      * Creates a HTTP-server and starts node protocol handler
-     *
-     * @throws IOException
      */
     @Override
-    public void run() throws IOException {
-        setProxy(new MasterProxy("localhost", getPort()));
+    public void run() {
 
         /* Start a HTTP thread */
         new Thread(() -> {
@@ -204,11 +192,8 @@ public class Master extends Node {
         }, "HTTP-SERVER").start();
 
         /* Start a slave monitor thread */
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                runSlaveMonitorThread();
-            }
+        new Thread(() -> {
+            runSlaveMonitorThread();
         }, "SLAVE_MONITOR").start();
 
         super.run();
@@ -229,7 +214,7 @@ public class Master extends Node {
             for (String node : nodes.keySet()) {
                 NodeProxy np = nodes.get(node);
                 for (String pid : np.processes.keySet()) {
-                    Process proc = np.processes.get(pid);
+                    ProcessProxy proc = np.processes.get(pid);
                     long timeNow = (new Date()).getTime();
                     if (proc.getLastHBTime() + SLAVE_HB_WAIT_INTERVAL < timeNow) {
                         np.processes.remove(pid);

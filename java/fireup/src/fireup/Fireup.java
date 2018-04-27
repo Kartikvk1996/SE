@@ -154,22 +154,6 @@ public class Fireup implements RequestHandler {
         return fireupServer.getPort();
     }
 
-    @Override
-    public void handle_get(ESocket sock, GetPDU gpdu) throws IOException {
-    }
-
-    @Override
-    public void handle_intro(ESocket sock, IntroPDU ipdu) throws IOException {
-    }
-
-    @Override
-    public void handle_connect(ESocket sock, ConnectPDU cpdu) throws IOException {
-    }
-
-    @Override
-    public void handle_ack(ESocket sock, AckPDU apdu) throws IOException {
-    }
-
     private void createPropertiesFile() {
         try {
             properties.put(PROP_SEHOME, ".");
@@ -232,6 +216,11 @@ public class Fireup implements RequestHandler {
         } catch (IOException ex) {
             Logger.elog(Logger.HIGH, "Couldn't download " + fileName + " " + ex.getMessage());
         }
+    }
+
+    @Override
+    public void handler(ESocket sock, PDU pdu) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
