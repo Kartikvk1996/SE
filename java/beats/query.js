@@ -1,4 +1,4 @@
-var API_END_POINT = "/status";
+var API_END_POINT = "";
 var refreshInterval = 3000;
 var container;
 
@@ -21,8 +21,35 @@ function btom(x) {
     return tof2(x / 1024 / 1024) + "MB";
 }
 
+function insert_common_header() {
+
+    var appwindow = document.getElementsByClassName("appwindow")[0];
+    var hdr = document.createElement("div");
+    hdr.classList += "header";
+
+    hdr.innerHTML = `
+                    <a href='index.html'>
+                        <span class='beats-label'>Beats</span>
+                    </a>
+                    <div style="float: right">
+                        <a class="navbarlink" href='help.html'>Help</a>
+                    </div>
+                    <div style="float: right">
+                        <a class="navbarlink" href='api.html'>API</a>
+                    </div>`;
+
+    if(appwindow.childElementCount != 0)
+        appwindow.insertBefore(hdr, appwindow.childNodes[0]);
+    else
+        appwindow.appendChild(hdr);
+}
+
+
 window.onload = function schedule() {
+    insert_common_header();
     prolog();
+    if(API_END_POINT == "")
+        return;
     refresh(API_END_POINT);
     var timerId = setInterval(
         refresh,

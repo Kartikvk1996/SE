@@ -16,9 +16,9 @@ import se.util.Logger;
 public class Heartbeat implements Runnable {
 
     MasterProxy mproxy;
-    Node node;
+    Process node;
     int millis;
-    public Heartbeat(MasterProxy mproxy, Node self, int millis) {
+    public Heartbeat(MasterProxy mproxy, Process self, int millis) {
         this.mproxy = mproxy;
         node = self;
         this.millis = millis;

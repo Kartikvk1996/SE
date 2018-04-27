@@ -1,84 +1,91 @@
 package se.dscore;
 
+/**
+ * Core of the domain. This implements the basic functionality of a component
+ * process.
+ */
 import java.io.IOException;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jsonparser.JsonExposed;
-import jsonparser.JsonObject;
-import se.ipc.ESocket;
-import se.ipc.pdu.CommandPDU;
-import se.ipc.pdu.InvalidPDUException;
-import se.ipc.pdu.KillPDU;
+import jsonparser.JsonException;
 import se.ipc.pdu.PDU;
+import se.ipc.ESocket;
+import se.ipc.pdu.InvalidPDUException;
+import static se.ipc.pdu.PDUConsts.METHOD_DIE;
 import se.ipc.pdu.StatusPDU;
+import se.util.Logger;
 
-public class Process {
-    
-    @JsonExposed(comment = "PID of the process. It's a string")
-    public String pid;
-    
-    @JsonExposed(comment = "This denotes the type of process")
-    public String type;
-    
-    @JsonExposed(comment = "This is the host on which process is running")
-    public String host;
-    
-    @JsonExposed(comment = "Port on which this slave may be listening")
-    public int port;
+public class Process implements RequestHandler {
 
-    @JsonExposed(comment = "Last heartbeat interval of the slave")
-    public long lastHeartbeatTime;
     
-    @JsonExposed(comment = "The error stream of the process")
-    public String errFile;
-    
-    @JsonExposed(comment = "The output stream of the process")
-    public String outFile;
-    
-    Process(String host, int port, String type, String pid, String errFile, String outFile) {
-        this.host = host;
-        this.port = port;
-        this.type = type;
-        this.pid = pid;
-        this.errFile = errFile;
-        this.outFile = outFile;
-    }
-    
-    String getHost() {
-        return host;
+    private final String err;
+    private final String out;
+    private final Server server;
+    public static final int HEARTBEAT_INTERVAL = 2000;
+    protected Configuration config;
+
+    /* this is just for master port unavailibility issue */
+    protected Process(Configuration config) throws IOException {
+        this.config = config;
+        server = new Server(this);
+        err = config.getErrFile();
+        out = config.getOutFile();
+        PDU.setProcessRole(config.getProcessRole());
+        Logger.setLoglevel(Integer.parseInt((String) config.get(Configuration.DEBUG_LEVEL)));
     }
 
-    int getPort() {
-        return port;
+    public String getErrFile() {
+        return err;
+    }
+    
+    public String getOutFile() {
+        return out;
+    }
+    
+    public void run() {
+        new Thread(() -> {
+            try {
+                server.run();
+            } catch (IOException ex) {
+                Logger.elog(Logger.HIGH, "Exception in dscore thread. " + ex.getMessage());
+            }
+        }, "dscore-thread").start();
     }
 
-    String sendPDU(PDU pdu, boolean recvBack) throws IOException {
-        ESocket sock = new ESocket(getHost(), getPort());
-        sock.send(pdu);
-        if (recvBack) {
-            return sock.readData();
-        }
-        return "";
+    public String getHost() {
+        return server.getHost();
     }
 
-    public long getLastHBTime() {
-        return lastHeartbeatTime;
+    public int getPort() {
+        return server.getPort();
     }
 
-    void rcvHeartbeat(StatusPDU pdu) {
-        lastHeartbeatTime = (new Date()).getTime();
-    }
-
-    @RESTExposedMethod(comment = "Runs a method in given process. Nothing is sent back")
-    public String runMethod(String method, JsonObject data) {
+    @Override
+    public void handle(ESocket socket) throws IOException {
+        PDU pdu = null;
         try {
-            sendPDU(new CommandPDU(method, data), false);
-        } catch (InvalidPDUException | IOException ex) {
-            return ex.toString();
+            pdu = socket.recvPDU();
+        } catch (JsonException | InvalidPDUException ex) {
+            Logger.elog(Logger.HIGH, "Error handling the client. " + ex.getMessage());
         }
-        return "success";
+        if (pdu == null) {
+            return;
+        }
+        handler(socket, pdu);
+    }
+
+    @Override
+    public void handler(ESocket socket, PDU pdu) throws IOException {
+        switch(pdu.getMethod()) {
+            case METHOD_DIE:
+                deinit();
+                System.exit(0);
+        }
+    }
+
+    public PDU getStatus() {
+        return new StatusPDU();
     }
     
-    
+    public void deinit() {
+        
+    }
 }

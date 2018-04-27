@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import jsonparser.Json;
 import jsonparser.JsonException;
-import se.dscore.Master;
+import se.dscore.MasterProcess;
 import se.dscore.MasterView;
 import se.util.Logger;
 
 public class RESTServer extends HttpServer {
 
     MasterView mview;
-    Master master;
+    MasterProcess master;
 
-    public RESTServer(String docRoot, Master master) throws IOException {
+    public RESTServer(String docRoot, MasterProcess master) throws IOException {
         super(docRoot);
         this.master = master;
         mview = master.getDomainStatus();

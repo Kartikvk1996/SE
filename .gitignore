@@ -1,3 +1,6 @@
+*/dmgr/content/*
+*/dmgr/www/textcontent/*
+PID*
 /fireup/nbproject/private/
 /fireup/build/
 .vscode/
@@ -37,3 +40,10 @@
 /java/apidoccer/build/
 /java/FindServer/nbproject/private/
 /java/FindServer/build/
+/java/TCycle/nbproject/private/
+/java/http/nbproject/private/
+/java/TCycle/dist/
+/java/TCycle/build/
+/java/doclassifiwe/nbproject/private/
+/java/doclassfier/nbproject/private/
+/java/docclassifier/nbproject/private/
