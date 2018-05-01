@@ -1,4 +1,4 @@
-Hi. How are you doing these days.
-Weather seems fine these days.
+Hi.	How are you doing these days.
+Weather 	seems fine these days	.
 Are you hungry.
 Please be patient.

@@ -1,0 +1,6 @@
+majorproject.search.engine.conjecture.Document
+majorproject.search.engine.conjecture.node
+majorproject.search.engine.conjecture.wordVec
+majorproject.search.engine.conjecture.MajorProjectSearchEngineConjecture
+majorproject.search.engine.conjecture.mainWord
+majorproject.search.engine.conjecture.contextWord
