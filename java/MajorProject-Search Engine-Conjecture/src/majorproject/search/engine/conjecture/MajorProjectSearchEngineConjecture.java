@@ -169,7 +169,7 @@ public class MajorProjectSearchEngineConjecture  {
            
            for(int numOfsentencesinLIne=0;numOfsentencesinLIne<sentence.length;numOfsentencesinLIne++){
                sentence[numOfsentencesinLIne]=sentence[numOfsentencesinLIne].trim();
-              System.err.println("SENTENCE:"+sentence[numOfsentencesinLIne]);
+            //  System.err.println("SENTENCE:"+sentence[numOfsentencesinLIne]);
           
          words=sentence[numOfsentencesinLIne].split(" ");
                
@@ -237,7 +237,7 @@ public class MajorProjectSearchEngineConjecture  {
                  
                 //System.err.println("size:"+wordList.size());    
                  if(!str.equals(words[numOfwordsinSentence])){
-                   System.err.println("context word:"+str);
+                 //  System.err.println("context word:"+str);
                     
                      int indexOfContextwords=wordList.get(str);
                      
@@ -246,15 +246,18 @@ public class MajorProjectSearchEngineConjecture  {
                   
                      
                      for(wordVec contextword: nearbyWords){
-                         float[] numerator,denominator;
-                        // denominator=denominator(mainword);
+                         float numerator,denominator;
+                         denominator=denominator(mainword);
+                         
                          for(int cindex=0;cindex <nearbyWords.size();cindex++){
               //           System.err.println("contextword:");contextword.display();System.err.println("\tmainword:");mainword.display();
                      float dotProduct=contextword.product(mainword.get());
-                    // dotProduct=exp(dotProduct);
+                     dotProduct=exp(dotProduct);
+                             System.err.println("probability:"+dotProduct/denominator);
                      //numerator=product(dotProduct, contextword.get());
                    //  sum=add(sum,numerator);
-                     } 
+                     }
+                        
                    //  gradient=divide(sum, denominator);
                      
                      }                 
@@ -378,6 +381,10 @@ public class MajorProjectSearchEngineConjecture  {
     return res;
     }
     
+    public float divide (float arg1,float arg2){
+    return arg1/arg2;
+    }
+    
     
     public float[] difference(float[]arg1, float[] arg2){
     
@@ -387,6 +394,10 @@ public class MajorProjectSearchEngineConjecture  {
      res[size]=arg1[size]-arg2[size];
     }
     return res;
+    }
+    
+    public float difference(float arg1, float arg2){
+    return arg1-arg2;
     }
     
     
