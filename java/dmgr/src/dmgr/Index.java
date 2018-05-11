@@ -6,7 +6,7 @@ import jsonparser.JsonExposed;
 public class Index implements Serializable {
     
     @JsonExposed(comment = "frequency of the word in this doc")
-    int frequency;
+    public int frequency;
 
     public Index(int frequency) {
         this.frequency = frequency;

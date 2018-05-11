@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class Logger {
     
+    public static final int PROTO   = 0;
     public static final int DEBUG   = 1;
     public static final int LOW     = 2;
     public static final int MEDIUM  = 3;
@@ -16,7 +17,7 @@ public class Logger {
     
     static PrintStream pw = System.out;
     static int loglevel;
-    static String[] levels = {"", "DEBUG", "LOW", "MEDIUM", "HIGH"};
+    static String[] levels = {"PROTO", "DEBUG", "LOW", "MEDIUM", "HIGH"};
     
     public static void setLoglevel(int level) {
         loglevel = level;

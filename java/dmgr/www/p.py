@@ -19,27 +19,35 @@ def text_from_html(body):
     visible_texts = filter(tag_visible, texts)  
     return u" ".join(t.strip() for t in visible_texts)
 
+lf = open("linktab.txt", "w", encoding="utf-8", buffering=1)
 
 baseurl = sys.argv[1]
-queue = {sys.argv[2]}
+queue = {(sys.argv[2], 0)}
+maxdepth = int(sys.argv[3])
 docid = 0
 visited = {""}
 
 while len(queue) != 0:
 
-    url = queue.pop()
+    urlt = queue.pop()
+    url = urlt[0]
+    dpt = urlt[1]
+    if dpt > maxdepth:
+        continue
+
     if url in visited:
         continue
 
     url = url.replace("&amp;","&")
     if ( url[0] == '/' ):
         url = baseurl + url
-    
+
     visited.add(url)
-    print( '>' + url )
+    print('>' + str(urlt))
     try:
         html_code = urllib.request.urlopen(url).read().decode('utf-8')
         docid = docid + 1
+        lf.write(str(docid) + '\t' + str(dpt) + '\t' + url + '\n')    
     except:
         print('error occured downloading : ' + url)
         continue
@@ -49,8 +57,8 @@ while len(queue) != 0:
     for tag in links:
         link = tag.get('href',None)
         if link is not None and link[0] == '/' and '.' not in link:
-            queue.add(link)            
-
+            queue.add((link, dpt + 1))
+            
     with io.open('C:\\Users\\mpataki\\Documents\\se\\java\\dmgr\\tmp\\' + str(docid), "w", encoding="utf-8") as f:
         f.write(text_from_html(html_code))
     

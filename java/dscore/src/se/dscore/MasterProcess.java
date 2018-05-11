@@ -26,14 +26,15 @@ import se.ipc.pdu.PDUConsts;
 import se.ipc.pdu.StatusPDU;
 import se.util.Logger;
 import se.util.http.HttpServer;
+import se.util.http.ProgressiveProcess;
 import se.util.http.RESTServer;
 
-public class MasterProcess extends Process {
+public class MasterProcess extends Process implements ProgressiveProcess {
 
-    private final MasterView status;
-    private final LinkedHashMap<String, NodeProxy> nodes;
+    protected final MasterView status;
+    protected final LinkedHashMap<String, NodeProxy> nodes;
     private final HttpServer hserver;
-    private Scheduler scheduler;
+    protected Scheduler scheduler;
     private final long SLAVE_HB_WAIT_INTERVAL = 12000;
 
     /**
@@ -58,13 +59,13 @@ public class MasterProcess extends Process {
     }
 
     /* Planning to remove this */
-    void introduce(ESocket sock, PDU pdu) throws IOException {
+    void introduce(IntroPDU pdu) throws IOException {
 
         for (String slaveHost : nodes.keySet()) {
             NodeProxy slave = nodes.get(slaveHost);
             HashMap<String, ProcessProxy> map = slave.getProcesses();
             for (String key : map.keySet()) {
-                map.get(key).sendPDU(new IntroPDU(sock.getHost(), sock.getPort()), false);
+                map.get(key).sendPDU(pdu, false);
             }
         }
     }
@@ -99,7 +100,7 @@ public class MasterProcess extends Process {
                     new NodeProxy(
                             this, sender,
                             pdu.getConnectPort(),
-                            pdu.getLogPort(),
+                            pdu.getHttpPort(),
                             pdu.getSysInfo()
                     )
             );
@@ -119,12 +120,14 @@ public class MasterProcess extends Process {
                         pdu.getWho(),
                         pid,
                         pdu.getErrFile(),
-                        pdu.getOutFile()
+                        pdu.getOutFile(),
+                        pdu.getHttpPort()
                 )
         );
 
         AckPDU apdu = new AckPDU(ticket);
         sock.send(apdu);
+        introduce(new IntroPDU(sender, pdu.getConnectPort(), pdu.getWho()));
     }
 
     int getSlaveCount() {
@@ -167,14 +170,6 @@ public class MasterProcess extends Process {
         super.handler(socket, pdu);
     }
 
-    /**
-     * Provides a global level status object which can be queried
-     *
-     * @return The status of this domain
-     */
-    public MasterView getDomainStatus() {
-        return status;
-    }
 
     /**
      * Creates a HTTP-server and starts node protocol handler
@@ -242,6 +237,11 @@ public class MasterProcess extends Process {
             node.processes.get(pdu.getPid()).rcvHeartbeat(pdu);
         } catch (Exception ex) {
         }
+    }
+
+    @Override
+    public Object getProgress() {
+        return status;
     }
 
 }

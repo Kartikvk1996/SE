@@ -4,11 +4,7 @@ import se.ipc.pdu.PDU;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.logging.Level;
 import jsonparser.DictObject;
 import jsonparser.Json;
 import jsonparser.JsonException;
@@ -16,10 +12,14 @@ import se.ipc.pdu.AckPDU;
 import se.ipc.pdu.CommandPDU;
 import se.ipc.pdu.ConnectPDU;
 import se.ipc.pdu.CreatePDU;
+import se.ipc.pdu.DiePDU;
 import se.ipc.pdu.GetPDU;
+import se.ipc.pdu.HiPDU;
+import se.ipc.pdu.IntroPDU;
 import se.ipc.pdu.InvalidPDUException;
 import se.ipc.pdu.KillPDU;
 import se.ipc.pdu.PDUConsts;
+import se.ipc.pdu.SearchPDU;
 import se.ipc.pdu.StatusPDU;
 import se.util.Logger;
 
@@ -38,7 +38,7 @@ public class ESocket {
     public void send(PDU iPDU) throws IOException {
         try {
             String str = Json.dump(iPDU);
-            Logger.ilog(Logger.DEBUG, str);
+            Logger.ilog(Logger.PROTO, str);
             socket.getOutputStream().write(str.getBytes());
         } catch (JsonException ex) {
             Logger.elog(Logger.HIGH, "Unable to send data. Json Exception");
@@ -72,7 +72,7 @@ public class ESocket {
 
     public PDU recvPDU() throws IOException, JsonException, InvalidPDUException {
         DictObject jObj = (DictObject) Json.parse(getInputStream());
-        Logger.ilog(Logger.DEBUG, jObj.toString());
+        Logger.ilog(Logger.PROTO, jObj.toString());
         PDU tmp = new PDU(jObj);
         switch (tmp.getMethod()) {
             case PDUConsts.METHOD_ACK:
@@ -84,7 +84,7 @@ public class ESocket {
             case PDUConsts.METHOD_ERROR:
                 return new GetPDU(jObj);
             case PDUConsts.METHOD_INTRO:
-                return new StatusPDU(jObj);
+                return new IntroPDU(jObj);
             case PDUConsts.METHOD_GET:
                 return new GetPDU(jObj);
             case PDUConsts.METHOD_STATUS:
@@ -95,8 +95,19 @@ public class ESocket {
                 return new KillPDU(jObj);
             case PDUConsts.METHOD_COMMAND:
                 return new CommandPDU(jObj);
+            case PDUConsts.METHOD_DIE:
+                return new DiePDU();
+            case PDUConsts.METHOD_HI:
+                return new HiPDU(jObj);
+            case PDUConsts.METHOD_SEARCH:
+                return new SearchPDU(jObj);
         }
         return tmp;
     }
 
+    @Override
+    public String toString() {
+        return "{ host: " + getHost() + ", port : " + getPort() + " }";
+    }
+    
 }

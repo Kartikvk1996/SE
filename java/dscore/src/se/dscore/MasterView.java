@@ -1,13 +1,9 @@
 package se.dscore;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import jsonparser.DictObject;
-import jsonparser.Json;
 import jsonparser.JsonArray;
-import jsonparser.JsonException;
 import jsonparser.JsonExposed;
 import jsonparser.JsonObject;
 import jsonparser.StringObject;
@@ -19,24 +15,6 @@ public class MasterView {
 
     public MasterView(LinkedHashMap<String, NodeProxy> nodes) {
         this.nodes = nodes;
-    }
-
-    public String getObjectAsJson(String url) {
-
-        String chunks[] = url.split("/");
-
-        try {
-            Object obj = APIFinder.getObject(this, chunks, 1, chunks.length);
-            if (obj != null) {
-                return Json.dump(obj);
-            } else {
-                return "{'error': 'object not found'}";
-            }
-        } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | JsonException ex) {
-        } catch (APIAccessException ex) {
-            return "{'error': 'Field not exposed'}";
-        }
-        return "{}";
     }
 
     public void shutDownNode(String nodename) throws Exception {
@@ -94,23 +72,4 @@ public class MasterView {
         resp.set("errors", jarr);
         return resp.toString();
     }
-
-    public String execute(String url, JsonObject obj) {
-
-        String chunks[] = url.split("/");
-        try {
-            Object endObj = APIFinder.getObject(this, chunks, 1, chunks.length - 1);
-            Method meth = endObj.getClass().getMethod(chunks[chunks.length - 1], JsonObject.class);
-            if (meth.getAnnotation(RESTExposedMethod.class) != null) {
-                return (String) meth.invoke(endObj, obj);
-            } else {
-                return "{'error': 'This API is not exposed'}";
-            }
-        } catch (IllegalArgumentException | IllegalAccessException | JsonException | NoSuchFieldException | NoSuchMethodException | SecurityException | InvocationTargetException ex) {
-        } catch (APIAccessException ex) {
-            return "{'error': 'The field is not exposed through REST API'}";
-        }
-        return "{'error': 'No such method'}";
-    }
-
 }

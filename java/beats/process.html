@@ -33,6 +33,7 @@
         var nodename, processname;
         var logPort, logHost;
         var pid, port, type, host, lastHeartbeatTime, stderr, stdout, kill;
+        var httpPortEntry = false;
 
         var elements = [
 
@@ -40,7 +41,6 @@
             ['port', 'Port'],
             ['host', 'Host'],
             ['lastHeartbeatTime', 'Heartbeat'],
-
         ];
 
         function prolog() {
@@ -78,8 +78,6 @@
             host = g("host");
             lastHeartbeatTime = g("lastHeartbeatTime");
 
-
-
         }
 
 
@@ -101,24 +99,32 @@
         function set(x, v) { x.innerHTML = v; }
 
 
-        function display(processname) {
+        function display(process) {
 
             var logloc = `http://${logHost}:${logPort}`;
 
+            set(pid, process.pid);
+            set(type, process.type);
+            set(port, process.port);
+            set(host, process.host);
+            set(lastHeartbeatTime, tdiff(process.lastHeartbeatTime));
 
+            if (httpPortEntry == false) {
+                if (process.httpPort != 0) {
+                    httpPortEntry = true;
+                    var url = `http://${process.host}:${process.httpPort}/index.html`;
+                    processarea.innerHTML += `
+                            <tr>
+                                <td align='right' class="lab"><span>http-port</span></td>
+                                <td><a href='${url}'>${url}</a></td>
+                            </tr>`;
+                }
+            }
 
+            stderr.href = `http://${logHost}:${logPort}/${process.errFile}`;
+            stdout.href = `http://${logHost}:${logPort}/${process.outFile}`;
 
-            set(pid, processname.pid);
-            set(type, processname.type);
-            set(port, processname.port);
-            set(host, processname.host);
-            set(lastHeartbeatTime, tdiff(processname.lastHeartbeatTime));
-
-
-            stderr.href = `http://${logHost}:${logPort}/${processname.errFile}`;
-            stdout.href = `http://${logHost}:${logPort}/${processname.outFile}`;
-
-            kill.href = `/exec/nodes/${nodename}/kill?{{"pid":"${processname.pid}"}}`;
+            kill.href = `/exec/nodes/${nodename}/kill?{{"pid":"${process.pid}"}}`;
         }
     </script>
     <script src="query.js"></script>

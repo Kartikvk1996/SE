@@ -41,17 +41,24 @@ public class Trie implements Serializable {
         }
     }
 
+    boolean addOnSearch;
     int lastid;
     Node root;
 
-    Trie() {
+    Trie(Trie sibling, boolean addOnSearch) {
+        this.root = sibling.root;
+        this.addOnSearch = addOnSearch;
+    }
+    
+    Trie(boolean addOnSearch) {
         lastid = 1;
         root = new Node(null);
+        this.addOnSearch = addOnSearch;
     }
 
     public static Trie fromFile(String fileName)
             throws FileNotFoundException, IOException {
-        Trie trie = new Trie();
+        Trie trie = new Trie(true);
         BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line;
         Pattern pattern = Pattern.compile("[A-Za-z]+");
@@ -65,6 +72,10 @@ public class Trie implements Serializable {
         return trie;
     }
 
+    public void setAddOnSearch(boolean addOnSearch) {
+        this.addOnSearch = addOnSearch;
+    }
+    
     public NodeData insert(String word) {
         word = word.toLowerCase();
         Node cur = root;
@@ -89,13 +100,23 @@ public class Trie implements Serializable {
         for (int i = 0; cur != null && i < len; i++) {
             cur = cur.ptrs[word.charAt(i) - 'a'];
         }
-        NodeData data = cur == null ?
-                insert(word) :
-                cur.data;
-        if(data == null) {
-            data = cur.data = new NodeData(lastid++, 0); //frequency increment next line
+        NodeData data = null;
+
+        if (cur == null) {
+            if (addOnSearch) {
+                data = insert(word);
+            }
+        } else {
+            data = cur.data;
         }
-        data.freq++;
+
+        if (data == null) {
+            if (addOnSearch) {
+                data = cur.data = new NodeData(lastid++, 1);
+            }
+        } else {
+            data.freq++;
+        }
         return data;
     }
 

@@ -33,13 +33,17 @@ public class ProcessProxy {
     @JsonExposed(comment = "The output stream of the process")
     public String outFile;
     
-    ProcessProxy(String host, int port, String type, String pid, String errFile, String outFile) {
+    @JsonExposed(comment = "This is the http port the process runs if it has any")
+    public int httpPort;
+    
+    ProcessProxy(String host, int port, String type, String pid, String errFile, String outFile, int httpPort) {
         this.host = host;
         this.port = port;
         this.type = type;
         this.pid = pid;
         this.errFile = errFile;
         this.outFile = outFile;
+        this.httpPort = httpPort;
     }
     
     String getHost() {

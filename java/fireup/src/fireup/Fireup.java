@@ -171,7 +171,7 @@ public class Fireup implements RequestHandler {
                     "", "***",
                     getFireupPort()
             );
-            cpdu.setLogPort(httpServer.getPort());
+            cpdu.setHttpPort(httpServer.getPort());
             
             AckPDU pdu = (AckPDU) mproxy.send(cpdu, true);
             mproxy.setJarVersion(Long.parseLong(pdu.getJarVersion()));

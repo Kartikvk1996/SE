@@ -1,8 +1,16 @@
+import java.io.FileNotFoundException;
 import se.dscore.MasterProcess;
 import java.io.IOException;
+import se.dscore.MasterProcessConfiguration;
+import se.dscore.Scheduler;
 
-public class DataMaster {
+public class DataMaster extends MasterProcess {
     
+    public DataMaster(MasterProcessConfiguration config, Scheduler scheduler) throws IOException, FileNotFoundException {
+        super(config);
+        this.scheduler = scheduler;
+    }
+
     public static void main(String argv[]) throws IOException {
         
         /**
@@ -11,8 +19,7 @@ public class DataMaster {
         /**/
         
         DMasterConfiguration config = new DMasterConfiguration("masterconfig.conf");
-        MasterProcess master = new MasterProcess(config);
-        master.setScheduler(new RBScheduler(config, master.getHost(), master.getPort()));
+        DataMaster master = new DataMaster(config, new RBScheduler(config));
 	System.out.printf("master running on port  [%d]\n", master.getPort());
         System.out.printf("Http server running on port [%d]\n", master.getHttpServer().getPort());
         System.out.printf("Http server document root : [%s]\n", master.getHttpServer().getDocumentRoot());

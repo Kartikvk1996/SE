@@ -13,7 +13,7 @@ public class SlaveProcess extends Process {
     protected MasterProxy mproxy;
     protected String ticket;
 
-    public SlaveProcess(SlaveProcessConfiguration config) throws IOException, ArrayIndexOutOfBoundsException {
+    public SlaveProcess(SlaveProcessConfiguration config) throws IOException {
         super(config);
         mproxy = new MasterProxy(config.getMasterHost(), config.getMasterPort());
         ticket = config.getTicket();
@@ -27,6 +27,7 @@ public class SlaveProcess extends Process {
         /* report to the master that you are running on port X */
         try {
             ConnectPDU pdu = new ConnectPDU(ticket, pid, getPort());
+            pdu.setHttpPort(getHttpPort());
             pdu.setEOFiles(getErrFile(), getOutFile());
             mproxy.send(pdu, true);
         } catch (IOException | JsonException | InvalidPDUException ex) {
