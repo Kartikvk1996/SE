@@ -15,3 +15,12 @@ $$ make genexec
 
 
 ---------------------------------------------CRSMaster--------------------------------------
+$$ mkdir queue
+$$ touch queue/queue.dat
+
+
+
+--------------------------------------------DataServer--------------------------------------
+$$ mkdir data
+$$ mkdir data/index
+$$ touch data/index/index.txt
