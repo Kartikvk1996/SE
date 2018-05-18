@@ -1,0 +1,19 @@
+
+
+[ 18-05-2018 06:25:39 ]  [ INFO ]	[__init]	Starting the Master
+[ 18-05-2018 06:25:39 ]  [ INFO ]	[__init]	Starting internal server on IP 127.0.0.1:8081	
+[ 18-05-2018 06:25:39 ]  [ INFO ]	[__init]	Internal server on IP 127.0.0.1:8081 started	
+[ 18-05-2018 06:25:39 ]  [ INFO ]	[__init]	HTTP server on IP 127.0.0.1:8124 started	
+[ 18-05-2018 06:25:39 ]  [ INFO ]	[__init]	Queue instance created
+[ 18-05-2018 06:25:39 ]  [ INFO ]	[__init]	Queue loading previous saved instance 
+[ 18-05-2018 06:25:39 ]  [ INFO ]	[__init]	Queue previous saved instance loaded with 860 links 
+[ 18-05-2018 06:25:39 ]  [ INFO ]	[__init]	Master started
+[ 18-05-2018 06:25:39 ]  [ INFO ]	[connectDataServer]	Registering with DataServer
+[ 18-05-2018 06:25:39 ]  [ INFO ]	[connectDataServer]	Successfully Registered with DataServer
+[ 18-05-2018 06:27:19 ]  [ INFO ]	[shutdown]	Shutting down CMS
+[ 18-05-2018 06:27:19 ]  [ INFO ]	[shutdown]	Shutdown message sent to all crawlers
+[ 18-05-2018 06:27:19 ]  [ INFO ]	[shutdown]	Waiting 10 seconds to get response from all crawlers
+[ 18-05-2018 06:27:29 ]  [ INFO ]	[shutdown]	Saving queue current instance
+[ 18-05-2018 06:27:29 ]  [ INFO ]	[shutdown]	Queue current instance saved successfully 
+[ 18-05-2018 06:27:29 ]  [ INFO ]	[shutdown]	Master stopped
+[ 18-05-2018 06:27:29 ]  [ CRITICAL ]	[serveRequest]	Exception : [readData]	Failed to read from socket. Connection closed by peer, Errorno :0

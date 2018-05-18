@@ -1,0 +1,17 @@
+build the libraries using make
+
+--> common folder
+$$ make
+
+--> CRSMaster folder
+$$ make
+$$ make genexec
+
+--> DataServer
+$$ make
+$$ make genexec
+
+
+
+
+---------------------------------------------CRSMaster--------------------------------------

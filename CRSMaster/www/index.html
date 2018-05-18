@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+
+<script>
+
+	function fetchMasterInfo()
+	{
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+			   var data = JSON.parse(xhttp.responseText);
+			   console.log(data);
+			   
+			   document.getElementById("m_ipaddress").innerHTML = "IP ADDRESS : "+data.CMS_Server_IP;
+			   document.getElementById("m_port").innerHTML = "PORT : "+data.CMS_Server_Port;
+			   document.getElementById("m_uptime").innerHTML = "START TIME : "+data.CMS_Start_time;
+			   document.getElementById("m_max_crawlers").innerHTML = "MAX CRAWLERS : "+data.CMS_max_Crawlers;
+			   document.getElementById("m_curr_crawlers").innerHTML = "CURRENT CRAWLERS : "+data.current_CRS;
+			   document.getElementById("m_QueueSize").innerHTML = "MAX QUEUE SIZE : "+data.CMS_queue_size;
+			   
+			}
+		};
+		xhttp.open("GET", "http://127.0.0.1:8124/master", true);
+		xhttp.send();
+	}
+	
+	function fetchQueueInfo()
+	{
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+			   var data = JSON.parse(xhttp.responseText);
+			   console.log(data);
+			   document.getElementById("q_currSize").innerHTML = "CURRENT SIZE : "+data.current_size;
+			   document.getElementById("q_maxSize").innerHTML = "MAXIMUM SIZE : "+data.maximum_size;
+			}
+		};
+		xhttp.open("GET", "http://127.0.0.1:8124/queue", true);
+		xhttp.send();
+	}
+	
+	function fetchProcessInfo()
+	{
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+			   var data = JSON.parse(xhttp.responseText);
+			   console.log(data);
+			   document.getElementById("p_virmemory").innerHTML = "VIRTUAL MEMORY : "+data.memory.virtual_used;
+			   document.getElementById("p_phymemory").innerHTML = "PHYSICAL MEMORY : "+data.memory.physical_used;
+			}
+		};
+		xhttp.open("GET", "http://127.0.0.1:8124/processInfo", true);
+		xhttp.send();
+	}
+
+	setInterval(fetchMasterInfo,200);
+	setInterval(fetchQueueInfo,100);
+	setInterval(fetchProcessInfo,100);
+	
+	
+	function fetchLogs( name)
+	{
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+			   document.getElementById("mylogs").innerHTML = xhttp.responseText;
+			}
+		};
+		var url="http://127.0.0.1:8124/logs?name="+name;
+		xhttp.open("GET", url, true);
+		xhttp.send();
+	}
+	
+
+</script>
+
+
+
+<body>
+
+<div class="container-fluid">
+	<h3>CRAWLWER MANAGING SYSTEM</h3>
+</div>
+
+<hr/>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="card h-100">
+				<div class="card-header">
+					CMS Information
+				</div>
+				<div class="card-body">
+					<p id="m_ipaddress"></p>
+					<p id="m_port"></p>
+					<p id="m_uptime"></p>
+					<p id="m_max_crawlers"></p>
+					<p id="m_curr_crawlers"></p>
+					<p id="m_QueueSize"></p>	
+					<p>LOGS : <button type="button" class="btn btn-default" data-toggle="modal" data-target="#log" onclick="fetchLogs('log')">logs</button>
+					</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-sm-4">
+			<div class="card h-100">
+				<div class="card-header">
+					Queue Information
+				</div>
+				<div class="card-body">
+					<p id="q_currSize"></p>
+					<p id="q_maxSize"></p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-sm-4">
+			<div class="card h-100">
+				<div class="card-header">
+					Process Information
+				</div>
+				<div class="card-body">
+					<p id="p_cpu"></p>
+					<p id="p_phymemory"></p>
+					<p id="p_virmemory"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- The Modal -->
+<div class="modal fade" id="log">
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+  
+	<!-- Modal Header -->
+	<div class="modal-header">
+	  <h4 class="modal-title">Logs</h4>
+	  <button type="button" class="close" data-dismiss="modal">&times;</button>
+	</div>
+	
+	<!-- Modal body -->
+	<div class="modal-body">
+	  <pre id="mylogs"></pre>
+	</div>
+	
+	<!-- Modal footer -->
+	<div class="modal-footer">
+	  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+	</div>
+	
+  </div>
+</div>
+</div>
+
+	
+	
+</body>
+</html>

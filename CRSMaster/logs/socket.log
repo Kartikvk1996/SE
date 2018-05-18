@@ -1,0 +1,129 @@
+[ 13-04-2018 02:34:23 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 13-04-2018 02:34:23 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 13-04-2018 02:34:23 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 13-04-2018 02:34:23 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 13-04-2018 02:38:56 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 13-04-2018 02:39:07 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 13-04-2018 02:39:18 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 13-04-2018 02:45:25 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 14-04-2018 02:15:23 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:15:23 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 14-04-2018 02:15:23 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:15:23 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 14-04-2018 02:15:30 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 14-04-2018 02:15:30 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 14-04-2018 02:22:00 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:22:00 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 14-04-2018 02:22:00 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:22:00 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 14-04-2018 02:23:05 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:23:05 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 14-04-2018 02:23:05 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:23:05 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 14-04-2018 02:25:13 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:25:13 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 14-04-2018 02:25:13 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:25:13 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 14-04-2018 02:25:37 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:25:37 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 14-04-2018 02:25:37 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:25:37 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 14-04-2018 02:26:47 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:26:47 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 14-04-2018 02:26:47 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:26:47 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 14-04-2018 02:28:43 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:28:43 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 14-04-2018 02:28:43 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 14-04-2018 02:28:43 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 14-04-2018 02:29:18 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 14-04-2018 02:29:29 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 14-04-2018 02:29:40 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 14-04-2018 02:30:44 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 16-04-2018 12:10:04 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 16-04-2018 12:10:04 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 16-04-2018 12:10:04 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 16-04-2018 12:10:04 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 16-04-2018 12:18:14 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 16-04-2018 12:18:14 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 16-04-2018 12:18:14 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 16-04-2018 12:18:14 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 16-04-2018 12:19:30 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 16-04-2018 12:19:30 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 16-04-2018 12:19:31 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 16-04-2018 12:19:31 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 16-04-2018 12:20:24 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 16-04-2018 12:20:24 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 16-04-2018 12:20:24 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 16-04-2018 12:20:24 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 16-04-2018 12:21:40 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 16-04-2018 12:21:40 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 16-04-2018 12:21:40 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 16-04-2018 12:21:40 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 16-04-2018 12:23:12 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 16-04-2018 12:23:12 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 16-04-2018 12:23:12 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 16-04-2018 12:23:12 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 16-04-2018 12:24:18 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 16-04-2018 12:24:18 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 16-04-2018 12:24:31 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 19-04-2018 11:47:40 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 19-04-2018 11:47:40 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 19-04-2018 11:47:40 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 19-04-2018 11:47:40 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 19-04-2018 11:47:45 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 19-04-2018 11:50:56 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 19-04-2018 11:50:56 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 19-04-2018 11:50:56 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 19-04-2018 11:50:56 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8124 successfully
+[ 19-04-2018 11:53:46 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 19-04-2018 11:53:57 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 19-04-2018 11:54:08 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 19-04-2018 11:54:53 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 19-04-2018 11:55:05 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer
+[ 21-04-2018 01:03:42 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 01:03:42 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 01:05:11 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 01:05:11 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 01:07:40 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 01:07:40 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 01:10:13 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 01:10:13 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 01:12:18 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 01:12:18 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 01:14:54 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 01:14:54 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 01:19:48 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 01:19:48 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 01:21:52 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 01:21:52 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 01:23:23 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 01:23:23 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 06:27:46 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 06:27:46 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 06:30:49 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 21-04-2018 06:31:00 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 21-04-2018 06:31:11 ]  [ ERROR ]	[clientConnect]	Failed to connect to server IP: 127.0.0.1:8552
+[ 21-04-2018 06:34:58 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 06:34:58 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 06:37:30 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 06:37:30 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 06:41:51 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 06:41:51 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 06:45:04 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 06:45:04 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 06:47:06 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 06:47:06 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 06:49:00 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 06:49:00 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 06:52:11 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 06:52:11 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 07:03:17 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 07:03:17 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 07:12:58 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 07:12:58 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 07:13:38 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 07:13:38 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 07:21:16 ]  [ INFO ]	[serverConnect]	New socket created successfully
+[ 21-04-2018 07:21:16 ]  [ INFO ]	[serverConnect]	Socket binded with IP 127.0.0.1:8081 successfully
+[ 21-04-2018 07:21:57 ]  [ WARNING ]	[readData]	Failed to read , connection closed by peer

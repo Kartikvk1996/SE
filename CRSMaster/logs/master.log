@@ -1,0 +1,192 @@
+[ 13-04-2018 02:34:23 ]  [ INFO ]	[CMS]	Queue instance created
+[ 13-04-2018 02:34:23 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 13-04-2018 02:35:15 ]  [ INFO ]	[addCrawler]	Adding new crawler
+[ 13-04-2018 02:35:15 ]  [ INFO ]	[addCrawler]	polling stated on crawlers (CRS)
+[ 13-04-2018 02:35:15 ]  [ INFO ]	[addCrawler]	New Crawler added IP : 127.0.0.1	PORT : 8552	QueueSize : 200
+[ 13-04-2018 02:39:28 ]  [ INFO ]	[removeCrawler]	Crawler with IP : 127.0.0.1	PORT : 8552	removed successfully
+[ 13-04-2018 02:39:38 ]  [ INFO ]	[pollCrawlers]	polling stopped , No CRS (crawlers) attached
+[ 14-04-2018 02:15:23 ]  [ INFO ]	[CMS]	Queue instance created
+[ 14-04-2018 02:15:23 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 14-04-2018 02:22:00 ]  [ INFO ]	[CMS]	Queue instance created
+[ 14-04-2018 02:22:00 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 14-04-2018 02:23:05 ]  [ INFO ]	[CMS]	Queue instance created
+[ 14-04-2018 02:23:05 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 14-04-2018 02:25:13 ]  [ INFO ]	[CMS]	Queue instance created
+[ 14-04-2018 02:25:13 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 14-04-2018 02:25:37 ]  [ INFO ]	[CMS]	Queue instance created
+[ 14-04-2018 02:25:37 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 14-04-2018 02:26:47 ]  [ INFO ]	[CMS]	Queue instance created
+[ 14-04-2018 02:26:47 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 14-04-2018 02:28:43 ]  [ INFO ]	[CMS]	Queue instance created
+[ 14-04-2018 02:28:43 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 14-04-2018 02:28:57 ]  [ INFO ]	[addCrawler]	Adding new crawler
+[ 14-04-2018 02:28:57 ]  [ INFO ]	[addCrawler]	polling stated on crawlers (CRS)
+[ 14-04-2018 02:28:57 ]  [ INFO ]	[addCrawler]	New Crawler added IP : 127.0.0.1	PORT : 8552	QueueSize : 200
+[ 14-04-2018 02:29:50 ]  [ INFO ]	[removeCrawler]	Crawler with IP : 127.0.0.1	PORT : 8552	removed successfully
+[ 14-04-2018 02:30:00 ]  [ INFO ]	[pollCrawlers]	polling stopped , No CRS (crawlers) attached
+[ 14-04-2018 02:30:34 ]  [ INFO ]	[shutdown]	Shutting down CMS
+[ 14-04-2018 02:30:34 ]  [ INFO ]	[shutdown]	Shutdown message sent to all crawlers
+[ 14-04-2018 02:30:34 ]  [ INFO ]	[shutdown]	Waiting 10 seconds to get response from all crawlers
+[ 14-04-2018 02:30:44 ]  [ INFO ]	[shutdown]	Saving queue current instance
+[ 14-04-2018 02:30:44 ]  [ INFO ]	[shutdown]	Queue current instance saved successfully 
+[ 14-04-2018 02:30:44 ]  [ INFO ]	[shutdown]	HTTP Server stopped successfully
+[ 14-04-2018 02:30:44 ]  [ INFO ]	[shutdown]	CMS stopped
+[ 14-04-2018 02:30:49 ]  [ WARNING ]	[parseRequest]	Exception : [json.exception.parse_error.101] parse error at 1: syntax error - invalid literal; last read: 'N'
+NULL
+[ 16-04-2018 12:10:04 ]  [ INFO ]	[CMS]	Queue instance created
+[ 16-04-2018 12:10:04 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 16-04-2018 12:18:14 ]  [ INFO ]	[CMS]	Queue instance created
+[ 16-04-2018 12:18:14 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 16-04-2018 12:20:24 ]  [ INFO ]	[CMS]	Queue instance created
+[ 16-04-2018 12:20:24 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 16-04-2018 12:21:40 ]  [ INFO ]	[CMS]	Queue instance created
+[ 16-04-2018 12:21:40 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 16-04-2018 12:23:12 ]  [ INFO ]	[CMS]	Queue instance created
+[ 16-04-2018 12:23:12 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 19-04-2018 11:47:40 ]  [ INFO ]	[CMS]	Queue instance created
+[ 19-04-2018 11:47:40 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 19-04-2018 11:50:56 ]  [ INFO ]	[CMS]	Queue instance created
+[ 19-04-2018 11:50:56 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 19-04-2018 11:51:55 ]  [ INFO ]	[addCrawler]	Adding new crawler
+[ 19-04-2018 11:51:55 ]  [ INFO ]	[addCrawler]	polling stated on crawlers (CRS)
+[ 19-04-2018 11:51:55 ]  [ INFO ]	[addCrawler]	New Crawler added IP : 127.0.0.1	PORT : 8552	QueueSize : 200
+[ 19-04-2018 11:54:18 ]  [ INFO ]	[removeCrawler]	Crawler with IP : 127.0.0.1	PORT : 8552	removed successfully
+[ 19-04-2018 11:54:28 ]  [ INFO ]	[pollCrawlers]	polling stopped , No CRS (crawlers) attached
+[ 21-04-2018 01:03:42 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 01:03:42 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 01:05:11 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 01:05:11 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 01:07:40 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 01:07:40 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 01:10:13 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 01:10:13 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 01:12:18 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 01:12:18 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 01:14:54 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 01:14:54 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 01:19:48 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 01:19:48 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 01:21:52 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 01:21:52 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 01:23:23 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 01:23:23 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 06:27:46 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 06:27:46 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 06:29:37 ]  [ INFO ]	[addCrawler]	Adding new crawler
+[ 21-04-2018 06:29:38 ]  [ INFO ]	[addCrawler]	polling stated on crawlers (CRS)
+[ 21-04-2018 06:29:38 ]  [ INFO ]	[addCrawler]	New Crawler added IP : 127.0.0.1	PORT : 8552	QueueSize : 200
+[ 21-04-2018 06:31:21 ]  [ INFO ]	[removeCrawler]	Crawler with IP : 127.0.0.1	PORT : 8552	removed successfully
+[ 21-04-2018 06:31:31 ]  [ INFO ]	[pollCrawlers]	polling stopped , No CRS (crawlers) attached
+[ 21-04-2018 06:34:58 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 06:34:58 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 06:37:30 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 06:37:30 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 06:41:51 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 06:41:51 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 06:45:04 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 06:45:04 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 06:47:06 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 06:47:06 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 06:49:00 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 06:49:00 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 06:52:11 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 06:52:11 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 07:03:17 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 07:03:17 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 07:12:58 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 07:12:58 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 07:13:38 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 07:13:38 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 07:21:16 ]  [ INFO ]	[CMS]	Queue instance created
+[ 21-04-2018 07:21:16 ]  [ INFO ]	[CMS]	Queue previous saved instance loaded successfully 
+[ 21-04-2018 07:21:47 ]  [ INFO ]	[shutdown]	Shutting down CMS
+[ 21-04-2018 07:21:47 ]  [ INFO ]	[shutdown]	Shutdown message sent to all crawlers
+[ 21-04-2018 07:21:47 ]  [ INFO ]	[shutdown]	Waiting 10 seconds to get response from all crawlers
+[ 21-04-2018 07:21:57 ]  [ INFO ]	[shutdown]	Saving queue current instance
+[ 21-04-2018 07:21:57 ]  [ INFO ]	[shutdown]	Queue current instance saved successfully 
+[ 21-04-2018 07:21:57 ]  [ INFO ]	[shutdown]	HTTP Server stopped successfully
+[ 21-04-2018 07:21:57 ]  [ INFO ]	[shutdown]	CMS stopped
+[ 21-04-2018 07:22:02 ]  [ WARNING ]	[parseRequest]	Exception : [json.exception.parse_error.101] parse error at 1: syntax error - invalid literal; last read: 'N'
+NULL
+[ 23-04-2018 08:33:50 ]  [ INFO ]	[__init]	Queue instance created
+[ 23-04-2018 08:33:50 ]  [ INFO ]	[__init]	Queue loading previous saved instance 
+[ 23-04-2018 08:33:50 ]  [ INFO ]	[__init]	Queue previous saved instance loaded with 3l links 
+[ 23-04-2018 08:34:38 ]  [ INFO ]	[addCrawler]	Adding new crawler
+[ 23-04-2018 08:34:38 ]  [ INFO ]	[addCrawler]	polling stated on crawlers (CRS)
+[ 23-04-2018 08:34:38 ]  [ INFO ]	[addCrawler]	New Crawler added IP : 127.0.0.1	PORT : 8552	QueueSize : 200
+[ 23-04-2018 08:35:49 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:35:49 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler X:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:36:00 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:36:00 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler X:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:36:06 ]  [ INFO ]	[addCrawler]	Adding new crawler
+[ 23-04-2018 08:36:41 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:36:41 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler X:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:36:52 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:36:52 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler X:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:37:03 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:37:03 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler X:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:37:14 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:37:14 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler X:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:37:25 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:37:25 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler X:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:37:36 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:37:36 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler X:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:37:47 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:37:47 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler X:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:37:58 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:37:58 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler X:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:42:00 ]  [ INFO ]	[__init]	Queue instance created
+[ 23-04-2018 08:42:00 ]  [ INFO ]	[__init]	Queue loading previous saved instance 
+[ 23-04-2018 08:42:00 ]  [ INFO ]	[__init]	Queue previous saved instance loaded with 3l links 
+[ 23-04-2018 08:42:06 ]  [ INFO ]	[addCrawler]	Adding new crawler
+[ 23-04-2018 08:42:06 ]  [ INFO ]	[addCrawler]	polling stated on crawlers (CRS)
+[ 23-04-2018 08:42:06 ]  [ INFO ]	[addCrawler]	New Crawler added IP : 127.0.0.1	PORT : 8552	QueueSize : 200
+[ 23-04-2018 08:44:38 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:44:38 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler 127.0.0.1:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:44:49 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:44:49 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler 127.0.0.1:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:45:00 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:45:00 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler 127.0.0.1:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:45:10 ]  [ INFO ]	[removeCrawler]	Crawler with IP : 127.0.0.1	PORT : 8552	removed successfully
+[ 23-04-2018 08:45:20 ]  [ INFO ]	[pollCrawlers]	polling stopped , No CRS (crawlers) attached
+[ 23-04-2018 08:45:39 ]  [ INFO ]	[addCrawler]	Adding new crawler
+[ 23-04-2018 08:45:39 ]  [ INFO ]	[addCrawler]	polling stated on crawlers (CRS)
+[ 23-04-2018 08:45:39 ]  [ INFO ]	[addCrawler]	New Crawler added IP : 127.0.0.1	PORT : 8552	QueueSize : 200
+[ 23-04-2018 08:48:01 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:48:01 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler 127.0.0.1:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:48:12 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:48:12 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler 127.0.0.1:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:48:23 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:48:23 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler 127.0.0.1:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:48:33 ]  [ INFO ]	[removeCrawler]	Crawler with IP : 127.0.0.1	PORT : 8552	removed successfully
+[ 23-04-2018 08:48:43 ]  [ INFO ]	[pollCrawlers]	polling stopped , No CRS (crawlers) attached
+[ 23-04-2018 08:55:34 ]  [ INFO ]	[addCrawler]	Adding new crawler
+[ 23-04-2018 08:55:34 ]  [ INFO ]	[addCrawler]	polling stated on crawlers (CRS)
+[ 23-04-2018 08:55:34 ]  [ INFO ]	[addCrawler]	New Crawler added IP : 127.0.0.1	PORT : 8552	QueueSize : 200
+[ 23-04-2018 08:56:25 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:56:25 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler 127.0.0.1:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:56:36 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:56:36 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler 127.0.0.1:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:56:47 ]  [ CRITICAL ]	[sendData]	Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552 
+[ 23-04-2018 08:56:47 ]  [ WARNING ]	[pollCrawlers]	Failed to send poll message to crawler 127.0.0.1:0x2168
+Exception : [clientConnect]	Failed to connect to 127.0.0.1:8552
+[ 23-04-2018 08:56:57 ]  [ INFO ]	[removeCrawler]	Crawler with IP : 127.0.0.1	PORT : 8552	removed successfully
+[ 23-04-2018 08:57:07 ]  [ INFO ]	[pollCrawlers]	polling stopped , No CRS (crawlers) attached
