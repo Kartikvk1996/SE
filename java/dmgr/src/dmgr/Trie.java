@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import se.util.Logger;
 
 public class Trie implements Serializable {
 
@@ -49,7 +50,7 @@ public class Trie implements Serializable {
         this.root = sibling.root;
         this.addOnSearch = addOnSearch;
     }
-    
+
     Trie(boolean addOnSearch) {
         lastid = 1;
         root = new Node(null);
@@ -75,20 +76,24 @@ public class Trie implements Serializable {
     public void setAddOnSearch(boolean addOnSearch) {
         this.addOnSearch = addOnSearch;
     }
-    
+
     public NodeData insert(String word) {
         word = word.toLowerCase();
         Node cur = root;
         int len = word.length();
-        for (int i = 0; i < len; i++) {
-            int index = word.charAt(i) - 'a';
-            if (cur.ptrs[index] == null) {
-                cur.ptrs[index] = new Node(null);
+        try {
+            for (int i = 0; i < len; i++) {
+                int index = word.charAt(i) - 'a';
+                if (cur.ptrs[index] == null) {
+                    cur.ptrs[index] = new Node(null);
+                }
+                cur = cur.ptrs[index];
             }
-            cur = cur.ptrs[index];
-        }
-        if (cur.data == null) {
-            cur.data = new NodeData(lastid++, 1);
+            if (cur.data == null) {
+                cur.data = new NodeData(lastid++, 1);
+            }
+        } catch(Exception ex) {
+            Logger.elog(Logger.HIGH, "Possible number format exception ", ex);
         }
         return cur.data;
     }
@@ -98,7 +103,11 @@ public class Trie implements Serializable {
         Node cur = root;
         int len = word.length();
         for (int i = 0; cur != null && i < len; i++) {
-            cur = cur.ptrs[word.charAt(i) - 'a'];
+            try {
+                cur = cur.ptrs[word.charAt(i) - 'a'];
+            } catch(Exception ex) {
+                Logger.elog(Logger.HIGH, "Possible index out of bounds", ex);
+            }
         }
         NodeData data = null;
 

@@ -7,7 +7,9 @@ public class PDUConsts {
     public final static String PN_DMGR = "dmgr";
     public final static String PN_WSERVER = "ws";
     public final static String PN_PRXYSERVER = "proxy";
-    
+    public final static String PN_CMASTER = "cmaster";
+    public final static String PN_CRUNNER = "crunner";
+
     public final static String PID = "PID";
 
     public final static int METHOD_DATA = 0;

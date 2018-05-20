@@ -46,12 +46,20 @@ public class Process implements RequestHandler {
     public void setHttpPort(int port) {
         this.httpPort = port;
     }
-    
+
     public int getHttpPort() {
         return httpPort;
     }
-    
+
     public void run() {
+
+        /* add a shutdown hook */
+        Runtime.getRuntime().addShutdownHook(
+                new Thread(() -> {
+                    deinit();
+                })
+        );
+
         new Thread(() -> {
             try {
                 server.run();

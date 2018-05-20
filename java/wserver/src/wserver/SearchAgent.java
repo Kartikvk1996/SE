@@ -27,7 +27,7 @@ public class SearchAgent extends Thread {
             sock.send(spdu);
             result = (SearchResult) new ObjectInputStream(sock.getInputStream()).readObject();
         } catch (IOException | ClassNotFoundException ex) {
-            Logger.elog(Logger.HIGH, "Error while reading data from dmgr at " + addr.toString() + " " + ex.getMessage());
+            Logger.elog(Logger.HIGH, "Error while reading data from dmgr at " + addr.toString() + " " + ex.getLocalizedMessage());
         }
     }
     

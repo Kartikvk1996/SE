@@ -4,6 +4,7 @@ import urllib.request
 import re
 import sys
 import io
+import socket
 
 def tag_visible(element):
     if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
@@ -21,10 +22,18 @@ def text_from_html(body):
 
 lf = open("linktab.txt", "w", encoding="utf-8", buffering=1)
 
+
+print("usage : p.py <seed> <base> <depth> <report-host> <report-port>")
+
+if len(sys.argv) < 5:
+    exit(0)
+
 baseurl = sys.argv[1]
 queue = {(sys.argv[2], 0)}
 maxdepth = int(sys.argv[3])
-docid = 0
+reporthost = sys.argv[4]
+reportport = int(sys.argv[5])
+docid = int(sys.argv[6])
 visited = {""}
 
 while len(queue) != 0:
@@ -47,11 +56,16 @@ while len(queue) != 0:
     try:
         html_code = urllib.request.urlopen(url).read().decode('utf-8')
         docid = docid + 1
-        lf.write(str(docid) + '\t' + str(dpt) + '\t' + url + '\n')    
+        report = str(docid) + '\t' + url + '\n'
+        lf.write(report)
+        reporter = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        reporter.connect((reporthost, reportport))
+        reporter.sendall(report.encode('utf-8'))
+        reporter.close()
     except:
         print('error occured downloading : ' + url)
         continue
-        
+    
     soup = BeautifulSoup(html_code)
     links = soup.find_all('a')
     for tag in links:

@@ -23,18 +23,18 @@
         function getresults() {
             queryData("/search?" + g('sbox').value, function (jdata) {
 
-                g('time').innerHTML = `${jdata.millis} ms.`;
+                jdata = JSON.parse(jdata);
 
                 var prxy = jdata.prxyAddr;
                 var tdata = [];
 
-                for(var i=0; i<jdata.rset.length; i++) {
+                for (var i = 0; i < jdata.rset.length; i++) {
                     tdata = tdata.concat(jdata.rset[i].rset);
                 }
 
                 var data = [];
 
-                for(var i=0; i<tdata.length; i++) {
+                for (var i = 0; i < tdata.length; i++) {
                     var key = Object.keys(tdata[i])[0];
                     data.push({
                         docid: key,
@@ -44,13 +44,16 @@
 
                 /* sort the results */
                 data.sort(
-                    function(b, a) {
+                    function (b, a) {
                         return a.freq - b.freq
                     }
                 );
 
+                g('time').innerHTML = `${data.length} results in ${jdata.millis} ms.`;
+
                 results.innerHTML = "";
                 for (var i = 0; i < data.length; i++) {
+
                     results.innerHTML +=
                         `
                         <div class='result'>
@@ -61,28 +64,64 @@
                             <span>http://${prxy.host}:${prxy.port}/${data[i].docid}</span>
                         </div>
                     `;
-                } 
+                }
             });
         }
         function queryData(endpoint, func) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200)
-                    func(JSON.parse(this.responseText));
+                    func(this.responseText);
+            }
+            xhttp.open("GET", endpoint, false);
+            xhttp.send();
+        }
+        function queryHeader(endpoint, func) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200)
+                    func(xhttp.getResponseHeader('Location'));
             }
             xhttp.open("GET", endpoint, false);
             xhttp.send();
         }
     </script>
+
+    <style>
+        * {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        #title {
+            font-size: 1.5em;
+            font-weight: bolder;
+        }
+
+        input {
+            border: solid 1px skyblue;
+            padding: 5px;
+            width: 400px;
+            font-size: 1.2em;
+            box-shadow: 10px;
+        }
+
+        button {
+            padding: 4px 10px;
+            font-size: 1.2em;
+        }
+    </style>
+
 </head>
 
 <body>
-    <h1>Search here</h1>
+    <span id='title'>Search&nbsp;&nbsp;&nbsp;</span>
     <input type='text' id='sbox' />
     <button onclick="getresults()">Go</button>
-
-    <h4>Results</h4>
+    <br/>
+    <br/>
     <span id='time'></span>
+    <br/>
+    <br/>
     <div id='results'>
     </div>
 </body>

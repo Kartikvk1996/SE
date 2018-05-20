@@ -7,7 +7,7 @@ package proxyserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.HashMap;
 import se.util.http.HttpRequest;
 import se.util.http.ProgressiveProcess;
 import se.util.http.RESTServer;
@@ -18,9 +18,9 @@ import se.util.http.RESTServer;
  */
 public class ProxyServer extends RESTServer {
 
-    ArrayList<SEUrl> urlMap;
+    HashMap<Long, SEUrl> urlMap;
 
-    public ProxyServer(String docRoot, ProgressiveProcess process, ArrayList<SEUrl> urlMap)
+    public ProxyServer(String docRoot, ProgressiveProcess process, HashMap<Long, SEUrl> urlMap)
             throws IOException {
         super(docRoot, process);
         this.urlMap = urlMap;
@@ -30,7 +30,7 @@ public class ProxyServer extends RESTServer {
     protected void serve(HttpRequest req) throws IOException {
         switch (req.getUrl()) {
             case "proxy":
-                Integer index = Integer.parseInt(req.getData());
+                Long index = Long.parseLong(req.getData());
                 SEUrl seu = urlMap.get(index);
                 seu.hits++;
                 OutputStream out = req.getOutputStream();

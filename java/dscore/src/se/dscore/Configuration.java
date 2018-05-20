@@ -28,6 +28,10 @@ public class Configuration {
         conf = new DictObject();
     }
 
+    public void putDefaults() {
+        
+    }
+    
     public void generateSample(String filePath) throws FileNotFoundException {
 
         Field[] fields = this.getClass().getFields();
