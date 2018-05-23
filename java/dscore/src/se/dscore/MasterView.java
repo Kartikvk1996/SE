@@ -10,7 +10,7 @@ import jsonparser.StringObject;
 
 public class MasterView {
 
-    @JsonExposed(comment = "This is a list of slaves. Access the elements using the key")
+    @JsonExposed(comment = "This is a hashmap of slaves. Access the elements using the key [ticket]")
     public final LinkedHashMap<String, NodeProxy> nodes;
 
     public MasterView(LinkedHashMap<String, NodeProxy> nodes) {
