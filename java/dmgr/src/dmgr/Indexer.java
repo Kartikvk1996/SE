@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,9 +41,9 @@ public class Indexer implements Runnable {
     private void index(File file) throws FileNotFoundException, IOException {
 
         Logger.ilog(Logger.LOW, "Indexing " + file.getAbsolutePath());
-        
-        /* index it */
-        HashMap<Integer, Integer> map = new HashMap<>();
+
+        /* word: frequency */
+        HashMap<Integer, Integer> word2freq = new HashMap<>();
         Long docid = Long.parseLong(file.getName());
 
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -56,10 +55,10 @@ public class Indexer implements Runnable {
                 Matcher matcher = pattern.matcher(line);
                 while (matcher.find()) {
                     Integer key = dict.get(matcher.group()).id;
-                    if (map.containsKey(key)) {
-                        map.put(key, map.get(key) + 1);
+                    if (word2freq.containsKey(key)) {
+                        word2freq.put(key, word2freq.get(key) + 1);
                     } else {
-                        map.put(key, 1);
+                        word2freq.put(key, 1);
                     }
                 }
             }
@@ -69,14 +68,14 @@ public class Indexer implements Runnable {
 
         br.close();
 
-        for (Map.Entry<Integer, Index> entry : map.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : word2freq.entrySet()) {
             appendDoc(entry.getKey(), new IndexWrapper(docid, new Index(entry.getValue())));
         }
 
         file.delete();
     }
 
-    private void appendDoc(Integer uniqWord, Index index) {
+    private void appendDoc(Integer uniqWord, IndexWrapper windex) {
 
         HashMap<Long, Index> docs;
         File wfile = new File(cdir, "" + uniqWord);
@@ -90,10 +89,11 @@ public class Indexer implements Runnable {
                     docs = (HashMap<Long, Index>) ois.readObject();
                 }
             }
-            if(docs.containsKey(index.docid))
-                docs.get(index.docid).freq += index.freq;
-            else
-                docs.put(index.docid, freq);
+            if (docs.containsKey(windex.docid)) {
+                docs.get(windex.docid).frequency += windex.index.frequency;
+            } else {
+                docs.put(windex.docid, windex.index);
+            }
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(wfile))) {
                 oos.writeObject(docs);
             }

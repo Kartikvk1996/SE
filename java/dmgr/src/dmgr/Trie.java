@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import se.util.Logger;
 
 public class Trie implements Serializable {
 
@@ -41,17 +42,24 @@ public class Trie implements Serializable {
         }
     }
 
+    boolean addOnSearch;
     int lastid;
     Node root;
 
-    Trie() {
+    Trie(Trie sibling, boolean addOnSearch) {
+        this.root = sibling.root;
+        this.addOnSearch = addOnSearch;
+    }
+
+    Trie(boolean addOnSearch) {
         lastid = 1;
         root = new Node(null);
+        this.addOnSearch = addOnSearch;
     }
 
     public static Trie fromFile(String fileName)
             throws FileNotFoundException, IOException {
-        Trie trie = new Trie();
+        Trie trie = new Trie(true);
         BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line;
         Pattern pattern = Pattern.compile("[A-Za-z]+");
@@ -65,19 +73,27 @@ public class Trie implements Serializable {
         return trie;
     }
 
+    public void setAddOnSearch(boolean addOnSearch) {
+        this.addOnSearch = addOnSearch;
+    }
+
     public NodeData insert(String word) {
         word = word.toLowerCase();
         Node cur = root;
         int len = word.length();
-        for (int i = 0; i < len; i++) {
-            int index = word.charAt(i) - 'a';
-            if (cur.ptrs[index] == null) {
-                cur.ptrs[index] = new Node(null);
+        try {
+            for (int i = 0; i < len; i++) {
+                int index = word.charAt(i) - 'a';
+                if (cur.ptrs[index] == null) {
+                    cur.ptrs[index] = new Node(null);
+                }
+                cur = cur.ptrs[index];
             }
-            cur = cur.ptrs[index];
-        }
-        if (cur.data == null) {
-            cur.data = new NodeData(lastid++, 1);
+            if (cur.data == null) {
+                cur.data = new NodeData(lastid++, 1);
+            }
+        } catch(Exception ex) {
+            Logger.elog(Logger.HIGH, "Possible number format exception ", ex);
         }
         return cur.data;
     }
@@ -87,15 +103,29 @@ public class Trie implements Serializable {
         Node cur = root;
         int len = word.length();
         for (int i = 0; cur != null && i < len; i++) {
-            cur = cur.ptrs[word.charAt(i) - 'a'];
+            try {
+                cur = cur.ptrs[word.charAt(i) - 'a'];
+            } catch(Exception ex) {
+                Logger.elog(Logger.HIGH, "Possible index out of bounds", ex);
+            }
         }
-        NodeData data = cur == null ?
-                insert(word) :
-                cur.data;
-        if(data == null) {
-            data = cur.data = new NodeData(lastid++, 0); //frequency increment next line
+        NodeData data = null;
+
+        if (cur == null) {
+            if (addOnSearch) {
+                data = insert(word);
+            }
+        } else {
+            data = cur.data;
         }
-        data.freq++;
+
+        if (data == null) {
+            if (addOnSearch) {
+                data = cur.data = new NodeData(lastid++, 1);
+            }
+        } else {
+            data.freq++;
+        }
         return data;
     }
 

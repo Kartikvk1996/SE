@@ -1,0 +1,129 @@
+<html>
+
+<head>
+    <title>Search</title>
+
+    <style>
+        .result {
+            clear: both;
+            padding: 5px;
+        }
+    </style>
+
+    <script>
+
+        var results;
+
+        function g(id) { return document.getElementById(id); }
+
+        window.onload = function () {
+            results = g('results');
+        }
+
+        function getresults() {
+            queryData("/search?" + g('sbox').value, function (jdata) {
+
+                jdata = JSON.parse(jdata);
+
+                var prxy = jdata.prxyAddr;
+                var tdata = [];
+
+                for (var i = 0; i < jdata.rset.length; i++) {
+                    tdata = tdata.concat(jdata.rset[i].rset);
+                }
+
+                var data = [];
+
+                for (var i = 0; i < tdata.length; i++) {
+                    var key = Object.keys(tdata[i])[0];
+                    data.push({
+                        docid: key,
+                        freq: tdata[i][key].frequency
+                    })
+                }
+
+                /* sort the results */
+                data.sort(
+                    function (b, a) {
+                        return a.freq - b.freq
+                    }
+                );
+
+                g('time').innerHTML = `${data.length} results in ${jdata.millis} ms.`;
+
+                results.innerHTML = "";
+                for (var i = 0; i < data.length; i++) {
+
+                    results.innerHTML +=
+                        `
+                        <div class='result'>
+                            <a href='http://${prxy.host}:${prxy.port}/proxy?${data[i].docid}'>
+                                http://${prxy.host}:${prxy.port}/${data[i].docid}
+                            </a>
+                            <br/>
+                            <span>http://${prxy.host}:${prxy.port}/${data[i].docid}</span>
+                        </div>
+                    `;
+                }
+            });
+        }
+        function queryData(endpoint, func) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200)
+                    func(this.responseText);
+            }
+            xhttp.open("GET", endpoint, false);
+            xhttp.send();
+        }
+        function queryHeader(endpoint, func) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200)
+                    func(xhttp.getResponseHeader('Location'));
+            }
+            xhttp.open("GET", endpoint, false);
+            xhttp.send();
+        }
+    </script>
+
+    <style>
+        * {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        #title {
+            font-size: 1.5em;
+            font-weight: bolder;
+        }
+
+        input {
+            border: solid 1px skyblue;
+            padding: 5px;
+            width: 400px;
+            font-size: 1.2em;
+            box-shadow: 10px;
+        }
+
+        button {
+            padding: 4px 10px;
+            font-size: 1.2em;
+        }
+    </style>
+
+</head>
+
+<body>
+    <span id='title'>Search&nbsp;&nbsp;&nbsp;</span>
+    <input type='text' id='sbox' />
+    <button onclick="getresults()">Go</button>
+    <br/>
+    <br/>
+    <span id='time'></span>
+    <br/>
+    <br/>
+    <div id='results'>
+    </div>
+</body>
+
+</html>

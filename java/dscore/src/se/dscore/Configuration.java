@@ -28,6 +28,10 @@ public class Configuration {
         conf = new DictObject();
     }
 
+    public void putDefaults() {
+        
+    }
+    
     public void generateSample(String filePath) throws FileNotFoundException {
 
         Field[] fields = this.getClass().getFields();
@@ -108,4 +112,11 @@ public class Configuration {
         set(PROCESS_ROLE, role);
     }
 
+    public void setDebugLevel(int level) {
+        set(DEBUG_LEVEL, level);
+    }
+    
+    public int getDebugLevel() {
+        return Integer.parseInt((String) get(DEBUG_LEVEL));
+    }
 }

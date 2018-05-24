@@ -6,7 +6,7 @@ import jsonparser.JsonExposed;
 
 public class ConnectPDU extends PDU {
 
-    private static final String ATTR_HTTP_PORT = "logport";
+    private static final String ATTR_HTTP_PORT = "httpport";
     private static final String ATTR_ERR_FILE = "errfile";
     private static final String ATTR_OUT_FILE = "outfile";
     
@@ -42,11 +42,11 @@ public class ConnectPDU extends PDU {
         init(ticket, pid, port);
     }
     
-    public int getLogPort() {
+    public int getHttpPort() {
         return (Integer)((DictObject)data).get(ATTR_HTTP_PORT).getValue();
     }
     
-    public void setLogPort(int port) {
+    public void setHttpPort(int port) {
         ((DictObject)data).set(ATTR_HTTP_PORT, port);
     }
     

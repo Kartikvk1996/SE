@@ -8,14 +8,17 @@ import java.io.IOException;
 import jsonparser.JsonException;
 import se.ipc.pdu.PDU;
 import se.ipc.ESocket;
+import se.ipc.pdu.HiPDU;
+import se.ipc.pdu.IntroPDU;
 import se.ipc.pdu.InvalidPDUException;
+import se.ipc.pdu.PDUConsts;
 import static se.ipc.pdu.PDUConsts.METHOD_DIE;
 import se.ipc.pdu.StatusPDU;
 import se.util.Logger;
 
 public class Process implements RequestHandler {
 
-    
+    private int httpPort;
     private final String err;
     private final String out;
     private final Server server;
@@ -29,18 +32,34 @@ public class Process implements RequestHandler {
         err = config.getErrFile();
         out = config.getOutFile();
         PDU.setProcessRole(config.getProcessRole());
-        Logger.setLoglevel(Integer.parseInt((String) config.get(Configuration.DEBUG_LEVEL)));
+        Logger.setLoglevel(config.getDebugLevel());
     }
 
     public String getErrFile() {
         return err;
     }
-    
+
     public String getOutFile() {
         return out;
     }
-    
+
+    public void setHttpPort(int port) {
+        this.httpPort = port;
+    }
+
+    public int getHttpPort() {
+        return httpPort;
+    }
+
     public void run() {
+
+        /* add a shutdown hook */
+        Runtime.getRuntime().addShutdownHook(
+                new Thread(() -> {
+                    deinit();
+                })
+        );
+
         new Thread(() -> {
             try {
                 server.run();
@@ -70,22 +89,42 @@ public class Process implements RequestHandler {
             return;
         }
         handler(socket, pdu);
+        socket.close();
     }
 
     @Override
     public void handler(ESocket socket, PDU pdu) throws IOException {
-        switch(pdu.getMethod()) {
+        switch (pdu.getMethod()) {
             case METHOD_DIE:
                 deinit();
                 System.exit(0);
+            case PDUConsts.METHOD_INTRO:
+                IntroPDU ipdu = (IntroPDU) pdu;
+                ESocket sock = new ESocket(ipdu.getGuestHost(), ipdu.getGuestPort());
+                sock.send(new HiPDU(getPort(), getHttpPort()));
+                try {
+                    HiPDU hello = (HiPDU) sock.recvPDU();
+                    handle_hello(sock, hello);
+                } catch (JsonException | InvalidPDUException ex) {
+                    Logger.elog(Logger.HIGH, "Couldn't say hello to " + sock);
+                }
+                break;
+            case PDUConsts.METHOD_HI:
+                HiPDU hpdu = (HiPDU) pdu;
+                handle_hello(socket, hpdu);
+                /* Say hello back on same socket */
+                socket.send(new HiPDU(getPort(), getHttpPort()));
+                break;
         }
     }
 
     public PDU getStatus() {
         return new StatusPDU();
     }
-    
+
     public void deinit() {
-        
+    }
+
+    protected void handle_hello(ESocket sock, HiPDU hpdu) {
     }
 }

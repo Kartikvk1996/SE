@@ -53,11 +53,11 @@ public class Server {
                 try {
                     handler.handle(sock);
                     sock.close();
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                     Logger.elog(Logger.HIGH, ex.getMessage());
                 }
             });
-            Logger.ilog(Logger.DEBUG, "Accepted a connection");
+            Logger.ilog(Logger.PROTO, "Accepted a connection");
         }
     }
 

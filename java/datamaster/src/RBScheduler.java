@@ -8,13 +8,11 @@ import se.util.Logger;
 public class RBScheduler implements Scheduler {
 
     DMasterConfiguration config;
-    private final String mhost;
-    private final int mport;
+    static int wservers;
+    static int prxyservers;
 
-    public RBScheduler(DMasterConfiguration config, String mhost, int mport) {
+    public RBScheduler(DMasterConfiguration config) {
         this.config = config;
-        this.mhost = mhost;
-        this.mport = mport;
     }
 
     @Override
@@ -27,8 +25,14 @@ public class RBScheduler implements Scheduler {
         if (slv.getProcessCount() < 2) {
             try {
                 slv.createProcess(config.getDmgrExecutable(), config.getDmgrCommandLine());
-                slv.createProcess(config.getDmgrExecutable(), config.getDmgrCommandLine());
-                slv.createProcess(config.getDmgrExecutable(), config.getDmgrCommandLine());
+                if(wservers < 1) {
+                    slv.createProcess(config.getWsExecutable(), config.getWsCmdline());
+                    wservers++;
+                }
+                if(prxyservers < 1) {
+                    slv.createProcess(config.getPrxyExecutable(), config.getPrxyCmdline());
+                    prxyservers++;
+                }
             } catch (IOException ex) {
                 Logger.elog(Logger.HIGH, "Error creating process on node [" + config.getDmgrExecutable() + " [" + host + "]");
             }

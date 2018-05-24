@@ -31,9 +31,10 @@ public class Apidoccer {
 
     private void mlist(String uptoNow, Class<?> cur) {
 
-        if(isPrimitive(cur))
+        if (isPrimitive(cur)) {
             return;
-        
+        }
+
         Method meths[] = cur.getDeclaredMethods();
         for (Method meth : meths) {
             RESTExposedMethod annmeth = meth.getAnnotation(RESTExposedMethod.class);
@@ -63,7 +64,7 @@ public class Apidoccer {
 
     }
 
-    public void plist(String uptoNow, Class<?> cur) {
+    public final void plist(String uptoNow, Class<?> cur) {
 
         Field[] fields = cur.getFields();
 
@@ -98,17 +99,23 @@ public class Apidoccer {
     }
 
     public Apidoccer() {
-        
-        plist("/status", MasterView.class);
-        mlist("/exec", MasterView.class);
-        
+
+        Class[] classes = {
+            MasterView.class
+        };
+
+        for (Class c : classes) {
+            plist("/status", c);
+            mlist("/exec", c);
+        }
+
         DictObject apilist = new DictObject();
         apilist.set("properties", proplist);
         apilist.set("methods", methList);
-        
+
         sop("var apilist = ");
         sop(apilist.toString());
-        
+
     }
 
     public static void main(String[] args) {
@@ -129,7 +136,7 @@ public class Apidoccer {
         dObj.set("comment", (f.getAnnotation(JsonExposed.class)).comment());
         return dObj;
     }
-    
+
     private JsonObject putAPI(Method meth, String url) {
         DictObject dObj = new DictObject();
         dObj.set("returntype", meth.getReturnType().getName());

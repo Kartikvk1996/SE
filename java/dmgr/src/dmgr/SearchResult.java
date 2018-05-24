@@ -1,19 +1,18 @@
 package dmgr;
 
-import java.util.HashSet;
+import java.io.Serializable;
+import java.util.HashMap;
 import jsonparser.JsonExposed;
 
-public class SearchResult {
+public class SearchResult implements Serializable {
     
-    @JsonExposed(comment = "milli-seconds consumed for getting results")
-    public long millis;
-    
-    @JsonExposed(comment = "results")
-    public HashSet<Index> set;
+    @JsonExposed(comment = "index")
+    public HashMap<Long, Index> rset;
 
-    public SearchResult(long millis, HashSet<Index> set) {
-        this.millis = millis;
-        this.set = set;
+    public SearchResult() {
     }
     
+    public SearchResult(HashMap<Long, Index> rset) {
+        this.rset = rset;
+    }
 }

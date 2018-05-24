@@ -8,6 +8,7 @@ public class IntroPDU extends PDU {
 
     @JsonExposed public String host;
     @JsonExposed public int port;
+    @JsonExposed public String type;
     
     public IntroPDU(DictObject jObject) throws InvalidPDUException {
         super(jObject);
@@ -21,10 +22,11 @@ public class IntroPDU extends PDU {
     }
     
     
-    public IntroPDU(String host, int port) {
+    public IntroPDU(String host, int port, String type) {
         super(PDUConsts.METHOD_INTRO);
         this.host = host;
         this.port = port;
+        this.type = type;
     }
     
     public String getGuestHost() {
@@ -35,4 +37,7 @@ public class IntroPDU extends PDU {
         return port;
     }
     
+    public String getType() {
+        return type;
+    }
 }
