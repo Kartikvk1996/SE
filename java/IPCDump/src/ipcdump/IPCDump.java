@@ -29,26 +29,26 @@ public class IPCDump {
 
         pw = new PrintWriter("ipcdump.html");
         DictObject kvp = new DictObject();
-        kvp.set("<key>", "<value>");
+        kvp.set("${key}", "${value}");
 
         AckPDU.setHttpPort(2345);
-        PDU.setProcessRole("<role of the generator process>");
-
+        PDU.setProcessRole("${role of the generator process>");
+        
         PDU pdus[] = {
-            new AckPDU("<ticket>"),
-            new ConnectPDU("<ticket>", "<process id>", 6433),
-            new CreatePDU("<executable name>", "<arg1> <arg2> ..."),
+            new AckPDU("${ticket}"),
+            new ConnectPDU("${ticket}", "${process id}", 6433),
+            new CreatePDU("${executable name}", "${arg1} ${arg2} ..."),
             new DiePDU(),
-            new ErrorPDU("<this is a error message>"),
-            new GetPDU("<resource name>"),
+            new ErrorPDU("${this is a error message}"),
+            new GetPDU("${resource name}"),
             new HiPDU(7738, 80),
-            new IntroPDU("<guest host>", 8734, "<guest type>"),
-            new KillPDU("<process id>"),
-            new SearchPDU("<search query>"),
+            new IntroPDU("${guest host}", 8734, "${guest type}"),
+            new KillPDU("${process id}"),
+            new SearchPDU("${search query}"),
             new StatusPDU()
         };
 
-        sop("<html><head><style>.classname{font-weight: bolder; font-family: monospace; font-size: 1.2em;}</style></head>");
+        sop("<html}<head><style>.classname{font-weight: bolder; font-family: monospace; font-size: 1.2em;}</style></head>");
         for (PDU pdu : pdus) {
             dumpPDU(pdu);
         }
@@ -61,7 +61,8 @@ public class IPCDump {
         sop(p.getClass().getName());
         sop("</span>");
         sop("<pre>");
-        sop(Formatter.format(Json.dump(p)));
+        String out = Formatter.format(Json.dump(p));
+        sop(out);
         sop("</pre>");
     }
 
