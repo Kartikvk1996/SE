@@ -6,15 +6,19 @@
 package majorproject.search.engine.conjecture;
 
 
+import com.sun.xml.internal.fastinfoset.algorithm.BuiltInEncodingAlgorithm;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilterInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -49,36 +53,104 @@ public class MajorProjectSearchEngineConjecture  {
     public static Stack<Character> bucket=new Stack<Character>();
     public static int size = 0;
     public static boolean searchFlag =false;
+    public static ArrayList<wordVec> wordArray=new ArrayList<wordVec>();
     private int uid=0;
     public static int dictionarySize=0;
     public  HashMap< String,Integer> wordList=new HashMap<String,Integer>();
+    public HashMap<String,wordVec> wordVectors=new HashMap<String,wordVec>();
     private contextWord context=new contextWord();
     private mainWord main=new mainWord();
-    public static void main(String[] args) {
+    ObjectOutputStream oos;
+    
+    
+    public static void main(String[] args) throws IOException {
 
         MajorProjectSearchEngineConjecture m = new MajorProjectSearchEngineConjecture();
 
         m.buildDictionary();
         
-        m.train();
+//        m.train();
+m.readVectors();
+m.test();
+
+    }
+    
+    public void test(){
+    
+    String test="sachin";
+        wordVec mainword=wordVectors.get(test);
+        double distance=0;
+        String word[]=new String[10];
+        double minDistance=Double.MAX_VALUE;
         
+       // System.out.println("size"+m.wordArray.size());
+       
+       
+        for(wordVec w: wordVectors.values()){
+            size=size+1;
+           // System.out.println("size"+size);
+            //wordVec contextWordVector=wordArray.get(size);
+          //  System.out.println("wordVec:");w.display();
+            distance= euclidianDistance(mainword.get(), w.get());
+            
+            if(distance<minDistance&&!test.equals(w.keyWord)){
+                word[0]=w.keyWord;
+            
+            minDistance=distance;
+            }
+        
+        }
+        minDistance=Double.MAX_VALUE;
+        for(wordVec w: wordVectors.values()){
+        distance=euclidianDistance(mainword.get(), w.get());
+        
+        if(!w.keyWord.equals(word[0])&&distance<minDistance&&!test.equals(w.keyWord))
+        {word[1]=w.keyWord;
+        minDistance=distance;
+        }
+        }
+        
+        minDistance=Double.MAX_VALUE;
+                for(wordVec w: wordVectors.values()){
+        
+                    
+                distance=euclidianDistance(mainword.get(), w.get());
+        
+        if(!w.keyWord.equals(word[1])&&!w.keyWord.equals(word[0])&&distance<minDistance&&!test.equals(w.keyWord))
+        {word[2]=w.keyWord;
+        minDistance=distance;
+        }
+        }
+        
+      
+        System.out.println("WORD1:"+word[0]+"WORD2:"+word[1]+"WORD3:"+word[2]);
+      
     }
-    ObjectOutputStream oos;
     
-    public float[] add(float [] arg1,float [] arg2){
-    float sum[]=new float[wordVec.dimension];
+    
+    public double add(double[] arg2, double[] dotProduct){
+    double sum=0;
     for(int i=0;i<wordVec.dimension;i++){
-    sum[i]=arg1[i]+arg2[i];
+    sum+=dotProduct[i]+arg2[i];
     }
-    
-    
     return sum;
     }
     
-    public float add(float arg1,float arg2){
-    float sum=0;
-    sum=arg1+arg2;
-    return sum;
+    
+    public double euclidianDistance(double[] vecA,double[] vecB){
+        
+        double distance=0;
+        double difference,ms=0;
+        for(int i=0;i<wordVec.dimension;i++){
+    difference=vecA[i]-vecB[i];
+    difference=difference*difference;
+    ms+=difference;difference=0;
+        
+        }
+        distance=Math.pow(ms, 0.5);
+        return distance;
+    
+    
     }
     
     public void buildDictionary() {
@@ -131,14 +203,7 @@ public class MajorProjectSearchEngineConjecture  {
 
     }
     
-   /* public float[] div(float [] numerator,float[] denominator)
-    {
-        float res[]=new float[numerator.length];
-        for(int iterator=0;iterator<numerator.length;i++)
-            res[iterator]=numerator[iterator]/
-    
-    }*/
-    public void train(){
+    public void train() throws IOException{
     
      BufferedReader br=null;
          String line=null;
@@ -164,12 +229,12 @@ public class MajorProjectSearchEngineConjecture  {
            
            if(line!=null){
                line=line.replace("[_-]", " ");
-              // System.err.println("LINE:"+line);
+               System.err.println("LINE:"+line);
            sentence=line.split("[.,!?]");}
            
            for(int numOfsentencesinLIne=0;numOfsentencesinLIne<sentence.length;numOfsentencesinLIne++){
                sentence[numOfsentencesinLIne]=sentence[numOfsentencesinLIne].trim();
-            //  System.err.println("SENTENCE:"+sentence[numOfsentencesinLIne]);
+               System.err.println("SENTENCE:"+sentence[numOfsentencesinLIne]);
           
          words=sentence[numOfsentencesinLIne].split(" ");
                
@@ -194,13 +259,13 @@ public class MajorProjectSearchEngineConjecture  {
          
          for(int numOfwordsinSentence=0;numOfwordsinSentence<words.length&&words[numOfwordsinSentence].length()>=1;numOfwordsinSentence++){
      
-           //  System.out.println("WORD:"+words[numOfwordsinSentence]);
+             System.out.println("WORD:"+words[numOfwordsinSentence]);
         words[numOfwordsinSentence]=words[numOfwordsinSentence].replaceAll("[.,!-]", ""); words[numOfwordsinSentence]=words[numOfwordsinSentence].toLowerCase();
         //sentences.add(words[numOfwordsinSentence]);// adding the words in the sentence
           for(short nearby=-1;nearby<2;nearby+=2)  {
              for(short multiplier=1;multiplier<=2;multiplier++){
                    if(numOfwordsinSentence+nearby*multiplier>=0&&words.length>numOfwordsinSentence+nearby*multiplier){sentences.add(words[numOfwordsinSentence+nearby*multiplier]);
-                  // System.err.println("word:"+words[numOfwordsinSentence]+"\tadded:"+words[numOfwordsinSentence+nearby*multiplier]);
+                   System.err.println("word:"+words[numOfwordsinSentence]+"\tadded:"+words[numOfwordsinSentence+nearby*multiplier]);
                    }
              }
           } 
@@ -220,14 +285,13 @@ public class MajorProjectSearchEngineConjecture  {
              
              if(searchFlag){
                  searchFlag=false;}
-            float expectency[]=new float[wordVec.dimension];
+            double sum[]=new double[wordVec.dimension];
             main.init();
              //System.err.println("word is:"+words[numOfwordsinSentence]);
              wordVec mainword=null;
-             float []sum = null;
-             float gradient[]=null;
+             
               
-                //get the center word vector
+                
                 mainword=main.getVec(wordList.get(words[numOfwordsinSentence]));
             
              //Extract the rest of context word vectors
@@ -237,31 +301,25 @@ public class MajorProjectSearchEngineConjecture  {
                  
                 //System.err.println("size:"+wordList.size());    
                  if(!str.equals(words[numOfwordsinSentence])){
-                 //  System.err.println("context word:"+str);
+                  //  System.err.println("context word:"+str);
                     
-                     int indexOfContextwords=wordList.get(str);
-                     
-                     //add the vectors to be updated
-                     nearbyWords.add(context.getVec(indexOfContextwords));
-                  
+                    try{ int i=wordList.get(str);nearbyWords.add(context.getVec(i));
+                    }
+                    catch(NullPointerException e)
+                    {addWord(str, sentence[numOfsentencesinLIne]);
+                    int i=wordList.get(str);
+                    nearbyWords.add(context.getVec(i));
+                    }
                      
                      for(wordVec contextword: nearbyWords){
-                         float numerator,denominator;
-                         denominator=denominator(mainword);
-                         
-                         for(int cindex=0;cindex <nearbyWords.size();cindex++){
               //           System.err.println("contextword:");contextword.display();System.err.println("\tmainword:");mainword.display();
-                     float dotProduct=contextword.product(mainword.get());
+                     double dotProduct=contextword.product(mainword.get());
                      dotProduct=exp(dotProduct);
-                             System.err.println("probability:"+dotProduct/denominator);
-                     //numerator=product(dotProduct, contextword.get());
-                   //  sum=add(sum,numerator);
-                     }
-                        
-                   //  gradient=divide(sum, denominator);
+                    // sum=add(sum,dotProduct);
                      
-                     }                 
-            
+                     
+                     }                  
+             //call the backpropagation algorithm
              
            
          
@@ -285,7 +343,9 @@ public class MajorProjectSearchEngineConjecture  {
      //   traceTree(Root, 0);
        
        
-   
+        
+        
+        // TODO code application logic here
     
     
     
@@ -347,59 +407,6 @@ public class MajorProjectSearchEngineConjecture  {
         return false;
 
     }
-   
-    public float dotproduct(float []arg1, float[] arg2)
-    {
-    float res=0;
-    for(int dim=0;dim<arg1.length;dim++){
-    res=arg1[dim]* arg2[dim];
-    }
-    return res;
-    
-    
-    }
-    
-    public float dotproduct(float[]arg1,wordVec word)
-    
-    {
-    float arg2[]=word.get();
-    float res=0;
-    for(int dim=0;dim<arg1.length;dim++)
-    {
-    res+=arg1[dim]*arg2[2];
-    
-    }
-    return res;
-    }
-    
-    public float[] divide(float[]arg1,float[]arg2){
-    
-    float[]res=null;
-    for(int size=0; size<arg1.length;size++){
-    res[size]=arg1[size]/arg2[size];
-    }
-    return res;
-    }
-    
-    public float divide (float arg1,float arg2){
-    return arg1/arg2;
-    }
-    
-    
-    public float[] difference(float[]arg1, float[] arg2){
-    
-    float res[]=null;
-    for(int size=0; size<arg1.length;size++){
-    
-     res[size]=arg1[size]-arg2[size];
-    }
-    return res;
-    }
-    
-    public float difference(float arg1, float arg2){
-    return arg1-arg2;
-    }
-    
     
     public boolean search(node root, String str, int length,Document d) {
         str=str.toLowerCase();
@@ -519,19 +526,48 @@ public class MajorProjectSearchEngineConjecture  {
 
     }
 
+    
+    public void readVectors() throws FileNotFoundException, IOException{
+    
+    String fileName="Vectors.csv";
+        BufferedReader br =new BufferedReader(new FileReader(fileName));
+        String line=null;
+        
+        wordVec w;int count=0;
+        
+        while ((line = br.readLine()) != null) {
+
+                // use comma as separator
+                String[] country = line.split(",");
+double [] temp=new double[wordVec.dimension];
+                for(int i=1;i<65;i++){
+                   // System.err.print(country[i]+",");
+                    temp[i-1]=Double.valueOf(country[i]);
+                }++count;
+               // System.err.println(count);
+                w=new wordVec();w.init(country[0],temp);
+                wordList.put(country[0], count);
+                wordVectors.put(country[0], w);
+                wordArray.add(w);
+               
+               // System.out.println("added");wordArray.get(count-1).display();
+
+            }
+        
+        System.out.println("VECTORS LOADED");
+        
+    }
+   
     public int keyHash(String str) {
         //This will result to a hash value based onthe charaacters preesnrt in the string
 
         return 1;
     }
   
-    float  exp(float arg){
+    double  exp(double arg){
   
   
-  arg=(float) Math.exp(arg);
-  
-  
-  return arg;
+  return Math.exp(arg);
   }
     
     
@@ -543,7 +579,6 @@ public class MajorProjectSearchEngineConjecture  {
     //new added words output to a new 
     fw.write(word+"\n");
     fw.close();
-        buildTree(Root, word);
       //  System.out.println("word:"+word+"\tsentence"+sentence);
    try{
        int index=wordList.get(word);
@@ -580,20 +615,7 @@ public class MajorProjectSearchEngineConjecture  {
          obj=objClassName.cast(obj);}catch(Exception e){e.printStackTrace();}
     
     }
-    
-   public float denominator(wordVec mainword){
-       
-       
-float dotProduct=0;
-float  sum=0;
-
-for(int i=0;i<MajorProjectSearchEngineConjecture.dictionarySize;i++){
-      dotProduct=mainword.product(context.getVec(i).get());
-      dotProduct=exp(dotProduct);
-      sum=add(sum,dotProduct);
-}
-
-return sum;}
+   
     
 }
 
@@ -602,7 +624,6 @@ class node {
     private node pointers[] = new node[26];
     private char character;
     public ArrayList<Document> docs=null;
-    static int index;
     public boolean end;
 
     public boolean addNode(int position, char c, node child) {
@@ -641,26 +662,26 @@ class node {
 
  class wordVec {
     
-    private float []word;
-   static int dimension=50;
-   
+    private double []word;
+   static int dimension=64;
+   String keyWord=null;
     public void init()
     {
-        word =new float[dimension];
-        for(int i=0;i<dimension;i++){word[i]=(float) (1/(1+Math.exp((Math.random()))));}
+        word =new double[dimension];
+        for(int i=0;i<dimension;i++)word[i]=(float) (1);
     }
     
     public void display(){for(int i=0;i<dimension;i++)System.err.print(word[i]+",");System.err.print("\n");}
     
-    public float[] get(){return word;}
+    public double[] get(){return word;}
     
-    public float product(float[] vecB){
-    float c=0;
+    public double product(double[] vecB){
+    double c=0;
     for(int i=0;i<dimension;i++){c+=word[i]*vecB[i];}
     return c;
     }
     
-    
+    public void init(String keyword,double[] fromFile){this.word=fromFile;this.keyWord=keyword;}
     
     
 }
@@ -715,7 +736,7 @@ class node {
     
     {
         wordVec temp;
-        
+        double [] t={1,1,1,1,1};
         
     //initialize noOfwords
         noOfwords=MajorProjectSearchEngineConjecture.dictionarySize;
@@ -725,8 +746,8 @@ class node {
          temp=new wordVec();
          
          temp.init();
-        
-        // for(int j=0;j<;j++)//System.out.print(t[j]);
+//        t=temp.product(t);
+         for(int j=0;j<5;j++)//System.out.print(t[j]);
          words.add(temp);
      }
         
@@ -747,15 +768,5 @@ class node {
 
  }
 
-class Document{
-private String url=null;
-public String docid=null;
-private String date;
-boolean isCrawled=false;
-static int rank;
-public Document(String url,String docid){this.url=url;this.docid=docid;}
-
-public Document(String url,String docid,String date){this.url=url;this.docid=docid;this.date=date;isCrawled=true;}
 
 
-}
