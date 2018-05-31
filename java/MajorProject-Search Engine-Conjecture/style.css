@@ -1,0 +1,25 @@
+body{
+	background-image: url("hudak.jpg");
+	background-size: cover;
+	width: 100%;
+	height: 100vh;
+	background-position: center center;
+	position: relative;
+	
+}
+
+#input{
+	
+	width:200px;
+	height:30px;
+	margin-left:41%;
+	margin-top:30%;
+}
+
+#click{
+	
+	width:70px;
+	height:30px;
+	background-image:url("button.png");
+	
+}
