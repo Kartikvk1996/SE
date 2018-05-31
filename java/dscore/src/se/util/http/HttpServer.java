@@ -17,11 +17,13 @@ public class HttpServer implements RequestHandler {
     String docRoot = ".";
     Server httpserver;
     HashMap<String, FileInputStream> openFiles;
+    HashMap<String, RestServlet> mappings;
 
     public HttpServer(String docRoot) throws IOException {
         this.docRoot = docRoot;
         httpserver = new Server(this);
         openFiles = new HashMap<>();
+        mappings = new HashMap<>();
     }
 
     public String getHost() {
@@ -41,15 +43,28 @@ public class HttpServer implements RequestHandler {
         httpserver.run();
     }
 
-    protected void serve(HttpRequest req) throws IOException {
-        sendFile(req.getUrl(), req.getOutputStream());
+    protected void serveReq(HttpRequest req) throws IOException {
+        String url = req.getUrl();
+        String service = url;
+        if (url.contains("/")) {
+            service = url.substring(0, url.indexOf('/'));
+        }
+        if (mappings.containsKey(service)) {
+            mappings.get(service).serve(req);
+        } else {
+            sendFile(req.getUrl(), req.getOutputStream());
+        }
+    }
+
+    public final void registerAPI(String url, RestServlet servelet) {
+        mappings.put(url, servelet);
     }
 
     @Override
     public void handle(ESocket sock) throws IOException {
         try {
             HttpRequest request = new HttpRequest(sock);
-            serve(request);
+            serveReq(request);
             sock.close();
         } catch (HttpException ex) {
             Logger.ilog(Logger.LOW, ex.getMessage());

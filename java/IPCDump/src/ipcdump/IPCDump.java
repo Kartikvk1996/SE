@@ -31,12 +31,11 @@ public class IPCDump {
         DictObject kvp = new DictObject();
         kvp.set("${key}", "${value}");
 
-        AckPDU.setHttpPort(2345);
         PDU.setProcessRole("${role of the generator process>");
         
         PDU pdus[] = {
-            new AckPDU("${ticket}"),
-            new ConnectPDU("${ticket}", "${process id}", 6433),
+            new AckPDU("${ticket}", 7348),
+            new ConnectPDU("${ticket}", "${process id}", 6433, 8787),
             new CreatePDU("${executable name}", "${arg1} ${arg2} ..."),
             new DiePDU(),
             new ErrorPDU("${this is a error message}"),

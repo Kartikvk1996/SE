@@ -1,0 +1,150 @@
+Thu May 31 18:06:48 IST 2018	INFO	[main]	The arguments must be <Ticket> <PID> <MHOST> <MPORT> [configFile]
+[Node-3, proc_314201818648_1, localhost, 55715, C:\\Users\\mpataki\\Documents\\se\\java\\dmgr\\dmgr.conf]
+Thu May 31 18:06:48 IST 2018	INFO	[main]	search server [not http] process running on 55998
+Thu May 31 18:06:48 IST 2018	INFO	[main]	Trie not found
+Thu May 31 18:06:53 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:06:53 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:06:58 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:06:58 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:03 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:03 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:08 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:08 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:13 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:13 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:18 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:18 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:23 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:23 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:28 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:28 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:33 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:33 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:38 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:38 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:43 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:43 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:48 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:48 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:54 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:54 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:07:59 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:07:59 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:04 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:04 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:09 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:09 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:14 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:14 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:19 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:19 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:24 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:24 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:29 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:29 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:34 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:34 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:39 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:39 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:44 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:44 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:49 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:49 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:54 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:54 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:08:59 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:08:59 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:04 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:04 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:09 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:09 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:14 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:14 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:19 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:19 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:24 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:24 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:29 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:29 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:34 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:34 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:39 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:39 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:44 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:44 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:49 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:49 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:54 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:54 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:09:59 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:09:59 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:04 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:04 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:09 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:09 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:14 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:14 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:19 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:19 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:24 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:24 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:29 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:29 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:34 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:34 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:39 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:39 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:44 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:44 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:49 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:49 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:54 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:54 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:10:59 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:10:59 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:04 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:04 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:09 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:09 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:14 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:14 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:19 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:19 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:24 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:24 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:29 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:29 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:34 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:34 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:39 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:39 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:44 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:44 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:49 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:49 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:54 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:54 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:11:59 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:11:59 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:04 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:04 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:09 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:09 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:14 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:14 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:19 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:19 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:24 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:24 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:29 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:29 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:34 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:34 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:39 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:39 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:44 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:44 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:49 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:49 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:12:54 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:12:54 IST 2018	INFO	[main]	Found [0] new files

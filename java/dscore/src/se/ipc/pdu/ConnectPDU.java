@@ -6,12 +6,13 @@ import jsonparser.JsonExposed;
 
 public class ConnectPDU extends PDU {
 
-    private static final String ATTR_HTTP_PORT = "httpport";
-    private static final String ATTR_ERR_FILE = "errfile";
-    private static final String ATTR_OUT_FILE = "outfile";
+    private static final String ATTR_HTTP_PORT = "restPort";
+    
+    /* port for http thread */
+    @JsonExposed public int restPort;
     
     /* port on which this server is listening. can be zero for a client */
-    @JsonExposed public int port;
+    @JsonExposed public int ipcPort;
     
     /* process id attached to this process. can be 0xbaba for the fireup */
     @JsonExposed public String pid;
@@ -30,41 +31,29 @@ public class ConnectPDU extends PDU {
         return sysInfo;
     }
 
-    private void init(String ticket, String pid, int port) {
+    private void init(String ticket, String pid, int ipcPort, int restPort) {
         this.sysInfo = new SysInfo(true);
-        this.port = port;
+        this.ipcPort = ipcPort;
         this.pid = pid;
         this.ticket = ticket;
+        this.restPort = restPort;
     }
     
-    public ConnectPDU(String ticket, String pid, int port) {
+    public ConnectPDU(String ticket, String pid, int ipcPort, int restPort) {
         super(PDUConsts.METHOD_CONNECT);
-        init(ticket, pid, port);
+        init(ticket, pid, ipcPort, restPort);
     }
     
     public int getHttpPort() {
-        return (Integer)((DictObject)data).get(ATTR_HTTP_PORT).getValue();
+        return restPort;
     }
     
     public void setHttpPort(int port) {
-        ((DictObject)data).set(ATTR_HTTP_PORT, port);
-    }
-    
-    public void setEOFiles(String errFile, String outFile) {
-        ((DictObject)data).set(ATTR_OUT_FILE, outFile);
-        ((DictObject)data).set(ATTR_ERR_FILE, errFile);
-    }
-    
-    public String getOutFile() {
-        return (String)((DictObject)data).get(ATTR_OUT_FILE).getValue();
-    }
-    
-    public String getErrFile() {
-        return (String)((DictObject)data).get(ATTR_ERR_FILE).getValue();
+        restPort = port;
     }
     
     public int getConnectPort() {
-        return port;
+        return ipcPort;
     }
 
     public String getPid() {

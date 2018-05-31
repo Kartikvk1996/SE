@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="datamaster">
+  <ClassDiagramComponents>
+    <Class name="DataMaster" package="" visibility="public" xPosition="549.0" yPosition="208.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="MasterProcessConfiguration" name="config"/>
+          <Argument type="Scheduler" name="scheduler"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="main" returnType="String" visibility="public" isStatic="true">
+          <Argument type="String" name="argv"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="DMasterConfiguration" package="" visibility="public" xPosition="190.0" yPosition="68.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="package">
+          <Argument type="String" name="filePath"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getDmgrCommandLine" returnType="String" visibility="package"/>
+        <Method name="getDmgrExecutable" returnType="String" visibility="package"/>
+        <Method name="getTcrawlerExecutable" returnType="String" visibility="package"/>
+        <Method name="getTcrawlerCmdline" returnType="String" visibility="package"/>
+        <Method name="getWsExecutable" returnType="String" visibility="package"/>
+        <Method name="getWsCmdline" returnType="String" visibility="package"/>
+        <Method name="getPrxyExecutable" returnType="String" visibility="package"/>
+        <Method name="getPrxyCmdline" returnType="String" visibility="package"/>
+      </Methods>
+    </Class>
+    <Class name="RBScheduler" package="" visibility="public" xPosition="190.0" yPosition="419.0">
+      <Fields>
+        <Field name="config" type="DMasterConfiguration" visibility="package"/>
+        <Field name="wservers" type="int" visibility="package" isStatic="true"/>
+        <Field name="prxyservers" type="int" visibility="package" isStatic="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="DMasterConfiguration" name="config"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="schedule" returnType="LinkedHashMap&lt;String, NodeProxy&gt;" visibility="public">
+          <Argument type="String" name="host"/>
+          <Argument type="LinkedHashMap&lt;String, NodeProxy&gt;" name="slaves"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="MasterProcess" package="" visibility="public" xPosition="679.0" yPosition="68.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="uses" source="RBScheduler" target="DMasterConfiguration" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="usesScheduler" source="DataMaster" target="RBScheduler" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="DataMaster" target="MasterProcess"/>
+    <UseRelation name="uses" source="DataMaster" target="DMasterConfiguration" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

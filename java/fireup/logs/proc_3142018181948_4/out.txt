@@ -1,0 +1,7 @@
+Thu May 31 18:19:49 IST 2018	INFO	[Thread-0]	The link reciever server is running on : 56658
+Thu May 31 18:22:12 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 18:22:15 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 18:22:18 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 18:22:21 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 18:22:24 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 18:22:27 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat

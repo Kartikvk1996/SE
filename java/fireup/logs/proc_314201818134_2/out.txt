@@ -1,0 +1,28 @@
+Thu May 31 18:03:13 IST 2018	INFO	[main]	The arguments must be <Ticket> <PID> <MHOST> <MPORT> [configFile]
+[Node-0, proc_314201818134_2, localhost, 55715, C:\\Users\\mpataki\\Documents\\se\\java\\dmgr\\dmgr.conf]
+Thu May 31 18:03:13 IST 2018	INFO	[main]	search server [not http] process running on 55784
+Thu May 31 18:03:13 IST 2018	INFO	[main]	Trie not found
+Thu May 31 18:03:18 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:03:18 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:03:23 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:03:23 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:03:28 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:03:28 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:03:33 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:03:33 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:03:38 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:03:38 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:03:43 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:03:43 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:03:48 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:03:48 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:03:53 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:03:53 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:03:58 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:03:58 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:04:03 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:04:03 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:04:08 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:04:08 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:04:13 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:04:13 IST 2018	INFO	[main]	Found [0] new files

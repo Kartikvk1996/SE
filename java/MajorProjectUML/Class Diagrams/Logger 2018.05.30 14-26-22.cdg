@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Logger">
+  <ClassDiagramComponents>
+    <Class name="Logger" package="se.util" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="PROTO" type="int" visibility="public" isStatic="true" isFinal="true"/>
+        <Field name="DEBUG" type="int" visibility="public" isStatic="true" isFinal="true"/>
+        <Field name="LOW" type="int" visibility="public" isStatic="true" isFinal="true"/>
+        <Field name="MEDIUM" type="int" visibility="public" isStatic="true" isFinal="true"/>
+        <Field name="HIGH" type="int" visibility="public" isStatic="true" isFinal="true"/>
+        <Field name="INFO" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="ERROR" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="loglevel" type="int" visibility="package" isStatic="true"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="setLoglevel" returnType="void" visibility="public" isStatic="true">
+          <Argument type="int" name="level"/>
+        </Method>
+        <Method name="ilog" returnType="void" visibility="public" isStatic="true">
+          <Argument type="int" name="level"/>
+          <Argument type="String" name="message"/>
+        </Method>
+        <Method name="elog" returnType="void" visibility="public" isStatic="true">
+          <Argument type="int" name="level"/>
+          <Argument type="String" name="message"/>
+        </Method>
+        <Method name="elog" returnType="void" visibility="public" isStatic="true">
+          <Argument type="int" name="level"/>
+          <Argument type="String" name="message"/>
+          <Argument type="Throwable" name="e"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>

@@ -27,22 +27,17 @@ public class ProcessProxy {
     @JsonExposed(comment = "Last heartbeat interval of the slave")
     public long lastHeartbeatTime;
     
-    @JsonExposed(comment = "The error stream of the process")
-    public String errFile;
-    
-    @JsonExposed(comment = "The output stream of the process")
-    public String outFile;
-    
     @JsonExposed(comment = "This is the http port the process runs if it has any")
     public int httpPort;
+
+    @JsonExposed(comment = "This denotes whether the process is active or not")
+    public int status;
     
-    ProcessProxy(String host, int port, String type, String pid, String errFile, String outFile, int httpPort) {
+    ProcessProxy(String host, int port, String type, String pid, int httpPort) {
         this.host = host;
         this.port = port;
         this.type = type;
         this.pid = pid;
-        this.errFile = errFile;
-        this.outFile = outFile;
         this.httpPort = httpPort;
     }
     
@@ -69,6 +64,7 @@ public class ProcessProxy {
 
     void rcvHeartbeat(StatusPDU pdu) {
         lastHeartbeatTime = (new Date()).getTime();
+        status = 1;
     }
 
     @RESTExposedMethod(comment = "Runs a method in given process. Nothing is sent back")
