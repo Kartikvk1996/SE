@@ -1,0 +1,6 @@
+Thu May 31 18:19:49 IST 2018	INFO	[main]	Http server running on : 56644
+Thu May 31 18:19:49 IST 2018	INFO	[pool-1-thread-2]	A new dmgr found at {host: 127.0.0.1, port: 56647}
+Thu May 31 18:19:49 IST 2018	INFO	[pool-1-thread-4]	A new proxyserver found at {host: 127.0.0.1, port: 56657}
+Thu May 31 18:22:12 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 18:22:15 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 18:22:18 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat

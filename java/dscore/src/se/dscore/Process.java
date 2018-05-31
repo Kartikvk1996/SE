@@ -5,6 +5,8 @@ package se.dscore;
  * process.
  */
 import java.io.IOException;
+import java.io.OutputStream;
+import jsonparser.Json;
 import jsonparser.JsonException;
 import se.ipc.pdu.PDU;
 import se.ipc.ESocket;
@@ -15,40 +17,33 @@ import se.ipc.pdu.PDUConsts;
 import static se.ipc.pdu.PDUConsts.METHOD_DIE;
 import se.ipc.pdu.StatusPDU;
 import se.util.Logger;
+import se.util.http.HttpRequest;
+import se.util.http.HttpServer;
+import se.util.http.ProgressiveProcess;
+import se.util.http.RestServlet;
 
-public class Process implements RequestHandler {
+public class Process implements RequestHandler, ProgressiveProcess, RestServlet {
 
-    private int httpPort;
-    private final String err;
-    private final String out;
-    private final Server server;
+    private final Server ipcServer;
+    private final HttpServer restServer;
     public static final int HEARTBEAT_INTERVAL = 2000;
     protected Configuration config;
 
     /* this is just for master port unavailibility issue */
     protected Process(Configuration config) throws IOException {
         this.config = config;
-        server = new Server(this);
-        err = config.getErrFile();
-        out = config.getOutFile();
+        ipcServer = new Server(this);
+        restServer = new HttpServer(config.getDocRoot());
         PDU.setProcessRole(config.getProcessRole());
         Logger.setLoglevel(config.getDebugLevel());
     }
 
-    public String getErrFile() {
-        return err;
-    }
-
-    public String getOutFile() {
-        return out;
-    }
-
-    public void setHttpPort(int port) {
-        this.httpPort = port;
+    public void registerAPI(String url, RestServlet servlet) {
+        restServer.registerAPI(url, servlet);
     }
 
     public int getHttpPort() {
-        return httpPort;
+        return restServer.getPort();
     }
 
     public void run() {
@@ -60,21 +55,37 @@ public class Process implements RequestHandler {
                 })
         );
 
+        /* register API urls */
+        registerAPI("status", this);
+        registerAPI("exec", this);
+
         new Thread(() -> {
             try {
-                server.run();
+                ipcServer.run();
             } catch (IOException ex) {
-                Logger.elog(Logger.HIGH, "Exception in dscore thread. " + ex.getMessage());
+                Logger.elog(Logger.HIGH, "Exception in dscore thread. ", ex);
             }
         }, "dscore-thread").start();
+
+        new Thread(() -> {
+            try {
+                restServer.run();
+            } catch (IOException ex) {
+                Logger.elog(Logger.HIGH, "Exception in rest-thread. ", ex);
+            }
+        }, "rest-server").start();
     }
 
     public String getHost() {
-        return server.getHost();
+        return ipcServer.getHost();
     }
 
-    public int getPort() {
-        return server.getPort();
+    public int getIPCPort() {
+        return ipcServer.getPort();
+    }
+
+    public int getRestPort() {
+        return restServer.getPort();
     }
 
     @Override
@@ -101,7 +112,7 @@ public class Process implements RequestHandler {
             case PDUConsts.METHOD_INTRO:
                 IntroPDU ipdu = (IntroPDU) pdu;
                 ESocket sock = new ESocket(ipdu.getGuestHost(), ipdu.getGuestPort());
-                sock.send(new HiPDU(getPort(), getHttpPort()));
+                sock.send(new HiPDU(getIPCPort(), getHttpPort()));
                 try {
                     HiPDU hello = (HiPDU) sock.recvPDU();
                     handle_hello(sock, hello);
@@ -113,7 +124,7 @@ public class Process implements RequestHandler {
                 HiPDU hpdu = (HiPDU) pdu;
                 handle_hello(socket, hpdu);
                 /* Say hello back on same socket */
-                socket.send(new HiPDU(getPort(), getHttpPort()));
+                socket.send(new HiPDU(getIPCPort(), getHttpPort()));
                 break;
         }
     }
@@ -126,5 +137,47 @@ public class Process implements RequestHandler {
     }
 
     protected void handle_hello(ESocket sock, HiPDU hpdu) {
+    }
+
+    private void sendStatus(String url, OutputStream out) throws IOException {
+        String dump = APIUtil.getObjectAsJson(getProgress(), url);
+        out.write("HTTP/1.0 200 OK\n".getBytes());
+        out.write(("Content-Length: " + dump.length() + "\n\n").getBytes());
+        out.write(dump.getBytes());
+    }
+
+    private void executeProcedure(String url, String data, OutputStream out) throws IOException {
+        String dump;
+        try {
+            dump = APIUtil.execute(getProgress(), url, Json.parse(data));
+        } catch (JsonException ex) {
+            dump = "{\"error\": \"Couldn't parse the data sent as JSON\"}";
+            Logger.elog(Logger.MEDIUM, "Couldn't parse the data sent as JSON");
+        }
+        out.write("HTTP/1.0 200 OK\n".getBytes());
+        out.write(("Content-Length: " + dump.length() + "\n\n").getBytes());
+        out.write(dump.getBytes());
+    }
+
+    @Override
+    public void serve(HttpRequest req) throws IOException {
+        String url = req.getUrl();
+        String service = url;
+        if (url.contains("/")) {
+            service = url.substring(0, url.indexOf('/'));
+        }
+        switch (service) {
+            case "status":
+                sendStatus(url, req.getOutputStream());
+                break;
+            case "exec":
+                executeProcedure(url, req.getData(), req.getOutputStream());
+                break;
+        }
+    }
+    
+    @Override
+    public Object getProgress() {
+        return this;
     }
 }

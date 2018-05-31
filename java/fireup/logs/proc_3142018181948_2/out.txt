@@ -1,0 +1,68 @@
+Thu May 31 18:19:48 IST 2018	INFO	[main]	The arguments must be <Ticket> <PID> <MHOST> <MPORT> [configFile]
+[Node-0, proc_3142018181948_2, localhost, 56629, C:\\Users\\mpataki\\Documents\\se\\java\\dmgr\\dmgr.conf]
+Thu May 31 18:19:49 IST 2018	INFO	[main]	search server [not http] process running on 56647
+Thu May 31 18:19:49 IST 2018	INFO	[main]	Trie not found
+Thu May 31 18:19:54 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:19:54 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:19:59 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:19:59 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:04 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:04 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:09 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:09 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:14 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:14 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:19 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:19 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:24 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:24 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:29 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:29 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:34 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:34 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:39 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:39 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:44 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:44 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:49 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:49 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:54 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:54 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:20:59 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:20:59 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:04 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:04 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:09 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:09 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:14 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:14 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:19 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:19 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:24 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:24 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:29 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:29 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:34 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:34 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:39 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:39 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:44 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:44 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:49 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:49 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:54 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:54 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:21:59 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:21:59 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:22:04 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:22:04 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:22:09 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:22:09 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:22:12 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 18:22:14 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:22:14 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:22:15 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 18:22:18 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 18:22:19 IST 2018	INFO	[main]	Scanning started
+Thu May 31 18:22:19 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 18:22:21 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat

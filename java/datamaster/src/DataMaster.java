@@ -20,9 +20,8 @@ public class DataMaster extends MasterProcess {
         
         DMasterConfiguration config = new DMasterConfiguration("masterconfig.conf");
         DataMaster master = new DataMaster(config, new RBScheduler(config));
-	System.out.printf("master running on port  [%d]\n", master.getPort());
-        System.out.printf("Http server running on port [%d]\n", master.getHttpServer().getPort());
-        System.out.printf("Http server document root : [%s]\n", master.getHttpServer().getDocumentRoot());
+	System.out.printf("master running on port  [%d]\n", master.getIPCPort());
+        System.out.printf("Http server running on port [%d]\n", master.getHttpPort());
         master.run();
         
     }

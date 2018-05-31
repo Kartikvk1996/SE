@@ -2,6 +2,7 @@ package se.dscore;
 
 import java.io.IOException;
 import jsonparser.JsonException;
+import se.ipc.pdu.AckPDU;
 import se.ipc.pdu.ConnectPDU;
 import se.ipc.pdu.InvalidPDUException;
 import se.ipc.pdu.StatusPDU;
@@ -16,6 +17,8 @@ public class SlaveProcess extends Process {
     public SlaveProcess(SlaveProcessConfiguration config) throws IOException {
         super(config);
         mproxy = new MasterProxy(config.getMasterHost(), config.getMasterPort());
+        
+        /* except node manager all processes should inherit these from parent */
         ticket = config.getTicket();
         pid = config.getPid();
         StatusPDU.setProcessDetails(ticket, pid);
@@ -26,10 +29,11 @@ public class SlaveProcess extends Process {
 
         /* report to the master that you are running on port X */
         try {
-            ConnectPDU pdu = new ConnectPDU(ticket, pid, getPort());
-            pdu.setHttpPort(getHttpPort());
-            pdu.setEOFiles(getErrFile(), getOutFile());
-            mproxy.send(pdu, true);
+            ConnectPDU cpdu = new ConnectPDU(ticket, pid, getIPCPort(), getHttpPort());
+            AckPDU pdu = (AckPDU) mproxy.send(cpdu, true);
+            mproxy.setJarVersion(Long.parseLong(pdu.getJarVersion()));
+            mproxy.setHttpPort(pdu.getHttpPort());
+            ticket = pdu.getTicket();
         } catch (IOException | JsonException | InvalidPDUException ex) {
             Logger.elog(Logger.HIGH, "unable to report to master. deinitialising");
             System.exit(0);

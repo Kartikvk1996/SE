@@ -121,8 +121,8 @@
                 }
             }
 
-            stderr.href = `http://${logHost}:${logPort}/${process.errFile}`;
-            stdout.href = `http://${logHost}:${logPort}/${process.outFile}`;
+            stderr.href = `http://${logHost}:${logPort}/logs/${process.pid}/err.txt`;
+            stdout.href = `http://${logHost}:${logPort}/logs/${process.pid}/out.txt`;
 
             kill.href = `/exec/nodes/${nodename}/kill?{{"pid":"${process.pid}"}}`;
         }

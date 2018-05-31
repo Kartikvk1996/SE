@@ -51,27 +51,24 @@ public class Dmgr extends SlaveProcess {
     public static void main(String[] args) throws IOException {
 
         /**
-         * 127.0.0.1 60834 192.168.56.1 60834 dmgr.conf new
-         * DMgrConfiguration().generateSample("dmgr.conf"); System.exit(0); /*
-         */
-        Logger.ilog(Logger.HIGH, "The arguments must be <Ticket> <PID> <ERRFILE> <OUTFILE> <MHOST> <MPORT> [configFile]");
+        new DMgrConfiguration().generateSample("dmgr.conf"); System.exit(0);
+        /**/
+        Logger.ilog(Logger.HIGH, "The arguments must be <Ticket> <PID> <MHOST> <MPORT> [configFile]");
         System.out.println(Arrays.toString(args));
 
-        conf = (DMgrConfiguration) ((args.length > 6)
-                ? new DMgrConfiguration(args[6])
+        conf = (DMgrConfiguration) ((args.length > 4)
+                ? new DMgrConfiguration(args[4])
                 : new DMgrConfiguration());
 
         conf.setTicket(args[0]);
         conf.setPid(args[1]);
-        conf.setErrFile(args[2]);
-        conf.setOutFile(args[3]);
-        conf.setMasterHost(args[4]);
-        conf.setMasterPort(Integer.parseInt(args[5]));
+        conf.setMasterHost(args[2]);
+        conf.setMasterPort(Integer.parseInt(args[3]));
         conf.setProcessRole("dmgr");
 
         Dmgr dmgr = new Dmgr(conf);
         dmgr.run();
-        Logger.ilog(Logger.HIGH, "search server [not http] process running on " + dmgr.getPort());
+        Logger.ilog(Logger.HIGH, "search server [not http] process running on " + dmgr.getIPCPort());
 
         tdir = new File(conf.getTempDirectory());
         cdir = new File(conf.getContentDirectory());

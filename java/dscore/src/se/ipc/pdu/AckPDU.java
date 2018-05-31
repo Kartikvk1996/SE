@@ -7,13 +7,14 @@ import jsonparser.JsonExposed;
 public class AckPDU extends PDU {
 
     /* this will serve as a check for assignement */
-    @JsonExposed public static Integer httpPort = null;
+    @JsonExposed public int restPort;
     @JsonExposed public static String jarRevision;
     @JsonExposed public String ticket;
     
-    public AckPDU(String ticket) {
+    public AckPDU(String ticket, int restPort) {
         super(PDUConsts.METHOD_ACK);
         this.ticket = ticket;
+        this.restPort = restPort;
     }
 
     public String getJarVersion() {
@@ -41,12 +42,12 @@ public class AckPDU extends PDU {
         jarRevision = curdate + "";
     }
 
-    public static void setHttpPort(int httpPort) {
-        AckPDU.httpPort = httpPort;
+    public void setHttpPort(int httpPort) {
+        restPort = httpPort;
     } 
     
     public int getHttpPort() {
-        return httpPort;
+        return restPort;
     }
 
     public String getTicket() {

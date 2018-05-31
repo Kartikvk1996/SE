@@ -61,6 +61,13 @@
             text-decoration: none;
         }
 
+        .active {
+            color: green;
+        }
+        .dead {
+            color: red;
+        }
+
     </style>
 
     <script>
@@ -147,11 +154,13 @@
                     `
                     <a href='process.html?${plink}' style='text-decoration: none; color: black;'>
                         <div class='process'>
-                            <span>PID: </span><span>${proc.pid}</span><br/>
-                            <span>Type: </span><span>${proc.type}</span><br/>
-                            <span>Port: </span><span>${proc.port}</span><br/><br/>
-                            <a href='${logloc}/${proc.errFile}' target='_blank'><span class='std stderr'>stderr</span></a>
-                            <a href='${logloc}/${proc.outFile}' target='_blank'><span class='std stdout'>stdout</span></a><br/>
+                            <span>${proc.pid}</span>
+                            <span class='${proc.status == 0 ? "dead" : "active"}'>&#x2b24;</span><br/>
+                            <span>Process Type: </span><span>${proc.type}</span><br/>
+                            <span>IPC Port: </span><span>${proc.port}</span><br/>
+                            <span>HTTP Port: </span><span>${proc.httpPort}</span><br/><br/>
+                            <a href='${logloc}/logs/${proc.pid}/err.txt' target='_blank'><span class='std stderr'>stderr</span></a>
+                            <a href='${logloc}/logs/${proc.pid}/out.txt' target='_blank'><span class='std stdout'>stdout</span></a><br/>
                         </div>
                     </a>
                     `;

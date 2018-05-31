@@ -35,18 +35,4 @@ public class LinkReciever implements Runnable {
             Logger.elog(0, ex.getMessage());
         }
     }
-
-    public static void xmain(String[] args) throws IOException {
-        HashMap<Long, SEUrl> map = new HashMap<>();
-        Thread t = new Thread(new LinkReciever(map));
-        ProxyServer ps = new ProxyServer(".", new ProgressiveProcess() {
-            @Override
-            public Object getProgress() {
-                return "";
-            }
-        }, map);
-        t.start();
-        System.out.println("Http server listening on : " + ps.getPort());
-        ps.run();
-    }
 }

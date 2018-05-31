@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="wserver">
+  <ClassDiagramComponents>
+    <Class name="SearchAgent" package="wserver" visibility="public" xPosition="665.0" yPosition="203.0">
+      <Fields>
+        <Field name="result" type="SearchResult" visibility="package"/>
+        <Field name="addr" type="Address" visibility="package"/>
+        <Field name="spdu" type="SearchPDU" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Address" name="addr"/>
+          <Argument type="SearchPDU" name="spdu"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="run" returnType="void" visibility="public"/>
+        <Method name="getResult" returnType="SearchResult" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="SearchResponse" package="wserver" visibility="public" xPosition="490.0" yPosition="478.0">
+      <Fields>
+        <Field name="prxyAddr" type="Address" visibility="public"/>
+        <Field name="millis" type="long" visibility="public"/>
+        <Field name="rset" type="ArrayList&lt;SearchResult&gt;" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="long" name="millis"/>
+          <Argument type="ArrayList&lt;SearchResult&gt;" name="rset"/>
+          <Argument type="Address" name="prxyAddr"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="WSConfiguration" package="wserver" visibility="public" xPosition="111.0" yPosition="153.0">
+      <Fields>
+        <Field name="DOC_ROOT" type="String" visibility="public" isStatic="true" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="String" name="filePath"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getDocRoot" returnType="String" visibility="public"/>
+        <Method name="setDocRoot" returnType="void" visibility="public">
+          <Argument type="String" name="docroot"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="WServer" package="wserver" visibility="public" xPosition="111.0" yPosition="421.0">
+      <Fields>
+        <Field name="wsview" type="WSView" visibility="package"/>
+        <Field name="dmgrs" type="HashMap&lt;String, Address&gt;" visibility="package"/>
+        <Field name="hserver" type="HttpServer" visibility="package" isStatic="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="WSConfiguration" name="config"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="handle_hello" returnType="void" visibility="protected">
+          <Argument type="ESocket" name="sock"/>
+          <Argument type="HiPDU" name="hpdu"/>
+        </Method>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+        <Method name="getProgress" returnType="Object" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="WSView" package="wserver" visibility="public" xPosition="340.0" yPosition="153.0">
+      <Fields>
+        <Field name="queries" type="long" visibility="public"/>
+        <Field name="squeries" type="long" visibility="public"/>
+        <Field name="dmgrs" type="HashMap&lt;String, Address&gt;" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="HashMap&lt;String, Address&gt;" name="dmgrs"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation name="uses" source="wserver.WServer" target="wserver.WSConfiguration" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="wsview" source="wserver.WServer" target="wserver.WSView" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="composes" source="wserver.WServer" target="wserver.SearchResponse" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="spawns" source="wserver.WServer" target="wserver.SearchAgent" sourceCardinality="1..1" targetCardinality="1..*"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

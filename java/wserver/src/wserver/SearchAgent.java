@@ -22,6 +22,10 @@ public class SearchAgent extends Thread {
     @Override
     public void run() {
         try {
+            
+            /* get some extra words for the search query*/
+            
+            
             Logger.ilog(Logger.DEBUG, "Using diffrent protocol for dmgrs");
             ESocket sock = new ESocket(addr.host, addr.port);
             sock.send(spdu);

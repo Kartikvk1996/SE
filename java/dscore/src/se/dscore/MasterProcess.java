@@ -25,15 +25,11 @@ import se.ipc.pdu.PDU;
 import se.ipc.pdu.PDUConsts;
 import se.ipc.pdu.StatusPDU;
 import se.util.Logger;
-import se.util.http.HttpServer;
-import se.util.http.ProgressiveProcess;
-import se.util.http.RESTServer;
 
-public class MasterProcess extends Process implements ProgressiveProcess {
+public class MasterProcess extends Process {
 
     protected final MasterView status;
     protected final LinkedHashMap<String, NodeProxy> nodes;
-    private final HttpServer hserver;
     protected Scheduler scheduler;
     private final long SLAVE_HB_WAIT_INTERVAL = 12000;
 
@@ -48,17 +44,12 @@ public class MasterProcess extends Process implements ProgressiveProcess {
         super(config);
         nodes = new LinkedHashMap<>();
         status = new MasterView(nodes);
-
-        hserver = new RESTServer((String) config.get(MasterProcessConfiguration.HTTP_ROOT), this);
-
-        AckPDU.setHttpPort(hserver.getPort());
     }
 
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
     }
 
-    /* Planning to remove this */
     void introduce(IntroPDU pdu) throws IOException {
 
         for (String slaveHost : nodes.keySet()) {
@@ -70,7 +61,6 @@ public class MasterProcess extends Process implements ProgressiveProcess {
         }
     }
 
-    /**/
     /**
      * Registers the Node, Process in the domain.
      *
@@ -105,7 +95,7 @@ public class MasterProcess extends Process implements ProgressiveProcess {
                     )
             );
 
-            AckPDU apdu = new AckPDU(ticket);
+            AckPDU apdu = new AckPDU(ticket, getHttpPort());
             sock.send(apdu);
             schedule(ticket);
             return;
@@ -119,13 +109,11 @@ public class MasterProcess extends Process implements ProgressiveProcess {
                         pdu.getConnectPort(),
                         pdu.getWho(),
                         pid,
-                        pdu.getErrFile(),
-                        pdu.getOutFile(),
                         pdu.getHttpPort()
                 )
         );
 
-        AckPDU apdu = new AckPDU(ticket);
+        AckPDU apdu = new AckPDU(ticket, getHttpPort());
         sock.send(apdu);
         introduce(new IntroPDU(sender, pdu.getConnectPort(), pdu.getWho()));
     }
@@ -177,15 +165,6 @@ public class MasterProcess extends Process implements ProgressiveProcess {
     @Override
     public void run() {
 
-        /* Start a HTTP thread */
-        new Thread(() -> {
-            try {
-                hserver.run();
-            } catch (IOException ex) {
-                Logger.elog(Logger.MEDIUM, "HttpServer encountered an errror");
-            }
-        }, "HTTP-SERVER").start();
-
         /* Start a slave monitor thread */
         new Thread(() -> {
             runSlaveMonitorThread();
@@ -212,16 +191,12 @@ public class MasterProcess extends Process implements ProgressiveProcess {
                     ProcessProxy proc = np.processes.get(pid);
                     long timeNow = (new Date()).getTime();
                     if (proc.getLastHBTime() + SLAVE_HB_WAIT_INTERVAL < timeNow) {
-                        np.processes.remove(pid);
+                        np.processes.get(pid).status = 0;
                         Logger.ilog(Logger.MEDIUM, "Killed the process [" + pid + "] on node [" + node + "]");
                     }
                 }
             }
         }
-    }
-
-    public HttpServer getHttpServer() {
-        return hserver;
     }
 
     /**

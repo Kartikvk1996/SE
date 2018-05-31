@@ -1,0 +1,27 @@
+Thu May 31 17:58:42 IST 2018	INFO	[main]	The arguments must be <Ticket> <PID> <MHOST> <MPORT> [configFile]
+[Node-1, proc_3142018175842_1, localhost, 55569, C:\\Users\\mpataki\\Documents\\se\\java\\dmgr\\dmgr.conf]
+Thu May 31 17:58:42 IST 2018	INFO	[main]	search server [not http] process running on 55641
+Thu May 31 17:58:42 IST 2018	INFO	[main]	Trie not found
+Thu May 31 17:58:47 IST 2018	INFO	[main]	Scanning started
+Thu May 31 17:58:47 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 17:58:52 IST 2018	INFO	[main]	Scanning started
+Thu May 31 17:58:52 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 17:58:57 IST 2018	INFO	[main]	Scanning started
+Thu May 31 17:58:57 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 17:59:02 IST 2018	INFO	[main]	Scanning started
+Thu May 31 17:59:02 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 17:59:07 IST 2018	INFO	[main]	Scanning started
+Thu May 31 17:59:07 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 17:59:12 IST 2018	INFO	[main]	Scanning started
+Thu May 31 17:59:12 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 17:59:17 IST 2018	INFO	[main]	Scanning started
+Thu May 31 17:59:17 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 17:59:22 IST 2018	INFO	[main]	Scanning started
+Thu May 31 17:59:22 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 17:59:25 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 17:59:27 IST 2018	INFO	[main]	Scanning started
+Thu May 31 17:59:27 IST 2018	INFO	[main]	Found [0] new files
+Thu May 31 17:59:28 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 17:59:31 IST 2018	ERROR	[Heartbeat]	Unable to send heartbeat
+Thu May 31 17:59:32 IST 2018	INFO	[main]	Scanning started
+Thu May 31 17:59:32 IST 2018	INFO	[main]	Found [0] new files

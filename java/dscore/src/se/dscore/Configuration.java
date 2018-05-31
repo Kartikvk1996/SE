@@ -18,9 +18,8 @@ import se.util.Logger;
 public class Configuration {
 
     public static final String DEBUG_LEVEL = "debug-level",
-            OUTFILE = "outfile",
-            ERRORFILE = "errfile",
-            PROCESS_ROLE = "processrole";
+            PROCESS_ROLE = "processrole",
+            DOC_ROOT = "doc-root";
 
     private DictObject conf;
 
@@ -80,22 +79,6 @@ public class Configuration {
         set(PID, pid);
     }
 
-    public String getErrFile() {
-        return (String) get(ERRORFILE);
-    }
-
-    public void setErrFile(String errFile) {
-        set(ERRORFILE, errFile);
-    }
-
-    public String getOutFile() {
-        return (String) get(OUTFILE);
-    }
-
-    public void setOutFile(String outFile) {
-        set(OUTFILE, outFile);
-    }
-
     public String getTicket() {
         return (String) get(TICKET);
     }
@@ -118,5 +101,13 @@ public class Configuration {
     
     public int getDebugLevel() {
         return Integer.parseInt((String) get(DEBUG_LEVEL));
+    }
+
+    public void setDocRoot(String docRoot) {
+        set(DOC_ROOT, docRoot);
+    }
+    
+    public String getDocRoot() {
+        return (String) get(DOC_ROOT);
     }
 }

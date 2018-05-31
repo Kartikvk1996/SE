@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="fireup">
+  <ClassDiagramComponents>
+    <Class name="MainPage" package="fireup" visibility="public" xPosition="75.0" yPosition="68.0">
+      <Fields>
+        <Field name="fireupModel" type="NodeManager" visibility="public" isStatic="true"/>
+        <Field name="listModel" type="Vector&lt;String&gt;" visibility="package"/>
+        <Field name="pidmapper" type="HashMap&lt;Integer, String&gt;" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="processAdded" returnType="void" visibility="public">
+          <Argument type="String" name="pid"/>
+        </Method>
+        <Method name="openEditor" returnType="void" visibility="private">
+          <Argument type="String" name="file"/>
+        </Method>
+        <Method name="showOutput" returnType="void" visibility="private">
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="showError" returnType="void" visibility="private">
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="setStatus" returnType="void" visibility="public">
+          <Argument type="String" name="status"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="NodeManager" package="fireup" visibility="public" xPosition="700.0" yPosition="68.0">
+      <Fields>
+        <Field name="lastPID" type="int" visibility="private"/>
+        <Field name="processes" type="HashMap&lt;String, WrappedProcess&gt;" visibility="package"/>
+        <Field name="mainPage" type="MainPage" visibility="private" isStatic="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="NodemanagerConfig" name="config"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="createProcess" returnType="PDU" visibility="private">
+          <Argument type="CreatePDU" name="cpdu"/>
+        </Method>
+        <Method name="getProcesses" returnType="HashMap" visibility="public"/>
+        <Method name="generatePID" returnType="String" visibility="private"/>
+        <Method name="killProcess" returnType="PDU" visibility="private">
+          <Argument type="KillPDU" name="pdu"/>
+        </Method>
+        <Method name="downloadExecutable" returnType="void" visibility="private">
+          <Argument type="String" name="fileName"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="WrappedProcess" package="fireup" visibility="public" xPosition="87.0" yPosition="441.0">
+      <Fields>
+        <Field name="procName" type="String" visibility="package"/>
+        <Field name="startTime" type="String" visibility="package"/>
+        <Field name="process" type="Process" visibility="package"/>
+        <Field name="cmdline" type="String" visibility="package"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="createProcess" returnType="WrappedProcess" visibility="public" isStatic="true">
+          <Argument type="String" name="ticket"/>
+          <Argument type="String" name="newPID"/>
+          <Argument type="String" name="executableName"/>
+          <Argument type="MasterProxy" name="mproxy"/>
+          <Argument type="NodemanagerConfig" name="nconf"/>
+          <Argument type="String[]" name="arguments"/>
+        </Method>
+        <Method name="kill" returnType="void" visibility="package"/>
+      </Methods>
+    </Class>
+    <Interface name="Reportable" package="fireup" visibility="public" xPosition="422.0" yPosition="286.0">
+      <Methods>
+        <Method name="processAdded" returnType="void" visibility="public">
+          <Argument type="String" name="pid"/>
+        </Method>
+        <Method name="setStatus" returnType="void" visibility="package">
+          <Argument type="String" name="status"/>
+        </Method>
+      </Methods>
+    </Interface>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="processes" source="fireup.NodeManager" target="fireup.WrappedProcess" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="HashMap&lt;String, WrappedProcess&gt;"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="fireup.NodeManager" target="fireup.Reportable"/>
+    <UseRelation source="fireup.WrappedProcess" target="fireup.WrappedProcess" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="fireup.MainPage" target="fireup.Reportable"/>
+    <HasRelation name="fireupModel" source="fireup.MainPage" target="fireup.NodeManager" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="mainPage" source="fireup.NodeManager" target="fireup.MainPage" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>
