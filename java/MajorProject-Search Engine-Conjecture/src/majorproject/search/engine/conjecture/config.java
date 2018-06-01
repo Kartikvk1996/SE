@@ -5,10 +5,20 @@
  */
 package majorproject.search.engine.conjecture;
 
+import java.io.IOException;
+import se.dscore.SlaveProcessConfiguration;
+
+
 /**
  *
  * @author akjantal
  */
-public class search {
+public class config extends SlaveProcessConfiguration{
+
+    public config(String file) throws IOException {super(file);
+        
+    }
+    
+    
     
 }

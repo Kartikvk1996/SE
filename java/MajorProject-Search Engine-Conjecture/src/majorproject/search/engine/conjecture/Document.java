@@ -5,7 +5,6 @@
  */
 package majorproject.search.engine.conjecture;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Occurs;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
